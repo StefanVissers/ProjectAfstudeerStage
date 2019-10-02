@@ -231,4 +231,3 @@ _Pvt_Extensions
 .fake/
 
 # Configs with secret stuff
-Frontend/appsettings.json
