@@ -1,3 +1,23 @@
-<p>
-  register works!
-</p>
+<div class="container" style="padding-top:40px;">
+  <div class="row">
+    <div class="col-md-6 mx-auto">
+      <div class="card mx-4">
+        <div class="card-body p-4">
+          <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onFormSubmit(userForm.value)">
+            <h1 style="text-align:center">Register</h1>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Username" formControlName="UserName">
+            </div>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" placeholder="Password" formControlName="Password">
+            </div>
+            <div class="input-group mb-4">
+              <input type="text" class="form-control" placeholder="Email" formControlName="Email">
+            </div>
+            <button type="submit" class="btn btn-block btn-success">Add User</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
