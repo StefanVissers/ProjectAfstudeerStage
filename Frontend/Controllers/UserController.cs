@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
+using Frontend.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 
 namespace Frontend.Controllers
 {
@@ -12,25 +15,33 @@ namespace Frontend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        // GET: api/User
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IDbContext<UserModel> _usersDbContext;
+        private readonly MongoDBAppSettings _mongoDbSettings;
+
+        // Userservice needed for authentication.
+        private readonly IUserService _userService;
+
+        public UserController(IOptions<MongoDBAppSettings> mongoDbSettings, IOptions<SecretSettings> secretSettings)
         {
-            return new string[] { "value1", "value2" };
+            _mongoDbSettings = mongoDbSettings.Value;
+            _usersDbContext = new UsersDbContext(_mongoDbSettings);
+            _userService = new UserService(secretSettings.Value, mongoDbSettings.Value);
         }
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public UserModel Get(string id)
         {
-            return "value";
+            var user = _usersDbContext.Get(id);
+            return user;
         }
 
         // POST: api/User
         [HttpPost]
-        public void Post([FromBody] UserModel userModel)
+        public IActionResult Post([FromBody] UserModel userModel)
         {
-
+            userModel = _usersDbContext.Post(userModel);
+            return Ok(userModel);
         }
 
         // PUT: api/User/5
@@ -43,6 +54,15 @@ namespace Frontend.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult Login([FromBody] UserModel user)
+        {
+            // Authenticates a user using username and password.
+            user = _userService.Authenticate(user);
+
+            return Ok();
         }
     }
 }

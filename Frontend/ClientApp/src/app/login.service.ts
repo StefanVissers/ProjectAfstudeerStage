@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { from, Observable } from 'rxjs';
@@ -10,9 +10,9 @@ export class LoginService {
     Url: string;
     token: string;
     header: any;
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
 
-        this.Url = 'http://localhost:14812/api/Login/';
+        this.Url = baseUrl + '/api/Login/';
 
         const headerSettings: { [name: string]: string | string[]; } = {};
         this.header = new HttpHeaders(headerSettings);

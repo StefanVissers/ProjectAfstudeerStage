@@ -18,6 +18,6 @@ export class NewTestCompComponent {
 
 }
 
-interface TestClass {
+class TestClass {
     someString: string;
 }

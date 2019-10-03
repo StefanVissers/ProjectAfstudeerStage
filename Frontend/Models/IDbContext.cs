@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace Frontend.Models
 {
-    interface IDbContext
+    interface IDbContext<T>
     {
+        T Post(T model);
+        T Get(string id);
     }
 }

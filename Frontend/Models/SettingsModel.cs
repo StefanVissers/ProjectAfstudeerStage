@@ -15,6 +15,17 @@ namespace Frontend.Models
         public string SecretString { get; set; }
     }
 
+    public class MongoDBAppSettings
+    {
+        public string MongoDatabaseName { get; set; }
+        public string MongoUserDatabaseName { get; set; }
+        public string MongoAuthDatabaseName { get; set; }
+        public string MongoUsername { get; set; }
+        public string MongoPassword { get; set; }
+        public string MongoPort { get; set; }
+        public string MongoHost { get; set; }
+    }
+
     public class CouchDbSettings
     {
         public string Username { get; set; }

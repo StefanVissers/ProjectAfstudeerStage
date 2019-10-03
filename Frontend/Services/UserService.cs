@@ -15,25 +15,26 @@ namespace Frontend.Services
     public interface IUserService
     {
         UserModel Authenticate(UserModel user);
-
-
     }
+
     public class UserService : IUserService
     {
         private readonly SecretSettings _secretSettings;
+        private readonly UsersDbContext _userDbContext;
 
-        public UserService(IOptions<SecretSettings> secretSettings)
+
+        public UserService(SecretSettings secretSettings, MongoDBAppSettings mongoSettings)
         {
-            _secretSettings = secretSettings.Value;
+            _secretSettings = secretSettings;
+            _userDbContext = new UsersDbContext(mongoSettings);
         }
         public UserModel Authenticate(UserModel user)
         {
             // Hash Password
-            string hashedPass = HashPassword(user.Username, user.Password);
-
+            user.Password = HashPassword(user.Username, user.Password);
+            
             // Gets a user from the database using the username and password.
-            // TODO
-            UserModel dbUser = null;
+            UserModel dbUser = _userDbContext.Get(user);
 
             // return null if user was not found.
             if (dbUser == null)
