@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Controllers
@@ -31,6 +33,23 @@ namespace Frontend.Controllers
         {
             var TestThing = new TestClass { someString = "succes" };
             return TestThing;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult SetCookiesTest()
+        {
+            Response.Cookies.Append(
+                "TESTCOOKIE",
+                "TESTVALUE",
+            new CookieOptions()
+            {
+                Path = "/",
+                Secure = true,
+                HttpOnly = false
+            });
+
+            return Ok();
         }
 
         public class TestClass

@@ -21,16 +21,14 @@ export class LoginComponent {
         sessionStorage.clear();
     }
     login() {
-        debugger;
         this.LoginService.Login(this.model).subscribe(
             data => {
-                debugger;
-                if (data.Status == "Success") {
-                    this.router.navigate(['/Dashboard']);
-                    debugger;
+                if (data != null) { //(data.Status == "Success") {
+                    this.router.navigate(['/dashboard']);
                 }
                 else {
-                    this.errorMessage = data.Message;
+                    //this.errorMessage = data.Message;
+                    this.errorMessage = "gefaald"
                 }
             },
             error => {

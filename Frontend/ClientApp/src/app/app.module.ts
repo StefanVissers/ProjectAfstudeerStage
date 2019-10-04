@@ -24,7 +24,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         NewTestCompComponent,
         LoginComponent,
         RegisterComponent,
-        DashboardComponent
+        DashboardComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -30,15 +30,15 @@ namespace Frontend.Models
             var MongoHost = Config.MongoHost;
 
             // Creates a model to log into the mongodb.
-            MongoCredential credential = MongoCredential.CreateCredential
-                (MongoAuthDatabaseName,
-                 MongoUsername,
-                 MongoPassword);
+            //MongoCredential credential = MongoCredential.CreateCredential
+                //(MongoAuthDatabaseName,
+                // MongoUsername,
+                // MongoPassword);
 
             // Connects to the Db.
             var settings = new MongoClientSettings
             {
-                Credential = credential,
+                //Credential = credential,
                 Server = new MongoServerAddress(MongoHost, Convert.ToInt32(MongoPort))
             };
             _client = new MongoClient(settings);
@@ -65,7 +65,7 @@ namespace Frontend.Models
             var filterPassword = Builders<UserModel>.Filter.Eq(x => x.Password, userModel.Password);
             var filterCombined = Builders<UserModel>.Filter.And(filterUsername, filterPassword);
 
-            var user = UsersCollection.FindAsync(filterCombined).Result.FirstAsync().Result;
+            var user = UsersCollection.FindAsync(filterCombined).Result.FirstOrDefault();
 
             return user;
         }
@@ -73,8 +73,13 @@ namespace Frontend.Models
         public UserModel Get(string id)
         {
             var filterId = Builders<UserModel>.Filter.Eq(x => x.Id, id);
-            var user = UsersCollection.FindAsync(filterId).Result.First();
-            user.Password = null;
+            var user = UsersCollection.FindAsync(filterId).Result.FirstOrDefault();
+
+            if (user == null)
+            {
+                user.Password = null;
+            }
+
             return user;
         }
 
@@ -82,9 +87,17 @@ namespace Frontend.Models
         {
             user.Password = UserService.HashPassword(user.Username, user.Password);
 
-            UsersCollection.InsertOneAsync(user);
-
-            return user;
+            if (Get(user) != null)
+            {
+                UsersCollection.InsertOne(user);
+                user.Password = null;
+                return user;
+            }
+            else
+            {
+                user.Password = null;
+                return user;
+            }
         }
 
         public IMongoCollection<UserModel> UsersCollection

@@ -30,6 +30,7 @@ namespace Frontend
             services.AddOptions();
 
             // Add our Config object so it can be injected
+            services.Configure<MongoDBAppSettings>(Configuration.GetSection("MongoDbAppSettings"));
             services.Configure<SecretSettings>(Configuration.GetSection("SecretSettings"));
             var appSettingsSection = Configuration.GetSection("SecretSettings");
             services.Configure<SecretSettings>(appSettingsSection);

@@ -53,7 +53,7 @@ namespace Frontend.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+            dbUser.Token = tokenHandler.WriteToken(token);
 
             // Remove password before returning
             dbUser.Password = null;

@@ -12,18 +12,16 @@ export class LoginService {
     header: any;
     constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
 
-        this.Url = baseUrl + '/api/Login/';
+        this.Url = baseUrl + '/api';
 
         const headerSettings: { [name: string]: string | string[]; } = {};
         this.header = new HttpHeaders(headerSettings);
     }
     Login(model: any) {
-        debugger;
-        var a = this.Url + 'UserLogin';
-        return this.http.post<any>(this.Url + 'UserLogin', model, { headers: this.header });
+        return this.http.post<any>(this.Url + '/User/Login', model, { headers: this.header });
     }
     CreateUser(register: Register) {
         const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-        return this.http.post<Register[]>(this.Url + '/createcontact/', register, httpOptions)
+        return this.http.post<Register[]>(this.Url + '/User', register, httpOptions)
     }
 }  

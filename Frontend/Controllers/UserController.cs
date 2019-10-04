@@ -50,7 +50,7 @@ namespace Frontend.Controllers
         {
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/User/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
@@ -62,7 +62,26 @@ namespace Frontend.Controllers
             // Authenticates a user using username and password.
             user = _userService.Authenticate(user);
 
-            return Ok();
+            if (user != null)
+            {
+                Response.Cookies.Append(
+                    "Auth",
+                    user.Token,
+                    new CookieOptions()
+                    {
+                        Path = "/",
+                        Secure = true,
+                        HttpOnly = false
+                    });
+
+                return Ok(new Response { Status = "Success", Message = user.Username });
+            }
+            else
+            {
+                //return Ok("Invalid username or password");
+                return Ok(new Response { Status = "Failure", Message = "Invalid Username or Password" });
+            }
+
         }
     }
 }

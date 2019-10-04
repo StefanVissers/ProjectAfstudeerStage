@@ -21,7 +21,7 @@ namespace Frontend.Models
 
         [BsonElement()]
         public string Email { get; set; }
-        
+
         [BsonElement()]
         public int Role { get; set; }
 
@@ -29,4 +29,9 @@ namespace Frontend.Models
         public string Token { get; set; }
     }
 
+    public class Response
+    {
+        public string Status { set; get; }
+        public string Message { set; get; }
+    }
 }
