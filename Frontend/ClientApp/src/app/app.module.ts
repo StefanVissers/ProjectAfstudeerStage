@@ -14,6 +14,11 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
+import { AuthInterceptor } from './services/auth.interceptor';
+import { ErrorInterceptor } from './services/error.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service'
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -41,7 +46,19 @@ import { DashboardComponent } from './dashboard/dashboard.component';
             { path: 'dashboard', component: DashboardComponent },
         ])
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorInterceptor,
+            multi: true,
+        },
+        CookieService,
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

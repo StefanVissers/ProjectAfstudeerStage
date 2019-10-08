@@ -11,7 +11,7 @@ namespace Frontend.Controllers
     [Route("api/[controller]")]
     public class SampleDataController : Controller
     {
-        private static string[] Summaries = new[]
+        private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
@@ -29,6 +29,7 @@ namespace Frontend.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize]
         public TestClass Tests()
         {
             var TestThing = new TestClass { someString = "succes" };
@@ -40,8 +41,8 @@ namespace Frontend.Controllers
         public IActionResult SetCookiesTest()
         {
             Response.Cookies.Append(
-                "TESTCOOKIE",
-                "TESTVALUE",
+                "TESTAUTHCOOKIE",
+                "TESTAUTHVALUE",
             new CookieOptions()
             {
                 Path = "/",

@@ -14,8 +14,6 @@ export class NewTestCompComponent {
             this.testClass = result;
         }, error => console.error(error));
     }
-
-
 }
 
 class TestClass {

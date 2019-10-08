@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../login.service';
-import { Register } from '../register';
+import { LoginService } from '../services/login.service';
+import { Register } from '../models/register';
 import { Observable } from 'rxjs';
 import { FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 

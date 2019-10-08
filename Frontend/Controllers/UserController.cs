@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
 using Frontend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -56,8 +57,15 @@ namespace Frontend.Controllers
         {
         }
 
+        [HttpGet("[action]")]
+        [Authorize]
+        public IActionResult Authenticated()
+        {
+            return Ok();
+        }
+
         [HttpPost("[action]")]
-        public IActionResult Login([FromBody] UserModel user)
+        public IActionResult Authenticate([FromBody] UserModel user)
         {
             // Authenticates a user using username and password.
             user = _userService.Authenticate(user);
@@ -74,7 +82,7 @@ namespace Frontend.Controllers
                         HttpOnly = false
                     });
 
-                return Ok(new Response { Status = "Success", Message = user.Username });
+                return Ok(new Response { Status = "Success", Message = user.Token });
             }
             else
             {
