@@ -17,7 +17,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { ErrorInterceptor } from './services/error.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service'
+import { CookieService } from 'ngx-cookie-service';
+import { routing } from './app.routing';
+import { AuthGuard } from './services/auth.guard';
 
 @NgModule({
     declarations: [
@@ -40,7 +42,7 @@ import { CookieService } from 'ngx-cookie-service'
             { path: '', component: HomeComponent, pathMatch: 'full' },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
-            { path: 'new-test-comp', component: NewTestCompComponent },
+            { path: 'new-test-comp', component: NewTestCompComponent, canActivate: [AuthGuard] },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
             { path: 'dashboard', component: DashboardComponent },

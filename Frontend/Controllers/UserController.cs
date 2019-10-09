@@ -61,7 +61,7 @@ namespace Frontend.Controllers
         [Authorize]
         public IActionResult Authenticated()
         {
-            return Ok();
+            return Ok(new Response() { Status = "Success", Message = "Authenticated" });
         }
 
         [HttpPost("[action]")]

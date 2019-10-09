@@ -21,7 +21,6 @@ export class AuthenticationService {
                     //user.authdata = window.btoa(username + ':' + password);
                     //localStorage.setItem('currentUser', JSON.stringify(user.token));
                 //}
-                
                 return user;
             }));
     }

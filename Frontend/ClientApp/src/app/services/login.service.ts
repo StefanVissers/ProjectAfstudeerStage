@@ -17,6 +17,7 @@ export class LoginService {
         this.header = new HttpHeaders(headerSettings);
     }
     Login(model: any) {
+        console.log("login in login service");
         return this.http.post<any>(this.Url + 'api/User/Login', model, { headers: this.header });
     }
     CreateUser(register: Register) {
