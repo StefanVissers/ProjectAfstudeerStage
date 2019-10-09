@@ -17,6 +17,7 @@ namespace Frontend.Controllers
         };
 
         [HttpGet("[action]")]
+        [Authorize]
         public IEnumerable<WeatherForecast> WeatherForecasts()
         {
             var rng = new Random();
@@ -34,23 +35,6 @@ namespace Frontend.Controllers
         {
             var TestThing = new TestClass { someString = "succes" };
             return TestThing;
-        }
-
-        [HttpGet]
-        [Authorize]
-        public IActionResult SetCookiesTest()
-        {
-            Response.Cookies.Append(
-                "TESTAUTHCOOKIE",
-                "TESTAUTHVALUE",
-            new CookieOptions()
-            {
-                Path = "/",
-                Secure = true,
-                HttpOnly = false
-            });
-
-            return Ok();
         }
 
         public class TestClass

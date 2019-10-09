@@ -18,7 +18,6 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { ErrorInterceptor } from './services/error.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { routing } from './app.routing';
 import { AuthGuard } from './services/auth.guard';
 
 @NgModule({
@@ -41,7 +40,7 @@ import { AuthGuard } from './services/auth.guard';
         RouterModule.forRoot([
             { path: '', component: HomeComponent, pathMatch: 'full' },
             { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
+            { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthGuard] },
             { path: 'new-test-comp', component: NewTestCompComponent, canActivate: [AuthGuard] },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },

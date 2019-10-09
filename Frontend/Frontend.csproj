@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\src\app\app.routing.ts" />
     <None Remove="ClientApp\src\app\auth.interceptor.ts" />
     <None Remove="ClientApp\src\app\models\Response.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
@@ -41,7 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\app.routing.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\Response.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\auth.guard.ts" />
