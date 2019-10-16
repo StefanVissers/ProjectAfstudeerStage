@@ -30,7 +30,7 @@ namespace Frontend.Controllers
         }
 
         // GET: api/User/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public UserModel Get(string id)
         {
             var user = _usersDbContext.Get(id);

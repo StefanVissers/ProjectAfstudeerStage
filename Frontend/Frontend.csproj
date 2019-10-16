@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\auth.interceptor.ts" />
+    <None Remove="ClientApp\src\app\models\project.ts" />
     <None Remove="ClientApp\src\app\models\Response.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
     <None Remove="ClientApp\src\app\services\auth.guard.ts" />
@@ -40,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\project.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\Response.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\auth.guard.ts" />

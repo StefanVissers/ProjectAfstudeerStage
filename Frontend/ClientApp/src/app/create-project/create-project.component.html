@@ -1,0 +1,28 @@
+<div class="container" style="padding-top:40px;">
+  <div class="row">
+    <div class="col-md-6 mx-auto">
+      <div class="card mx-4">
+        <div class="card-body p-4">
+          <form *ngIf="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
+            <h1 style="text-align:center">Create new project</h1>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Name" formControlName="Name">
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Description" formControlName="Description">
+            </div>
+            <div class="input-group mb-4">
+              <!--<select class="form-control">
+                      [(ngModel)]="selectedProdType"
+                      (ngModelChange)="changeSelectedType($event)">
+                <option *ngFor="let type of asvsLevels" [ngValue]="type">{{type.name}}</option>
+              </select>-->
+              <input type="text" class="form-control" placeholder="ASVSLevel" formControlName="ASVSLevel">
+            </div>
+            <button type="submit" class="btn btn-block btn-success">Create project</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
