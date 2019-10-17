@@ -70,4 +70,17 @@ namespace Frontend.Models
         LevelTwo = 2,
         LevelThree = 3
     }
+
+    public class ProjectListViewModel
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public bool IsCompleted { get; set; }
+
+        public int ASVSLevel { get; set; }
+    }
 }

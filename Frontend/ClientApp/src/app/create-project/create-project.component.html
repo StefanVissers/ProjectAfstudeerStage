@@ -17,7 +17,7 @@
                       (ngModelChange)="changeSelectedType($event)">
                 <option *ngFor="let type of asvsLevels" [ngValue]="type">{{type.name}}</option>
               </select>-->
-              <input type="text" class="form-control" placeholder="ASVSLevel" formControlName="ASVSLevel">
+              <input type="number" max="3" min="1" class="form-control" placeholder="ASVSLevel" formControlName="ASVSLevel">
             </div>
             <button type="submit" class="btn btn-block btn-success">Create project</button>
           </form>

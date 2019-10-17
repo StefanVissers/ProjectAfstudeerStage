@@ -16,7 +16,7 @@ namespace Frontend.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly IDbContext<ProjectModel> _projectsDbContext;
+        private readonly IProjectDbContext _projectsDbContext;
         private readonly MongoDBAppSettings _mongoDbSettings;
 
         public ProjectController(IOptions<MongoDBAppSettings> mongoDbSettings)
@@ -29,16 +29,20 @@ namespace Frontend.Controllers
 
         // GET: api/Project
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = _projectsDbContext.Get();
+
+            return Ok(result);
         }
 
-        // GET: api/Project/5
+        // GET: api/Project/5da829fa67db7d33e88a5d9e
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(string id)
         {
-            return "value";
+            var result = _projectsDbContext.Get(id);
+
+            return Ok(result);
         }
 
         // POST: api/Project

@@ -9,6 +9,9 @@ namespace Frontend.Models
     public class ProjectDbContext : IProjectDbContext
     {
         private readonly FilterDefinition<ProjectModel> EmptyProjectFilter = Builders<ProjectModel>.Filter.Empty;
+        private readonly FilterDefinition<ProjectModel> TemplateProjectFilter = Builders<ProjectModel>.Filter
+            .And(Builders<ProjectModel>.Filter.Eq(x => x.Name, "Template"),
+            Builders<ProjectModel>.Filter.Eq(x => x.Description, "Template Project"));
 
         MongoClient _client;
         public IMongoDatabase _database;
@@ -45,6 +48,13 @@ namespace Frontend.Models
             _database = _client.GetDatabase("Projects");
         }
 
+        public IEnumerable<ProjectModel> Get()
+        {
+            List<ProjectModel> list = ProjectsCollection.Find(EmptyProjectFilter).ToList();
+
+            return list;
+        }
+
         public ProjectModel Get(ProjectModel projectModel)
         {
             var filterName = Builders<ProjectModel>.Filter.Eq(x => x.Name, projectModel.Name);
@@ -66,47 +76,12 @@ namespace Frontend.Models
 
         public ProjectModel Post(ProjectModel model)
         {
-            if (Get(model) == null)
-            {
-                model.WorkflowElementCategories = new WorkflowElementCategory[2];
-                model.WorkflowElementCategories[0] = new WorkflowElementCategory()
-                {
-                    Description = "TestDescription",
-                    Name = "Test1Category",
-                    WorkflowElements = new WorkflowElement[2]
-                };
-                model.WorkflowElementCategories[1] = new WorkflowElementCategory()
-                {
-                    Name = "Test2Category",
-                    Description = "test2description",
-                    WorkflowElements = new WorkflowElement[1]
-                };
-                model.WorkflowElementCategories[0].WorkflowElements[0] = new WorkflowElement()
-                {
-                    Description = "worflowelementdescription1",
-                    Name = "worflowelementname1",
-                    Explanation = "explanation 1",
-                    IsDone = true,
-                    IsRelevant = true
-                };
-                model.WorkflowElementCategories[0].WorkflowElements[1] = new WorkflowElement()
-                {
-                    Description = "worflowelementdescription2",
-                    Name = "worflowelementname2",
-                    Explanation = "explanation 2",
-                    IsDone = false,
-                    IsRelevant = true
-                };
-                model.WorkflowElementCategories[1].WorkflowElements[0] = new WorkflowElement()
-                {
-                    Description = "worflowelementdescription2.1",
-                    Name = "worflowelementname2.1",
-                    Explanation = "explanation 2.1",
-                    IsDone = true,
-                    IsRelevant = false
-                };
-                ProjectsCollection.InsertOne(model);
-            }
+            var template = ProjectsCollection.Find(TemplateProjectFilter).FirstOrDefault();
+
+            model.WorkflowElementCategories = template.WorkflowElementCategories;
+
+            ProjectsCollection.InsertOne(model);
+
             return model;
         }
 
@@ -121,6 +96,7 @@ namespace Frontend.Models
 
     interface IProjectDbContext : IDbContext<ProjectModel>
     {
+        IEnumerable<ProjectModel> Get();
         IMongoCollection<ProjectModel> ProjectsCollection { get; }
     }
 }

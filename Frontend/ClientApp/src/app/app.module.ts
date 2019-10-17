@@ -15,6 +15,7 @@ import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProjectComponent } from './project/project.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
+import { ProjectDetailsComponent } from './project-details/project-details.component';
 
 import { AuthInterceptor } from './services/auth.interceptor';
 import { ErrorInterceptor } from './services/error.interceptor';
@@ -35,6 +36,7 @@ import { AuthGuard } from './services/auth.guard';
         DashboardComponent,
         ProjectComponent,
         CreateProjectComponent,
+        ProjectDetailsComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -47,6 +49,7 @@ import { AuthGuard } from './services/auth.guard';
             { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthGuard] },
             { path: 'new-test-comp', component: NewTestCompComponent, canActivate: [AuthGuard] },
             { path: 'create-project', component: CreateProjectComponent },
+            { path: 'project/:id', component: ProjectDetailsComponent },
             { path: 'project', component: ProjectComponent },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },

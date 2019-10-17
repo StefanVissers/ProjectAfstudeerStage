@@ -1,15 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Project } from '../models/project';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-project',
-  templateUrl: './project.component.html',
-  styleUrls: ['./project.component.css']
+    selector: 'app-project',
+    templateUrl: './project.component.html',
+    styleUrls: ['./project.component.css']
 })
 export class ProjectComponent implements OnInit {
+    public projects: Project[]
 
-  constructor() { }
+    constructor(http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+        http.get<Project[]>(baseUrl + 'api/Project/').subscribe(result => {
+            this.projects = result;
+            console.log(this.projects);
+        }, error => console.error(error));
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
+
+    getUrl(id: string) {
+        return this.baseUrl + 'project/' + id;
+    }
 
 }
