@@ -7,7 +7,6 @@
     <tr>
       <th>Project Name</th>
       <th>Project Description</th>
-      <th>Voltooid</th>
       <th></th>
     </tr>
   </thead>
@@ -15,7 +14,6 @@
     <tr *ngFor="let project of projects">
       <td>{{ project.name }}</td>
       <td>{{ project.description }}</td>
-      <td>{{ project.isCompleted }}</td>
       <td><a href="{{ getUrl(project.id) }}">Details</a></td>
     </tr>
   </tbody>

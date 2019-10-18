@@ -11,7 +11,8 @@ import { HttpClient } from '@angular/common/http';
 export class ProjectDetailsComponent implements OnInit {
 
     private projectId: string;
-    private project: Project
+    private project: Project;
+    public isCollapsed = false;
 
     constructor(http: HttpClient, route: ActivatedRoute, @Inject('BASE_URL') baseUrl: string) {
         route.params.subscribe(event => {
