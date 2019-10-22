@@ -14,7 +14,7 @@
     <tr *ngFor="let project of projects">
       <td>{{ project.name }}</td>
       <td>{{ project.description }}</td>
-      <td><a href="{{ getUrl(project.id) }}">Details</a></td>
+      <td><a [routerLink]="['/project/'+project.id]">Details</a></td>
     </tr>
   </tbody>
 </table>

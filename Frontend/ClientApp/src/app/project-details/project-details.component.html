@@ -2,21 +2,36 @@
 
 <div class="container">
   <div class="row" *ngIf="project">
-    <div class="col-md-4" style="overflow-y: auto">
-      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+    <div class="col-md-3 col-sm-4" style="overflow-y: auto">
+      <ngb-accordion #acc="ngbAccordion">
+        <!--activeIds="ngb-panel-0"-->
         <ngb-panel *ngFor="let category of project.workflowElementCategories" title="{{ category.name }}">
           <ng-template ngbPanelContent>
             <ul>
-              <li *ngFor="let element of category.workflowElements">{{ element.name }}</li>
+              <li *ngFor="let element of category.workflowElements">
+                <a [routerLink]="['/project/'+project.id+'/'+category.categoryId+'/'+element.elementId]">{{ element.name }}</a>
+              </li>
             </ul>
           </ng-template>
         </ngb-panel>
       </ngb-accordion>
 
     </div>
-    <div class="col-md-8">
+
+    <div>
       <h2>{{ project.name }}</h2>
-      <p>{{ project.description }}</p>
+
+      <div *ngIf="!categoryId && !elementId" class="col-md-9 col-sm-8">
+        <p>{{ project.description }}</p>
+      </div>
+
+      <div *ngIf="!elementId && categoryId" class="col-md-9 col-sm-8">
+        <h2>{{ categoryId }}</h2>
+      </div>
+
+      <div *ngIf="elementId && categoryId" class="col-md-9 col-sm-8">
+        <h2>{{ elementId }}</h2>
+      </div>
     </div>
   </div>
 </div>

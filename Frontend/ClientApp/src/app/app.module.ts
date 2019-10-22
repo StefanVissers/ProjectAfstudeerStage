@@ -52,6 +52,8 @@ import { AuthGuard } from './services/auth.guard';
             { path: 'new-test-comp', component: NewTestCompComponent, canActivate: [AuthGuard] },
             { path: 'create-project', component: CreateProjectComponent },
             { path: 'project/:id', component: ProjectDetailsComponent },
+            { path: 'project/:id/:category', component: ProjectDetailsComponent },
+            { path: 'project/:id/:category/:element', component: ProjectDetailsComponent },
             { path: 'project', component: ProjectComponent },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },

@@ -12,11 +12,15 @@ export class ProjectDetailsComponent implements OnInit {
 
     private projectId: string;
     private project: Project;
+    public categoryId: any;
+    public elementId: any;
     public isCollapsed = false;
 
-    constructor(http: HttpClient, route: ActivatedRoute, @Inject('BASE_URL') baseUrl: string) {
+    constructor(http: HttpClient, route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string) {
         route.params.subscribe(event => {
             this.projectId = event.id;
+            this.categoryId = event.category;
+            this.elementId = event.element;
         });
 
         http.get<Project>(baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
@@ -26,6 +30,14 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    getCategoryUrl(projectId: string, categoryId: string) {
+        return this.baseUrl + 'project/' + projectId + '/' + categoryId;
+    }
+
+    getElementUrl(projectId: string, categoryId: string, elementId: string) {
+        return this.baseUrl + 'project/' + projectId + '/' + categoryId + '/' + elementId;
     }
 
 }

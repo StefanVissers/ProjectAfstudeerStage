@@ -14,14 +14,19 @@ export class Project {
 
 
 export class WorkflowElementCategory {
+    CategoryId: string;
+
     Name: string;
 
     Description: string;
+
 
     WorflowElements: WorkflowElement[];
 }
 
 export class WorkflowElement {
+    ElementId: string;
+
     Name: string;
 
     Description: string;

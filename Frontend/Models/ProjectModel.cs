@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace Frontend.Models
@@ -37,6 +38,9 @@ namespace Frontend.Models
     public class WorkflowElementCategory
     {
         [BsonElement()]
+        public string CategoryId { get; set; }
+
+        [BsonElement()]
         public string Name { get; set; }
 
         [BsonElement()]
@@ -48,6 +52,9 @@ namespace Frontend.Models
 
     public class WorkflowElement
     {
+        [BsonElement()]
+        public string ElementId { get; set; }
+
         [BsonElement()]
         public string Name { get; set; }
 
