@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project } from '../models/project';
+import { Project, WorkflowElementCategory, WorkflowElement } from '../models/project';
 import { HttpClient } from '@angular/common/http';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-project-details',
@@ -11,33 +12,59 @@ import { HttpClient } from '@angular/common/http';
 export class ProjectDetailsComponent implements OnInit {
 
     private projectId: string;
-    private project: Project;
-    public categoryId: any;
-    public elementId: any;
+    public project: Project;
+    public category: WorkflowElementCategory;
+    public element: WorkflowElement;
+    public projectForm: FormGroup;
+    public categoryId: string;
+    public elementId: string;
     public isCollapsed = false;
 
-    constructor(http: HttpClient, route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string) {
+    constructor(private formbuilder: FormBuilder, private http: HttpClient,
+        route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string) {
         route.params.subscribe(event => {
             this.projectId = event.id;
             this.categoryId = event.category;
             this.elementId = event.element;
         });
 
-        http.get<Project>(baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
+        this.http.get<Project>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
             this.project = result;
             console.log(this.project);
         }, error => console.error(error));
+
+        if (this.categoryId) {
+            this.http.get<WorkflowElementCategory>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId).subscribe(result => {
+                this.category = result;
+                console.log(this.category);
+            }, error => console.error(error));
+        }
+
+        if (this.categoryId && this.elementId) {
+            this.http.get<WorkflowElement>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId + '/' + this.elementId).subscribe(result => {
+                this.element = result;
+                console.log(this.element);
+            }, error => console.error(error));
+        }
     }
 
     ngOnInit() {
+        if (this.elementId) {
+            this.projectForm = this.formbuilder.group({
+                Explanation: [''],
+                IsDone: [''],
+            });
+        }
     }
 
-    getCategoryUrl(projectId: string, categoryId: string) {
-        return this.baseUrl + 'project/' + projectId + '/' + categoryId;
+    loadElement() {
+        this.projectForm.setValue({
+            Explanation: this.element.Explanation,
+            IsDone: this.element.IsDone
+        });
     }
 
-    getElementUrl(projectId: string, categoryId: string, elementId: string) {
-        return this.baseUrl + 'project/' + projectId + '/' + categoryId + '/' + elementId;
+    onFormSubmit() {
+        console.log("update");
     }
-
 }

@@ -45,6 +45,24 @@ namespace Frontend.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}/{categoryid}")]
+        public IActionResult Get(string id, string categoryid)
+        {
+            var project = _projectsDbContext.Get(id);
+            var category = project.WorkflowElementCategories.Where(x => x.CategoryId == categoryid).FirstOrDefault();
+
+            return Ok(category);
+        }
+
+        [HttpGet("{id}/{categoryid}/{elementid}")]
+        public IActionResult Get(string id, string categoryid, string elementid)
+        {
+            var project = _projectsDbContext.Get(id);
+            var category = project.WorkflowElementCategories.Where(x => x.CategoryId == categoryid).FirstOrDefault();
+            var element = category.WorkflowElements.Where(x => x.ElementId == elementid).FirstOrDefault();
+            return Ok(element);
+        }
+
         // POST: api/Project
         [HttpPost]
         public IActionResult Post([FromBody] ProjectModel project)

@@ -19,18 +19,31 @@
     </div>
 
     <div>
-      <h2>{{ project.name }}</h2>
+      <h2 style="text-align: center">{{ project.name }}</h2>
+      <hr />
 
       <div *ngIf="!categoryId && !elementId" class="col-md-9 col-sm-8">
         <p>{{ project.description }}</p>
       </div>
 
-      <div *ngIf="!elementId && categoryId" class="col-md-9 col-sm-8">
-        <h2>{{ categoryId }}</h2>
+      <div *ngIf="!elementId && categoryId && category" class="col-md-9 col-sm-8">
+        <h2 style="text-align: center">{{ category.name }}</h2>
+        <p>{{ category.description }}</p>
       </div>
 
-      <div *ngIf="elementId && categoryId" class="col-md-9 col-sm-8">
-        <h2>{{ elementId }}</h2>
+      <div *ngIf="elementId && categoryId && category && element" class="col-md-9 col-sm-8">
+        <h2 style="text-align: center">{{ element.name }}</h2>
+        <p>{{ element.description }}</p>
+        <hr />
+        
+        <form *ngIf="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
+          <textarea class="form-control" formControlName="Explanation" ng-model="myTextarea"></textarea>
+          <br />
+          <span>Is this element done?</span>
+          <input title="Is Done" type="checkbox" formControlName="IsDone" class="form-control"/>
+          <br />
+          <button type="submit" class="btn btn-block btn-success">Update</button>
+        </form>
       </div>
     </div>
   </div>
