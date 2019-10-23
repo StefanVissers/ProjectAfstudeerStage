@@ -21,40 +21,45 @@ export class ProjectDetailsComponent implements OnInit {
     public isCollapsed = false;
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
-        route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string) {
+        route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string,
+        private activeRoute: ActivatedRoute) {
         route.params.subscribe(event => {
             this.projectId = event.id;
             this.categoryId = event.category;
             this.elementId = event.element;
         });
 
-        this.http.get<Project>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
-            this.project = result;
-            console.log(this.project);
-        }, error => console.error(error));
-
-        if (this.categoryId) {
-            this.http.get<WorkflowElementCategory>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId).subscribe(result => {
-                this.category = result;
-                console.log(this.category);
-            }, error => console.error(error));
-        }
-
-        if (this.categoryId && this.elementId) {
-            this.http.get<WorkflowElement>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId + '/' + this.elementId).subscribe(result => {
-                this.element = result;
-                console.log(this.element);
-            }, error => console.error(error));
-        }
+        console.log('Constructor');
+        
     }
 
     ngOnInit() {
+        console.log('onINit')
         if (this.elementId) {
             this.projectForm = this.formbuilder.group({
                 Explanation: [''],
                 IsDone: [''],
             });
         }
+
+        this.activeRoute.params.subscribe(routeParams => {
+            console.log(routeParams);
+            this.http.get<Project>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
+                this.project = result;
+            }, error => console.error(error));
+
+            if (this.categoryId) {
+                this.http.get<WorkflowElementCategory>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId).subscribe(result => {
+                    this.category = result;
+                }, error => console.error(error));
+            }
+
+            if (this.categoryId && this.elementId) {
+                this.http.get<WorkflowElement>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId + '/' + this.elementId).subscribe(result => {
+                    this.element = result;
+                }, error => console.error(error));
+            }
+        });
     }
 
     loadElement() {

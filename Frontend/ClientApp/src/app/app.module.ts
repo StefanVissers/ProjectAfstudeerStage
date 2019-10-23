@@ -58,7 +58,7 @@ import { AuthGuard } from './services/auth.guard';
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
             { path: 'dashboard', component: DashboardComponent },
-        ])
+        ], { onSameUrlNavigation: 'reload' })
     ],
     providers: [
         {
