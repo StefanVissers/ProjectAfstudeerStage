@@ -18,20 +18,20 @@
 
     </div>
 
-    <div>
+    <div class="col-md-9 col-sm-8">
       <h2 style="text-align: center">{{ project.name }}</h2>
       <hr />
 
-      <div *ngIf="!categoryId && !elementId" class="col-md-9 col-sm-8">
+      <div *ngIf="!categoryId && !elementId">
         <p>{{ project.description }}</p>
       </div>
 
-      <div *ngIf="!elementId && categoryId && category" class="col-md-9 col-sm-8">
+      <div *ngIf="!elementId && categoryId && category">
         <h2 style="text-align: center">{{ category.name }}</h2>
         <p>{{ category.description }}</p>
       </div>
 
-      <div *ngIf="elementId && categoryId && category && element" class="col-md-9 col-sm-8">
+      <div *ngIf="elementId && categoryId && category && element">
         <h2 style="text-align: center">{{ element.name }}</h2>
         <p>{{ element.description }}</p>
         <hr />

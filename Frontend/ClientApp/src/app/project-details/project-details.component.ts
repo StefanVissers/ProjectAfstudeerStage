@@ -28,13 +28,9 @@ export class ProjectDetailsComponent implements OnInit {
             this.categoryId = event.category;
             this.elementId = event.element;
         });
-
-        console.log('Constructor');
-        
     }
 
     ngOnInit() {
-        console.log('onINit')
         if (this.elementId) {
             this.projectForm = this.formbuilder.group({
                 Explanation: [''],
