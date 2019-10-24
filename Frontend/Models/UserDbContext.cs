@@ -100,6 +100,11 @@ namespace Frontend.Models
             }
         }
 
+        public UserModel Put(string id, UserModel model)
+        {
+            throw new NotImplementedException();
+        }
+
         public IMongoCollection<UserModel> UsersCollection
         {
             get

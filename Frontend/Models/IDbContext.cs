@@ -8,6 +8,7 @@ namespace Frontend.Models
     interface IDbContext<T>
     {
         T Post(T model);
+        T Put(string id, T model);
         T Get(string id);
     }
 }

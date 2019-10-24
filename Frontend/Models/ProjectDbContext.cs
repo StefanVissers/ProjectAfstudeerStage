@@ -85,6 +85,25 @@ namespace Frontend.Models
             return model;
         }
 
+        public ProjectModel Put(string id, ProjectModel model)
+        {
+            var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
+
+            var updateProjectName = Builders<ProjectModel>.Update.Set(x => x.Name, model.Name);
+            var updateProjectDescription = Builders<ProjectModel>.Update.Set(x => x.Description, model.Description);
+            var updateProjectASVSLevel = Builders<ProjectModel>.Update.Set(x => x.ASVSLevel, model.ASVSLevel);
+            var updateProjectIsCompleted = Builders<ProjectModel>.Update.Set(x => x.IsCompleted, model.IsCompleted);
+            var updateProjectElements = Builders<ProjectModel>.Update.Set(x => x.WorkflowElementCategories, model.WorkflowElementCategories);
+
+            var updates = Builders<ProjectModel>.Update.Combine(
+                updateProjectName, updateProjectDescription, updateProjectASVSLevel,
+                updateProjectIsCompleted, updateProjectElements);
+
+            var project = ProjectsCollection.FindOneAndUpdate(filterId, updates);
+
+            return project;
+        }
+
         public IMongoCollection<ProjectModel> ProjectsCollection
         {
             get

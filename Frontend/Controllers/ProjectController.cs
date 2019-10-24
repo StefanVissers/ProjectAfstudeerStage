@@ -74,8 +74,11 @@ namespace Frontend.Controllers
 
         // PUT: api/Project/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(string id, [FromBody] ProjectModel value)
         {
+            var result = _projectsDbContext.Put(id, value);
+
+            return Ok(result);
         }
 
         // DELETE: api/ApiWithActions/5
