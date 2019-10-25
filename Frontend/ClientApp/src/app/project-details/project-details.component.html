@@ -35,12 +35,22 @@
         <h2 style="text-align: center">{{ element.name }}</h2>
         <p>{{ element.description }}</p>
         <hr />
-        
-        <form *ngIf="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
-          <textarea class="form-control" formControlName="Explanation" ng-model="myTextarea"></textarea>
+
+        <form *ngIf="projectForm && element" name="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
+          <input type="hidden" formControlName="elementId" />
+          <textarea class="form-control" formControlName="explanation"></textarea>
           <br />
-          <span>Is this element done?</span>
-          <input title="Is Done" type="checkbox" formControlName="IsDone" class="form-control"/>
+          <div class="row">
+            <div class="col-sm-6">
+              <span>Is this element done?</span>
+              <input class="form-control" title="Is Done" type="checkbox" name="isDone" formControlName="isDone" />
+            </div>
+            <br />
+            <div class="col-sm-6">
+              <span>Is this element relevant?</span>
+              <input class="form-control" title="Is Relevant" type="checkbox" name="isRelevant" formControlName="isRelevant" />
+            </div>
+          </div>
           <br />
           <button type="submit" class="btn btn-block btn-success">Update</button>
         </form>

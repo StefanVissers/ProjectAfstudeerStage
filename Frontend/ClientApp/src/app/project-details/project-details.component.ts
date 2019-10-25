@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Project, WorkflowElementCategory, WorkflowElement } from '../models/project';
 import { HttpClient } from '@angular/common/http';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-project-details',
@@ -28,44 +28,46 @@ export class ProjectDetailsComponent implements OnInit {
             this.categoryId = event.category;
             this.elementId = event.element;
         });
+
+        this.projectForm = this.formbuilder.group({
+            elementId: [''],
+            explanation: [''],
+            isDone: [''],
+            isRelevant: [''],
+        });
     }
 
     ngOnInit() {
-        if (this.elementId) {
-            this.projectForm = this.formbuilder.group({
-                Explanation: [''],
-                IsDone: [''],
-            });
-        }
-
-        this.activeRoute.params.subscribe(routeParams => {
-            console.log(routeParams);
-            this.http.get<Project>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
-                this.project = result;
-            }, error => console.error(error));
-
-            if (this.categoryId) {
-                this.http.get<WorkflowElementCategory>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId).subscribe(result => {
-                    this.category = result;
-                }, error => console.error(error));
-            }
-
-            if (this.categoryId && this.elementId) {
-                this.http.get<WorkflowElement>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId + '/' + this.elementId).subscribe(result => {
-                    this.element = result;
-                }, error => console.error(error));
-            }
+        this.activeRoute.params.subscribe(_ => {
+            this.loadElement();
         });
     }
 
     loadElement() {
-        this.projectForm.setValue({
-            Explanation: this.element.Explanation,
-            IsDone: this.element.IsDone
-        });
+        this.http.get<Project>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
+            this.project = result;
+        }, error => console.error(error));
+
+        if (this.categoryId) {
+            this.http.get<WorkflowElementCategory>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId).subscribe(result => {
+                this.category = result;
+            }, error => console.error(error));
+        }
+
+        if (this.categoryId && this.elementId) {
+            this.http.get<WorkflowElement>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId + '/' + this.elementId).subscribe(result => {
+                this.element = result;
+                this.projectForm.patchValue(this.element);
+            }, error => console.error(error));
+        }
     }
 
     onFormSubmit() {
-        console.log("update");
+        this.element = this.projectForm.value;
+        console.log(JSON.stringify(this.element));
+        this.http.put<Project>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId, this.element).subscribe(result => {
+            this.project = result;
+            this.loadElement();
+        }, error => console.error(error));
     }
 }

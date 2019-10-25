@@ -62,5 +62,10 @@ namespace Frontend.Models
         {
             throw new NotImplementedException();
         }
+
+        public UserModel Put(string id, UserModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

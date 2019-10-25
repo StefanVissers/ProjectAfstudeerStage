@@ -81,6 +81,14 @@ namespace Frontend.Controllers
             return Ok(result);
         }
 
+        [HttpPut("{projectId}/{categoryId}")]
+        public IActionResult Put(string projectId, string categoryId, [FromBody] WorkflowElement value)
+        {
+            var result = _projectsDbContext.Put(projectId, categoryId, value);
+
+            return Ok(result);
+        }
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)

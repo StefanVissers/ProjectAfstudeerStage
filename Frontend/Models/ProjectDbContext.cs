@@ -104,6 +104,21 @@ namespace Frontend.Models
             return project;
         }
 
+        public ProjectModel Put(string projectId, string categoryId, WorkflowElement workflowElement)
+        {
+            var project = Get(projectId);
+            var category = project.WorkflowElementCategories.First(x => x.CategoryId == categoryId);
+            var element = category.WorkflowElements.First(x => x.ElementId == workflowElement.ElementId);
+
+            element.Explanation = workflowElement.Explanation;
+            element.IsDone = workflowElement.IsDone;
+            element.IsRelevant = workflowElement.IsRelevant;
+
+            var newProject = ProjectsCollection.ReplaceOne<ProjectModel>(x => x.Id == projectId, project);
+
+            return project;
+        }
+
         public IMongoCollection<ProjectModel> ProjectsCollection
         {
             get
@@ -116,6 +131,8 @@ namespace Frontend.Models
     interface IProjectDbContext : IDbContext<ProjectModel>
     {
         IEnumerable<ProjectModel> Get();
+
+        ProjectModel Put(string projectId, string categoryId, WorkflowElement workflowElement);
         IMongoCollection<ProjectModel> ProjectsCollection { get; }
     }
 }
