@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Frontend.Models;
 using Frontend.Services;
@@ -63,10 +64,39 @@ namespace Frontend.Controllers
             return Ok(element);
         }
 
+        [HttpGet("Users/{id}")]
+        public IActionResult Users(string id)
+        {
+            var project = _projectsDbContext.Get(id);
+
+            var users = project.Users;
+
+            return Ok();
+        }
+
         // POST: api/Project
         [HttpPost]
         public IActionResult Post([FromBody] ProjectModel project)
         {
+            if (project.Users == null)
+            {
+                project.Users = new List<UserRole>();
+            }
+
+            // Get the UserId from the Claims.
+            var user = User.Identity as ClaimsIdentity;
+            var userId = user.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (userId != null)
+            {
+                var userDbContext = new UsersDbContext(_mongoDbSettings);
+                var userModel = userDbContext.Get(userId);
+
+                var userRole = new UserRole() { UserId = userId, Name = userModel.Username, Role = UserRole.UserRoleCreator };
+
+                project.Users.Add(userRole);
+            }
+
             var result = _projectsDbContext.Post(project);
 
             return Ok(result);
@@ -89,10 +119,24 @@ namespace Frontend.Controllers
             return Ok(result);
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/Project/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(string id)
         {
+            _projectsDbContext.Delete(id);
+
+            return Ok();
+        }
+
+        [HttpGet("Authenticated/{id}")]
+        [Authorize]
+        public IActionResult Authenticated(string id)
+        {
+            var user = User.Identity as ClaimsIdentity;
+
+            var userId = user.FindFirst(ClaimTypes.Name)?.Value;
+
+            return Ok();
         }
     }
 }

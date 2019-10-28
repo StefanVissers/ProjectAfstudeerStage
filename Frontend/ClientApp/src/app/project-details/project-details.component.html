@@ -1,60 +1,18 @@
-<p *ngIf="!project"><em>Loading...</em></p>
-
-<div class="container">
-  <div class="row" *ngIf="project">
-    <div class="col-md-3 col-sm-4" style="overflow-y: auto">
-      <ngb-accordion #acc="ngbAccordion">
-        <!--activeIds="ngb-panel-0"-->
-        <ngb-panel *ngFor="let category of project.workflowElementCategories" title="{{ category.name }}">
-          <ng-template ngbPanelContent>
-            <ul>
-              <li *ngFor="let element of category.workflowElements">
-                <a [routerLink]="['/project/'+project.id+'/'+category.categoryId+'/'+element.elementId]">{{ element.name }}</a>
-              </li>
-            </ul>
-          </ng-template>
-        </ngb-panel>
-      </ngb-accordion>
-
+<form *ngIf="projectForm && element" name="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
+  <input type="hidden" formControlName="elementId" />
+  <textarea class="form-control" formControlName="explanation"></textarea>
+  <br />
+  <div class="row">
+    <div class="col-sm-6">
+      <span>Is this element done?</span>
+      <input class="form-control" title="Is Done" type="checkbox" name="isDone" formControlName="isDone" />
     </div>
-
-    <div class="col-md-9 col-sm-8">
-      <h2 style="text-align: center">{{ project.name }}</h2>
-      <hr />
-
-      <div *ngIf="!categoryId && !elementId">
-        <p>{{ project.description }}</p>
-      </div>
-
-      <div *ngIf="!elementId && categoryId && category">
-        <h2 style="text-align: center">{{ category.name }}</h2>
-        <p>{{ category.description }}</p>
-      </div>
-
-      <div *ngIf="elementId && categoryId && category && element">
-        <h2 style="text-align: center">{{ element.name }}</h2>
-        <p>{{ element.description }}</p>
-        <hr />
-
-        <form *ngIf="projectForm && element" name="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
-          <input type="hidden" formControlName="elementId" />
-          <textarea class="form-control" formControlName="explanation"></textarea>
-          <br />
-          <div class="row">
-            <div class="col-sm-6">
-              <span>Is this element done?</span>
-              <input class="form-control" title="Is Done" type="checkbox" name="isDone" formControlName="isDone" />
-            </div>
-            <br />
-            <div class="col-sm-6">
-              <span>Is this element relevant?</span>
-              <input class="form-control" title="Is Relevant" type="checkbox" name="isRelevant" formControlName="isRelevant" />
-            </div>
-          </div>
-          <br />
-          <button type="submit" class="btn btn-block btn-success">Update</button>
-        </form>
-      </div>
+    <br />
+    <div class="col-sm-6">
+      <span>Is this element relevant?</span>
+      <input class="form-control" title="Is Relevant" type="checkbox" name="isRelevant" formControlName="isRelevant" />
     </div>
   </div>
-</div>
+  <br />
+  <button type="submit" class="btn btn-block btn-success">Update</button>
+</form>

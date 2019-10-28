@@ -5,11 +5,6 @@ using System.Threading.Tasks;
 
 namespace Frontend.Models
 {
-    public class SettingsModel
-    {
-
-    }
-
     public class SecretSettings
     {
         public string SecretString { get; set; }

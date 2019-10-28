@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Project, WorkflowElementCategory, WorkflowElement } from '../models/project';
 import { HttpClient } from '@angular/common/http';
@@ -12,9 +12,9 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 export class ProjectDetailsComponent implements OnInit {
 
     private projectId: string;
-    public project: Project;
-    public category: WorkflowElementCategory;
-    public element: WorkflowElement;
+    @Input() project: Project;
+    @Input() category: WorkflowElementCategory;
+    @Input() element: WorkflowElement;
     public projectForm: FormGroup;
     public categoryId: string;
     public elementId: string;
@@ -44,16 +44,6 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     loadElement() {
-        this.http.get<Project>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
-            this.project = result;
-        }, error => console.error(error));
-
-        if (this.categoryId) {
-            this.http.get<WorkflowElementCategory>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId).subscribe(result => {
-                this.category = result;
-            }, error => console.error(error));
-        }
-
         if (this.categoryId && this.elementId) {
             this.http.get<WorkflowElement>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId + '/' + this.elementId).subscribe(result => {
                 this.element = result;

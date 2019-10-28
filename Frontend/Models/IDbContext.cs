@@ -10,5 +10,7 @@ namespace Frontend.Models
         T Post(T model);
         T Put(string id, T model);
         T Get(string id);
+
+        void Delete(string id);
     }
 }

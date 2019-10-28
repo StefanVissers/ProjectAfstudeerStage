@@ -9,6 +9,8 @@ export class Project {
 
     ASVSLevel: number;
 
+    Users: UserRole[];
+
     WorkflowElementCategories: WorkflowElementCategory[];
 }
 
@@ -19,7 +21,6 @@ export class WorkflowElementCategory {
     Name: string;
 
     Description: string;
-
 
     WorflowElements: WorkflowElement[];
 }
@@ -36,6 +37,14 @@ export class WorkflowElement {
     IsDone: boolean;
 
     IsRelevant: boolean;
+}
+
+export class UserRole {
+    UserId: string;
+
+    Name: string;
+
+    Role: string;
 }
 
 export enum ASVSLevel {

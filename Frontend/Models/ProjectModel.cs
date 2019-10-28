@@ -32,7 +32,10 @@ namespace Frontend.Models
         public int ASVSLevel { get; set; }
 
         [BsonElement()]
-        public WorkflowElementCategory[] WorkflowElementCategories { get; set; }
+        public List<UserRole> Users { get; set; }
+
+        [BsonElement()]
+        public List<WorkflowElementCategory> WorkflowElementCategories { get; set; }
     }
 
     public class WorkflowElementCategory
@@ -47,7 +50,7 @@ namespace Frontend.Models
         public string Description { get; set; }
 
         [BsonElement()]
-        public WorkflowElement[] WorkflowElements { get; set; }
+        public List<WorkflowElement> WorkflowElements { get; set; }
     }
 
     public class WorkflowElement
@@ -60,7 +63,7 @@ namespace Frontend.Models
 
         [BsonElement()]
         public string Description { get; set; }
-        
+
         [BsonElement()]
         public string Explanation { get; set; }
 
@@ -69,6 +72,20 @@ namespace Frontend.Models
 
         [BsonElement()]
         public bool IsRelevant { get; set; }
+    }
+
+    public class UserRole
+    {
+        public const string UserRoleCreator = "Creator";
+
+        [BsonElement()]
+        public string UserId { get; set; }
+
+        [BsonElement()]
+        public string Name { get; set; }
+
+        [BsonElement()]
+        public string Role { get; set; }
     }
 
     public enum ASVSLevel

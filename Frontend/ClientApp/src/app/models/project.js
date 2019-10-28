@@ -18,6 +18,12 @@ var WorkflowElement = /** @class */ (function () {
     return WorkflowElement;
 }());
 exports.WorkflowElement = WorkflowElement;
+var UserRole = /** @class */ (function () {
+    function UserRole() {
+    }
+    return UserRole;
+}());
+exports.UserRole = UserRole;
 var ASVSLevel;
 (function (ASVSLevel) {
     ASVSLevel[ASVSLevel["LevelOne"] = 1] = "LevelOne";

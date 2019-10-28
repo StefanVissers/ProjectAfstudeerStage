@@ -59,8 +59,15 @@ namespace Frontend.Models
             }
         }
 
+        /// <summary>
+        /// Get a user based on the Username and Passwordhash.
+        /// </summary>
+        /// <param name="userModel"></param>
+        /// <returns></returns>
         public UserModel Get(UserModel userModel)
         {
+            userModel.Password = UserService.HashPassword(userModel.Username, userModel.Password);
+
             var filterUsername = Builders<UserModel>.Filter.Eq(x => x.Username, userModel.Username);
             var filterPassword = Builders<UserModel>.Filter.Eq(x => x.Password, userModel.Password);
             var filterCombined = Builders<UserModel>.Filter.And(filterUsername, filterPassword);
@@ -70,6 +77,11 @@ namespace Frontend.Models
             return user;
         }
 
+        /// <summary>
+        /// Get a user based on the userId.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public UserModel Get(string id)
         {
             var filterId = Builders<UserModel>.Filter.Eq(x => x.Id, id);
@@ -83,6 +95,11 @@ namespace Frontend.Models
             return user;
         }
 
+        /// <summary>
+        /// Insert a UserModel into the database. Also hashes the password before inserting.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public UserModel Post(UserModel user)
         {
             user.Password = UserService.HashPassword(user.Username, user.Password);
@@ -103,6 +120,17 @@ namespace Frontend.Models
         public UserModel Put(string id, UserModel model)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deletes a User using its Id.
+        /// </summary>
+        /// <param name="id"></param>
+        public void Delete(string id)
+        {
+            var filterId = Builders<UserModel>.Filter.Eq(x => x.Id, id);
+
+            UsersCollection.FindOneAndDelete(filterId);
         }
 
         public IMongoCollection<UserModel> UsersCollection

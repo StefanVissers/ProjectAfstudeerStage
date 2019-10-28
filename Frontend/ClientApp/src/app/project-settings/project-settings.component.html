@@ -1,0 +1,18 @@
+<p *ngIf="!project"><em>Loading...</em></p>
+
+<table class='table table-striped' *ngIf="project">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of project.users">
+      <td>{{ user.name }}</td>
+      <td>{{ user.role }}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Frontend.Models
 {
@@ -48,6 +47,10 @@ namespace Frontend.Models
             _database = _client.GetDatabase("Projects");
         }
 
+        /// <summary>
+        /// Gets a list of all projects.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<ProjectModel> Get()
         {
             List<ProjectModel> list = ProjectsCollection.Find(EmptyProjectFilter).ToList();
@@ -55,6 +58,11 @@ namespace Frontend.Models
             return list;
         }
 
+        /// <summary>
+        /// Gets a ProjectModel based on its Name and Description.
+        /// </summary>
+        /// <param name="projectModel"></param>
+        /// <returns></returns>
         public ProjectModel Get(ProjectModel projectModel)
         {
             var filterName = Builders<ProjectModel>.Filter.Eq(x => x.Name, projectModel.Name);
@@ -66,6 +74,11 @@ namespace Frontend.Models
             return project;
         }
 
+        /// <summary>
+        /// Gets a ProjectModel from its Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ProjectModel Get(string id)
         {
             var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
@@ -114,9 +127,16 @@ namespace Frontend.Models
             element.IsDone = workflowElement.IsDone;
             element.IsRelevant = workflowElement.IsRelevant;
 
-            var newProject = ProjectsCollection.ReplaceOne<ProjectModel>(x => x.Id == projectId, project);
+            var newProject = ProjectsCollection.ReplaceOne(x => x.Id == projectId, project);
 
             return project;
+        }
+
+        public void Delete(string id)
+        {
+            var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
+
+            ProjectsCollection.FindOneAndDelete(filterId);
         }
 
         public IMongoCollection<ProjectModel> ProjectsCollection
@@ -131,7 +151,6 @@ namespace Frontend.Models
     interface IProjectDbContext : IDbContext<ProjectModel>
     {
         IEnumerable<ProjectModel> Get();
-
         ProjectModel Put(string projectId, string categoryId, WorkflowElement workflowElement);
         IMongoCollection<ProjectModel> ProjectsCollection { get; }
     }

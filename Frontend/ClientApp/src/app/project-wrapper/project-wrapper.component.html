@@ -1,0 +1,48 @@
+<p *ngIf="!project"><em>Loading...</em></p>
+
+<div class="container">
+  <div class="row" *ngIf="project">
+    <div class="col-md-3 col-sm-4" style="overflow-y: auto">
+      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+        <ngb-panel *ngFor="let category of project.workflowElementCategories" title="{{ category.name }}">
+          <ng-template ngbPanelContent>
+            <ul>
+              <li *ngFor="let element of category.workflowElements">
+                <a [routerLink]="['/project/'+project.id+'/'+category.categoryId+'/'+element.elementId]">{{ element.name }}</a>
+              </li>
+            </ul>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+
+    <div class="col-md-9 col-sm-8">
+      <div class="row">
+        <div class="col-md-9"><h2 style="text-align: center"><a *ngIf="project" [routerLink]="['/project/'+project.id]">{{ project.name }}</a></h2></div>
+        <div class="col-md-3"><h3 style="text-align: right"><a [routerLink]="['/project-settings/' + project.id]">Settings</a></h3></div>
+      </div>
+      <hr />
+
+      <div *ngIf="!categoryId && !elementId && !settings">
+        <p>{{ project.description }}</p>
+      </div>
+
+      <div *ngIf="!elementId && categoryId && category && !settings">
+        <h2 style="text-align: center">{{ category.name }}</h2>
+        <p>{{ category.description }}</p>
+      </div>
+
+      <div *ngIf="elementId && categoryId && category && element && !settings">
+        <h2 style="text-align: center">{{ element.name }}</h2>
+        <p>{{ element.description }}</p>
+        <hr />
+        <app-project-details [project]="project" [category]="category"></app-project-details>
+      </div>
+
+      <div *ngIf="settings">
+        <app-project-settings></app-project-settings>
+      </div>
+
+    </div>
+  </div>
+</div>

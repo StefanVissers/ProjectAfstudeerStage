@@ -1,14 +1,11 @@
 ﻿using Frontend.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Frontend.Services
 {
@@ -22,7 +19,6 @@ namespace Frontend.Services
         private readonly SecretSettings _secretSettings;
         private readonly UsersDbContext _userDbContext;
 
-
         public UserService(SecretSettings secretSettings, MongoDBAppSettings mongoSettings)
         {
             _secretSettings = secretSettings;
@@ -30,9 +26,6 @@ namespace Frontend.Services
         }
         public UserModel Authenticate(UserModel user)
         {
-            // Hash Password
-            user.Password = HashPassword(user.Username, user.Password);
-            
             // Gets a user from the database using the username and password.
             UserModel dbUser = _userDbContext.Get(user);
 
