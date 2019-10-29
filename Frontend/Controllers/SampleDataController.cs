@@ -29,14 +29,6 @@ namespace Frontend.Controllers
             });
         }
 
-        [HttpPost("[action]")]
-        [Authorize]
-        public TestClass Tests()
-        {
-            var TestThing = new TestClass { someString = "succes" };
-            return TestThing;
-        }
-
         public class TestClass
         {
             public string someString { get; set; }

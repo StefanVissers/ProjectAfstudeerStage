@@ -59,22 +59,6 @@ namespace Frontend.Models
         }
 
         /// <summary>
-        /// Gets a ProjectModel based on its Name and Description.
-        /// </summary>
-        /// <param name="projectModel"></param>
-        /// <returns></returns>
-        public ProjectModel Get(ProjectModel projectModel)
-        {
-            var filterName = Builders<ProjectModel>.Filter.Eq(x => x.Name, projectModel.Name);
-            var filterDescription = Builders<ProjectModel>.Filter.Eq(x => x.Description, projectModel.Description);
-            var filterCombined = Builders<ProjectModel>.Filter.And(filterName, filterDescription);
-
-            var project = ProjectsCollection.FindAsync(filterCombined).Result.FirstOrDefault();
-
-            return project;
-        }
-
-        /// <summary>
         /// Gets a ProjectModel from its Id.
         /// </summary>
         /// <param name="id"></param>

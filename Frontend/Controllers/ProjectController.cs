@@ -69,9 +69,7 @@ namespace Frontend.Controllers
         {
             var project = _projectsDbContext.Get(id);
 
-            var users = project.Users;
-
-            return Ok();
+            return Ok(project.Users);
         }
 
         // POST: api/Project

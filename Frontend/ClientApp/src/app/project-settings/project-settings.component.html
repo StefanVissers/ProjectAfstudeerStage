@@ -1,18 +1,62 @@
 <p *ngIf="!project"><em>Loading...</em></p>
 
-<table class='table table-striped' *ngIf="project">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Role</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of project.users">
-      <td>{{ user.name }}</td>
-      <td>{{ user.role }}</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<form *ngIf="projectForm && project" name="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
+  <input type="hidden" formControlName="id" />
+  <h3 style="text-align: center">Project description</h3>
+  <hr />
+  <textarea class="form-control" rows="5" formControlName="description"></textarea>
+  <hr />
+
+  <!--<table class='table table-striped' *ngIf="project">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of project.users">
+        <td>{{ user.name }}</td>
+        <td>{{ user.role }}</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>-->
+
+  <h3 style="text-align: center">Users and Roles</h3>
+  <div id="table" class="table-editable">
+    <span class="table-add float-right mb-3 mr-2">
+      <a class="text-success" (click)="add()">
+        Add user to project
+      </a>
+    </span>
+    <table *ngIf="users" class="table table-bordered table-responsive-md table-striped text-center">
+      <tr>
+        <th class="text-center">Name</th>
+        <th class="text-center">Role</th>
+        <th class="text-center">Remove</th>
+      </tr>
+      <tr *ngFor="let person of users; let id = index">
+        <td>
+          <span (keyup)="changeValue(id, 'name', $event)" (blur)="updateList(id, 'name', $event)" contenteditable="true">{{person.name}}</span>
+        </td>
+        <td>
+          <span contenteditable="true" (keyup)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)">{{person.role}}</span>
+          <!--<select *ngIf="usersToBeAdded">
+            <option *ngFor="let user of usersToBeAdded; let id = index" value="{{ user.username }}" id="{{ user.id }}" (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)">{{ user.username }}</option>
+          </select>-->
+        </td>
+        <td>
+          <span class="table-remove">
+            <button type="button" color="danger" rounded="true" size="sm" class="btn btn-block btn-danger my-0" (click)="remove(id)">Remove</button>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <hr />
+  <!-- Editable table -->
+
+  <button type="submit" class="btn btn-block btn-success">Update</button>
+</form>

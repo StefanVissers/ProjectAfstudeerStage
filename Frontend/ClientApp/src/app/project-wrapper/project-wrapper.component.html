@@ -23,23 +23,23 @@
       </div>
       <hr />
 
-      <div *ngIf="!categoryId && !elementId && !settings">
+      <div class="container" *ngIf="!categoryId && !elementId && !settings">
         <p>{{ project.description }}</p>
       </div>
 
-      <div *ngIf="!elementId && categoryId && category && !settings">
+      <div class="container" *ngIf="!elementId && categoryId && category && !settings">
         <h2 style="text-align: center">{{ category.name }}</h2>
         <p>{{ category.description }}</p>
       </div>
 
-      <div *ngIf="elementId && categoryId && category && element && !settings">
+      <div class="container" *ngIf="elementId && categoryId && category && element && !settings">
         <h2 style="text-align: center">{{ element.name }}</h2>
         <p>{{ element.description }}</p>
         <hr />
         <app-project-details [project]="project" [category]="category"></app-project-details>
       </div>
 
-      <div *ngIf="settings">
+      <div class="container" *ngIf="settings">
         <app-project-settings></app-project-settings>
       </div>
 

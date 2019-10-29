@@ -1,6 +1,6 @@
 <form *ngIf="projectForm && element" name="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
   <input type="hidden" formControlName="elementId" />
-  <textarea class="form-control" formControlName="explanation"></textarea>
+  <textarea class="form-control" rows="8" formControlName="explanation"></textarea>
   <br />
   <div class="row">
     <div class="col-sm-6">

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Frontend.Models;
+﻿using Frontend.Models;
 using Frontend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+using System.Collections.Generic;
 
 namespace Frontend.Controllers
 {
@@ -16,7 +12,7 @@ namespace Frontend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IDbContext<UserModel> _usersDbContext;
+        private readonly IUsersDbContext _usersDbContext;
         private readonly MongoDBAppSettings _mongoDbSettings;
 
         // Userservice needed for authentication.
@@ -29,7 +25,16 @@ namespace Frontend.Controllers
             _userService = new UserService(secretSettings.Value, mongoDbSettings.Value);
         }
 
+        // GET: api/User/
+        [HttpGet()]
+        public List<UserModel> Get()
+        {
+            var user = _usersDbContext.Get();
+            return user;
+        }
+
         // GET: api/User/5
+
         [HttpGet("{id}")]
         public UserModel Get(string id)
         {

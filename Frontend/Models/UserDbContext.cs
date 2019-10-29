@@ -95,6 +95,15 @@ namespace Frontend.Models
             return user;
         }
 
+        public List<UserModel> Get()
+        {
+            var users = UsersCollection.Find(EmptyUserFilter).ToList();
+
+            var userss = users.Select(x => new UserModel() { Id = x.Id, Username = x.Username }).ToList();
+
+            return userss;
+        }
+
         /// <summary>
         /// Insert a UserModel into the database. Also hashes the password before inserting.
         /// </summary>
@@ -144,6 +153,7 @@ namespace Frontend.Models
 
     interface IUsersDbContext : IDbContext<UserModel>
     {
+        List<UserModel> Get();
         IMongoCollection<UserModel> UsersCollection { get; }
     }
 }
