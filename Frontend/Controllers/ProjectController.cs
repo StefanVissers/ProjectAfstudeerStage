@@ -72,6 +72,14 @@ namespace Frontend.Controllers
             return Ok(project.Users);
         }
 
+        [HttpGet("UserRoles")]
+        public IActionResult UserRoles()
+        {
+            var roles = UserRole.UserRoles;
+
+            return Ok(roles);
+        }
+
         // POST: api/Project
         [HttpPost]
         public IActionResult Post([FromBody] ProjectModel project)

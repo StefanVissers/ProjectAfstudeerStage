@@ -77,6 +77,9 @@ namespace Frontend.Models
     public class UserRole
     {
         public const string UserRoleCreator = "Creator";
+        public const string UserRoleExtra = "Extra";
+        public const string UserRoleViewer = "Viewer";
+        public static readonly string[] UserRoles = { UserRoleCreator, UserRoleExtra, UserRoleViewer };
 
         [BsonElement()]
         public string UserId { get; set; }

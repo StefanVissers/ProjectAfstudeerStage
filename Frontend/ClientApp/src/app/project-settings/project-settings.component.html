@@ -7,23 +7,6 @@
   <textarea class="form-control" rows="5" formControlName="description"></textarea>
   <hr />
 
-  <!--<table class='table table-striped' *ngIf="project">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Role</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of project.users">
-        <td>{{ user.name }}</td>
-        <td>{{ user.role }}</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>-->
-
   <h3 style="text-align: center">Users and Roles</h3>
   <div id="table" class="table-editable">
     <span class="table-add float-right mb-3 mr-2">
@@ -31,7 +14,7 @@
         Add user to project
       </a>
     </span>
-    <table *ngIf="users" class="table table-bordered table-responsive-md table-striped text-center">
+    <table *ngIf="users" formControlName="users" class="table table-bordered table-responsive-md table-striped text-center">
       <tr>
         <th class="text-center">Name</th>
         <th class="text-center">Role</th>
@@ -39,13 +22,20 @@
       </tr>
       <tr *ngFor="let person of users; let id = index">
         <td>
-          <span (keyup)="changeValue(id, 'name', $event)" (blur)="updateList(id, 'name', $event)" contenteditable="true">{{person.name}}</span>
+          <select class="form-control" *ngIf="usersToBeAdded" (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)">
+            <option *ngFor="let user of usersToBeAdded; let id = index" value="{{ user.id }}"
+                    (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)" [selected]="person.userId==user.id ? true : null">
+              {{ user.username }}
+            </option>
+          </select>
         </td>
         <td>
-          <span contenteditable="true" (keyup)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)">{{person.role}}</span>
-          <!--<select *ngIf="usersToBeAdded">
-            <option *ngFor="let user of usersToBeAdded; let id = index" value="{{ user.username }}" id="{{ user.id }}" (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)">{{ user.username }}</option>
-          </select>-->
+          <select class="form-control" *ngIf="rolesToBeAdded" (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)">
+            <option *ngFor="let role of rolesToBeAdded; let id = index" value="{{ role }}"
+                    (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)" [selected]="person.role==role ? true : null">
+              {{ role }}
+            </option>
+          </select>
         </td>
         <td>
           <span class="table-remove">
@@ -56,7 +46,6 @@
     </table>
   </div>
   <hr />
-  <!-- Editable table -->
 
   <button type="submit" class="btn btn-block btn-success">Update</button>
 </form>
