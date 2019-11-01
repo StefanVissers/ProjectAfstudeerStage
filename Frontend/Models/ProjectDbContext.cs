@@ -90,13 +90,26 @@ namespace Frontend.Models
             var updateProjectDescription = Builders<ProjectModel>.Update.Set(x => x.Description, model.Description);
             var updateProjectASVSLevel = Builders<ProjectModel>.Update.Set(x => x.ASVSLevel, model.ASVSLevel);
             var updateProjectIsCompleted = Builders<ProjectModel>.Update.Set(x => x.IsCompleted, model.IsCompleted);
+            var updateProjectUsers = Builders<ProjectModel>.Update.Set(x => x.Users, model.Users);
             var updateProjectElements = Builders<ProjectModel>.Update.Set(x => x.WorkflowElementCategories, model.WorkflowElementCategories);
 
             var updates = Builders<ProjectModel>.Update.Combine(
                 updateProjectName, updateProjectDescription, updateProjectASVSLevel,
-                updateProjectIsCompleted, updateProjectElements);
+                updateProjectIsCompleted, updateProjectUsers, updateProjectElements);
 
             var project = ProjectsCollection.FindOneAndUpdate(filterId, updates);
+
+            return project;
+        }
+
+        public ProjectModel Put(string id, IEnumerable<UserRole> model)
+        {
+            var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
+
+            var updateProjectUsers = Builders<ProjectModel>.Update.Set(x => x.Users, model);
+
+
+            var project = ProjectsCollection.FindOneAndUpdate(filterId, updateProjectUsers);
 
             return project;
         }
@@ -135,6 +148,7 @@ namespace Frontend.Models
     interface IProjectDbContext : IDbContext<ProjectModel>
     {
         IEnumerable<ProjectModel> Get();
+        ProjectModel Put(string projectId, IEnumerable<UserRole> value);
         ProjectModel Put(string projectId, string categoryId, WorkflowElement workflowElement);
         IMongoCollection<ProjectModel> ProjectsCollection { get; }
     }

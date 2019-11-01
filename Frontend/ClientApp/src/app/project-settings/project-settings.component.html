@@ -14,7 +14,7 @@
         Add user to project
       </a>
     </span>
-    <table *ngIf="users" formControlName="users" class="table table-bordered table-responsive-md table-striped text-center">
+    <table *ngIf="users" class="table table-bordered table-responsive-md table-striped text-center">
       <tr>
         <th class="text-center">Name</th>
         <th class="text-center">Role</th>
@@ -22,17 +22,17 @@
       </tr>
       <tr *ngFor="let person of users; let id = index">
         <td>
-          <select class="form-control" *ngIf="usersToBeAdded" (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)">
+          <select class="form-control" *ngIf="usersToBeAdded" (change)="changeValue(id, 'name', $event)">
             <option *ngFor="let user of usersToBeAdded; let id = index" value="{{ user.id }}"
-                    (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)" [selected]="person.userId==user.id ? true : null">
+                    [selected]="person.userId==user.id ? true : null">
               {{ user.username }}
             </option>
           </select>
         </td>
         <td>
-          <select class="form-control" *ngIf="rolesToBeAdded" (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)">
+          <select class="form-control" *ngIf="rolesToBeAdded" (change)="changeValue(id, 'role', $event)">
             <option *ngFor="let role of rolesToBeAdded; let id = index" value="{{ role }}"
-                    (change)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)" [selected]="person.role==role ? true : null">
+                    [selected]="person.role==role ? true : null">
               {{ role }}
             </option>
           </select>

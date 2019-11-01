@@ -117,6 +117,15 @@ namespace Frontend.Controllers
             return Ok(result);
         }
 
+        // PUT: api/Project/5
+        [HttpPut("Users/{id}")]
+        public IActionResult Put(string id, [FromBody] IEnumerable<UserRole> value)
+        {
+            var result = _projectsDbContext.Put(id, value);
+
+            return Ok(result);
+        }
+
         [HttpPut("{projectId}/{categoryId}")]
         public IActionResult Put(string projectId, string categoryId, [FromBody] WorkflowElement value)
         {
