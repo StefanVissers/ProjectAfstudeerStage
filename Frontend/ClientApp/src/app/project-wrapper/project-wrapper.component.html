@@ -33,10 +33,7 @@
       </div>
 
       <div class="container" *ngIf="elementId && categoryId && category && element && !settings">
-        <h2 style="text-align: center">{{ element.name }}</h2>
-        <p>{{ element.description }}</p>
-        <hr />
-        <app-project-details [project]="project" [category]="category"></app-project-details>
+        <app-project-details [project]="project" [category]="category" [element]="element"></app-project-details>
       </div>
 
       <div class="container" *ngIf="settings">

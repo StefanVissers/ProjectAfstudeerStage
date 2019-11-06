@@ -1,7 +1,11 @@
+<h2 style="text-align: center">{{ element.name }}</h2>
+<p contenteditable="true">{{ element.description }}</p>
+<hr />
+
 <form *ngIf="projectForm && element" name="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
   <input type="hidden" formControlName="elementId" />
   <textarea style="font-family: Courier New, Courier, monospace;" class="form-control" rows="4" formControlName="explanation"></textarea>
-  <br />
+  <hr />
   <div class="row">
     <div class="col-sm-6">
       <span>Is this element done?</span>

@@ -12,13 +12,12 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 export class ProjectDetailsComponent implements OnInit {
 
     private projectId: string;
+    public categoryId: string;
+    public elementId: string;
+    public projectForm: FormGroup;
     @Input() project: Project;
     @Input() category: WorkflowElementCategory;
     @Input() element: WorkflowElement;
-    public projectForm: FormGroup;
-    public categoryId: string;
-    public elementId: string;
-    public isCollapsed = false;
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
         route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string,
@@ -53,6 +52,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     onFormSubmit() {
+        console.log(this.element.Description);
         this.element = this.projectForm.value;
         console.log(JSON.stringify(this.element));
         this.http.put<Project>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId, this.element).subscribe(result => {

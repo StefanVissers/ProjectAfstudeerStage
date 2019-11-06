@@ -56,10 +56,4 @@ export class ProjectWrapperComponent implements OnInit {
             }, error => console.error(error));
         }
     }
-
-    getActiveAccordion() {
-        if (this.categoryId) {
-            return this.categoryId;
-        }
-    }
 }
