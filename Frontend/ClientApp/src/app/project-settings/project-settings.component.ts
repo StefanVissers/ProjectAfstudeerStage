@@ -69,7 +69,6 @@ export class ProjectSettingsComponent implements OnInit {
                 this.project = result;
             }, error => console.error(error));
         }, error => console.error(error));
-        
     }
 
     // Section Users Table
@@ -97,17 +96,4 @@ export class ProjectSettingsComponent implements OnInit {
             x.Role = event.target.value;
         }
     }
-
-    //updateList(id: string, property: string, event: any) {
-    //    let x = this.users[id];
-    //    let y = this.usersToBeAdded.filter(z => z.id === event.target.value as string).pop();
-
-    //    if (property === "name") {
-    //        x.Name = y.username;
-    //        x.UserId = event.target.value;
-    //    } else {
-    //        x.Role = event.target.value;
-    //    }
-    //    console.log(x);
-    //}
 }

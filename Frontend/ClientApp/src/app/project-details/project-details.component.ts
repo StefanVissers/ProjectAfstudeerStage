@@ -28,7 +28,7 @@ export class ProjectDetailsComponent implements OnInit {
             this.categoryId = event.category;
             this.elementId = event.element;
         });
-
+        
         this.projectForm = this.formbuilder.group({
             elementId: [''],
             explanation: [''],
@@ -42,7 +42,7 @@ export class ProjectDetailsComponent implements OnInit {
             this.loadElement();
         });
     }
-
+    
     loadElement() {
         if (this.categoryId && this.elementId) {
             this.http.get<WorkflowElement>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId + '/' + this.elementId).subscribe(result => {

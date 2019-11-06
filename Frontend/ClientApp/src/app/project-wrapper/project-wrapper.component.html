@@ -3,8 +3,8 @@
 <div class="container">
   <div class="row" *ngIf="project">
     <div class="col-md-3 col-sm-4" style="overflow-y: auto">
-      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-        <ngb-panel *ngFor="let category of project.workflowElementCategories" title="{{ category.name }}">
+      <ngb-accordion #acc="ngbAccordion" [closeOthers]="true" activeIds="panel-{{ categoryId }}">
+        <ngb-panel *ngFor="let category of project.workflowElementCategories" id="panel-{{ category.categoryId }}" title="{{ category.name }}">
           <ng-template ngbPanelContent>
             <ul>
               <li *ngFor="let element of category.workflowElements">

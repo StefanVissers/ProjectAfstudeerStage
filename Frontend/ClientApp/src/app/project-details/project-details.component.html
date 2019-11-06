@@ -1,6 +1,6 @@
 <form *ngIf="projectForm && element" name="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
   <input type="hidden" formControlName="elementId" />
-  <textarea class="form-control" rows="8" formControlName="explanation"></textarea>
+  <textarea style="font-family: Courier New, Courier, monospace;" class="form-control" rows="4" formControlName="explanation"></textarea>
   <br />
   <div class="row">
     <div class="col-sm-6">
@@ -13,6 +13,6 @@
       <input class="form-control" title="Is Relevant" type="checkbox" name="isRelevant" formControlName="isRelevant" />
     </div>
   </div>
-  <br />
+  <hr />
   <button type="submit" class="btn btn-block btn-success">Update</button>
 </form>
