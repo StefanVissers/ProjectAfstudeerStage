@@ -27,6 +27,11 @@ namespace Frontend.Models
 
         [BsonElement()]
         public string Token { get; set; }
+
+        // Meta Data
+        [BsonElement()]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime TimeCreated { get; set; }
     }
 
     public class Response

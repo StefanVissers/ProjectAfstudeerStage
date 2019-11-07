@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 
 namespace Frontend.Controllers
 {
@@ -46,7 +49,10 @@ namespace Frontend.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] UserModel userModel)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
+            userModel.TimeCreated = DateTime.Now;
             userModel = _usersDbContext.Post(userModel);
+
             return Ok(userModel);
         }
 

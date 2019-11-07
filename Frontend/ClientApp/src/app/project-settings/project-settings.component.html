@@ -3,10 +3,9 @@
 <form *ngIf="projectForm && project" name="projectForm" [formGroup]="projectForm" (ngSubmit)="onFormSubmit(projectForm.value)">
   <input type="hidden" formControlName="id" />
   <h3 style="text-align: center">Project description</h3>
-  <hr />
   <textarea class="form-control" rows="5" formControlName="description"></textarea>
   <hr />
-  
+
   <h3 style="text-align: center">Users and Roles</h3>
   <div id="table" class="table-editable">
     <span class="table-add float-right mb-3 mr-2">
@@ -44,6 +43,11 @@
         </td>
       </tr>
     </table>
+  </div>
+  <hr />
+  <div class="col-sm-6">
+    <span>Is this project completed?</span>
+    <input class="form-control" title="Is Completed" type="checkbox" name="isCompleted" formControlName="isCompleted" />
   </div>
   <hr />
 

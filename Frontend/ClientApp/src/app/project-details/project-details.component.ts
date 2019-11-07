@@ -33,6 +33,7 @@ export class ProjectDetailsComponent implements OnInit {
             explanation: [''],
             isDone: [''],
             isRelevant: [''],
+            description: [''],
         });
     }
 
@@ -52,9 +53,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     onFormSubmit() {
-        console.log(this.element.Description);
         this.element = this.projectForm.value;
-        console.log(JSON.stringify(this.element));
         this.http.put<Project>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId, this.element).subscribe(result => {
             this.project = result;
             this.loadElement();

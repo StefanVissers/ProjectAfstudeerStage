@@ -12,6 +12,10 @@ export class Project {
     Users: UserRole[];
 
     WorkflowElementCategories: WorkflowElementCategory[];
+
+    TimeCreated: Date
+
+    TimeLastEdit: Date
 }
 
 

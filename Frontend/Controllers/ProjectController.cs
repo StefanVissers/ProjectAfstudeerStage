@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
+using System.Threading;
 using Frontend.Models;
-using Frontend.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -24,15 +23,25 @@ namespace Frontend.Controllers
         {
             _mongoDbSettings = mongoDbSettings.Value;
             _projectsDbContext = new ProjectDbContext(_mongoDbSettings);
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
         }
-
-
 
         // GET: api/Project
         [HttpGet]
         public IActionResult Get()
         {
             var result = _projectsDbContext.Get();
+
+            // Get the UserId from the Claims.
+            var user = User.Identity as ClaimsIdentity;
+            var userId = user.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (userId != null)
+            {
+                result = result.Where(x => x.Users.Any(y => y.UserId == userId));
+            }
+
+            result = result.OrderByDescending(x => x.IsCompleted ? 0 : 1);
 
             return Ok(result);
         }
@@ -84,6 +93,10 @@ namespace Frontend.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] ProjectModel project)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
+            project.TimeCreated = DateTime.Now;
+            project.TimeLastEdit = DateTime.Now;
+
             if (project.Users == null)
             {
                 project.Users = new List<UserRole>();
@@ -104,15 +117,18 @@ namespace Frontend.Controllers
             }
 
             var result = _projectsDbContext.Post(project);
-
+            
             return Ok(result);
         }
 
         // PUT: api/Project/5
         [HttpPut("{id}")]
-        public IActionResult Put(string id, [FromBody] ProjectModel value)
+        public IActionResult Put(string id, [FromBody] ProjectModel project)
         {
-            var result = _projectsDbContext.Put(id, value);
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
+            project.TimeLastEdit = DateTime.Now;
+            
+            var result = _projectsDbContext.Put(id, project);
 
             return Ok(result);
         }
@@ -151,7 +167,14 @@ namespace Frontend.Controllers
 
             var userId = user.FindFirst(ClaimTypes.Name)?.Value;
 
-            return Ok();
+            var project = _projectsDbContext.Get(id);
+
+            if(project.Users.Any(x => x.UserId == userId))
+            {
+                return Ok("Succes");
+            }
+
+            return Ok("Failure");
         }
     }
 }

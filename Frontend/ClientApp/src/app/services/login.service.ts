@@ -7,21 +7,19 @@ import { Register } from "../models/register";
     providedIn: 'root'
 })
 export class LoginService {
-    Url: string;
-    token: string;
-    header: any;
-    constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-        
 
+    header: any;
+
+    constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
         const headerSettings: { [name: string]: string | string[]; } = {};
         this.header = new HttpHeaders(headerSettings);
     }
     Login(model: any) {
         console.log("login in login service");
-        return this.http.post<any>(this.Url + 'api/User/Login', model, { headers: this.header });
+        return this.http.post<any>(this.baseUrl + 'api/User/Login', model, { headers: this.header });
     }
     CreateUser(register: Register) {
         const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-        return this.http.post<Register[]>(this.Url + 'api/User', register, httpOptions)
+        return this.http.post<Register[]>(this.baseUrl + 'api/User', register, httpOptions)
     }
 }  

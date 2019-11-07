@@ -113,7 +113,7 @@ namespace Frontend.Models
         {
             user.Password = UserService.HashPassword(user.Username, user.Password);
 
-            if (Get(user) != null)
+            if (Get(user) == null)
             {
                 UsersCollection.InsertOne(user);
                 user.Password = null;

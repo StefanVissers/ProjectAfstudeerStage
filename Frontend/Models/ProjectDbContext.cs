@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Frontend.Models
 {
@@ -48,12 +49,17 @@ namespace Frontend.Models
         }
 
         /// <summary>
-        /// Gets a list of all projects.
+        /// Gets a list of all projects without workflowelementcategories.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<ProjectModel> Get()
         {
-            List<ProjectModel> list = ProjectsCollection.Find(EmptyProjectFilter).ToList();
+            var list = ProjectsCollection.Find(EmptyProjectFilter).ToList();
+
+            // Parallel so requests will be faster.
+            Parallel.ForEach(list, project => {
+                project.WorkflowElementCategories = null;
+            });
 
             return list;
         }
@@ -92,10 +98,12 @@ namespace Frontend.Models
             var updateProjectIsCompleted = Builders<ProjectModel>.Update.Set(x => x.IsCompleted, model.IsCompleted);
             var updateProjectUsers = Builders<ProjectModel>.Update.Set(x => x.Users, model.Users);
             var updateProjectElements = Builders<ProjectModel>.Update.Set(x => x.WorkflowElementCategories, model.WorkflowElementCategories);
+            var updateProjectTimeLastEdit = Builders<ProjectModel>.Update.Set(x => x.TimeLastEdit, model.TimeLastEdit);
 
             var updates = Builders<ProjectModel>.Update.Combine(
                 updateProjectName, updateProjectDescription, updateProjectASVSLevel,
-                updateProjectIsCompleted, updateProjectUsers, updateProjectElements);
+                updateProjectIsCompleted, updateProjectUsers, updateProjectElements,
+                updateProjectTimeLastEdit);
 
             var project = ProjectsCollection.FindOneAndUpdate(filterId, updates);
 
@@ -123,6 +131,7 @@ namespace Frontend.Models
             element.Explanation = workflowElement.Explanation;
             element.IsDone = workflowElement.IsDone;
             element.IsRelevant = workflowElement.IsRelevant;
+            element.Description = workflowElement.Description;
 
             var newProject = ProjectsCollection.ReplaceOne(x => x.Id == projectId, project);
 

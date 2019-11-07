@@ -36,6 +36,16 @@ namespace Frontend.Models
 
         [BsonElement()]
         public List<WorkflowElementCategory> WorkflowElementCategories { get; set; }
+
+        // Meta Data
+        [BsonElement()]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime TimeCreated { get; set; }
+
+        [BsonElement()]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime TimeLastEdit { get; set; }
+
     }
 
     public class WorkflowElementCategory

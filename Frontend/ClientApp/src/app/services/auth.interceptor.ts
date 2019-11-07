@@ -11,7 +11,6 @@ export class AuthInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // add authorization header with basic auth credentials if available
         let cookieValue = this.cookieService.get('Auth');
-        //let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (cookieValue) {
             request = request.clone({
                 setHeaders: {
