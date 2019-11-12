@@ -19,6 +19,7 @@ export class ProjectWrapperComponent implements OnInit {
     public elementId: string;
     public isCollapsed = false;
     public settings = false;
+    public ssllabs = false;
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
         route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string,
@@ -30,6 +31,7 @@ export class ProjectWrapperComponent implements OnInit {
         });
         this.activeRoute.data.subscribe(data => {
             this.settings = data.settings;
+            this.ssllabs = data.ssllabs;
         })
     }
 

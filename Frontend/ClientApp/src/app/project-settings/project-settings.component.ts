@@ -61,8 +61,8 @@ export class ProjectSettingsComponent implements OnInit {
 
     onFormSubmit() {
         // Update Misc stuff
-        this.project.Description = this.projectForm.value.description;
-        this.project.IsCompleted = this.projectForm.value.isCompleted;
+        this.project.description = this.projectForm.value.description;
+        this.project.isCompleted = this.projectForm.value.isCompleted;
 
         this.http.put<Project>(this.baseUrl + 'api/Project/' + this.projectId, this.project).subscribe(result => {
             this.project = result;

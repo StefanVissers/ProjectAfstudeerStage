@@ -1,0 +1,32 @@
+<form name="ssllabsForm" [formGroup]="ssllabsForm" (ngSubmit)="onFormSubmit(ssllabsForm.value)">
+  <input hidden="hidden" formControlName="projectId" />
+  Host name:
+  <input type="text" class="form-control" placeholder="http://google.nl" formControlName="host" />
+  <hr />
+  IP address:
+  <input type="text" class="form-control" placeholder="192.168.1.1" formControlName="ip" />
+  <hr />
+  <button type="submit" class="btn btn-block btn-success">Start Scan</button>
+</form>
+
+<hr />
+
+<p *ngIf="loading">Loading...</p>
+<form *ngIf="result" name="resultForm" [formGroup]="resultForm">
+  Grade:
+  <input class="form-control-plaintext" style="font-size:large;" formControlName="grade" contenteditable="false" />
+  <hr />
+  Server Name:
+  <input class="form-control-plaintext" formControlName="serverName" contenteditable="false" />
+  <hr />
+  Suites:
+  <textarea rows="3" class="form-control-plaintext" formControlName="suites" contenteditable="false" ></textarea>
+  <hr />
+  Protocols:
+  <textarea rows="2" class="form-control-plaintext" formControlName="protocols" contenteditable="false" ></textarea>
+  <hr />
+  Simulations:
+  <textarea rows="5" class="form-control-plaintext" formControlName="sims" contenteditable="false" ></textarea>
+  <hr />
+</form>
+<br />

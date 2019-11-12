@@ -18,6 +18,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { ProjectSettingsComponent } from './project-settings/project-settings.component';
 import { ProjectWrapperComponent } from './project-wrapper/project-wrapper.component';
+import { ProjectSsllabsComponent } from './project-ssllabs/project-ssllabs.component';
 
 import { AuthInterceptor } from './services/auth.interceptor';
 import { ErrorInterceptor } from './services/error.interceptor';
@@ -40,6 +41,7 @@ import { AuthGuard } from './services/auth.guard';
         ProjectDetailsComponent,
         ProjectSettingsComponent,
         ProjectWrapperComponent,
+        ProjectSsllabsComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -56,7 +58,8 @@ import { AuthGuard } from './services/auth.guard';
             { path: 'project/:id/:category', component: ProjectWrapperComponent },
             { path: 'project/:id/:category/:element', component: ProjectWrapperComponent },
             { path: 'project', component: ProjectComponent },
-            { path: 'project-settings/:id', component: ProjectWrapperComponent, data: {'settings': true} },
+            { path: 'project-settings/:id', component: ProjectWrapperComponent, data: { 'settings': true } },
+            { path: 'project-ssllabs/:id', component: ProjectWrapperComponent, data: { 'ssllabs': true } },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
             { path: 'dashboard', component: DashboardComponent },

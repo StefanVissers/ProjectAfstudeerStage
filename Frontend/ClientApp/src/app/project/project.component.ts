@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Project } from '../models/project';
 import { HttpClient } from '@angular/common/http';
 

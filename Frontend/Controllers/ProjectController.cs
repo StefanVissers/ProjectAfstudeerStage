@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using SSLLabsApiWrapper;
+using static SSLLabsApiWrapper.SSLLabsApiService;
 
 namespace Frontend.Controllers
 {
@@ -26,8 +29,27 @@ namespace Frontend.Controllers
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
         }
 
+        // GET: api/Project/SSLLabs/5da829fa67db7d33e88a5d9e/http://google.nl/192.168.1.1
+        [HttpGet("SSLLabs/{id}/{host}/{ip}")]
+        public IActionResult GetSSLLabsReport(string id, string host, string ip)
+        {
+            var ssllService = new SSLLabsApiService("https://api.ssllabs.com/api/v3");
+            var x = ssllService.Analyze(host: "http://itauditcenter.nl", publish: Publish.Off, startNew: StartNew.On,
+                fromCache: FromCache.Off, maxHours: 1, all: All.Done, ignoreMismatch: IgnoreMismatch.Off);
+
+            var z = ssllService.GetEndpointData("http://itauditcenter.nl", "62.177.196.171");
+            while (z.statusMessage == "In progress")
+            {
+                Console.WriteLine("In Progress");
+                Thread.Sleep(5000);
+                z = ssllService.GetEndpointData("http://itauditcenter.nl", "62.177.196.171");
+            }
+
+            return Ok(z);
+        }
+
         // GET: api/Project
-        [HttpGet]
+        [HttpGet("")]
         public IActionResult Get()
         {
             var result = _projectsDbContext.Get();
@@ -159,6 +181,7 @@ namespace Frontend.Controllers
             return Ok();
         }
 
+
         [HttpGet("Authenticated/{id}")]
         [Authorize]
         public IActionResult Authenticated(string id)
@@ -170,7 +193,7 @@ namespace Frontend.Controllers
             var project = _projectsDbContext.Get(id);
 
             if(project.Users.Any(x => x.UserId == userId))
-            {
+             {
                 return Ok("Succes");
             }
 

@@ -1,21 +1,23 @@
 export class Project {
     id: string;
 
-    Name: string;
+    name: string;
 
-    Description: string;
+    description: string;
 
-    IsCompleted: boolean;
+    isCompleted: boolean;
 
-    ASVSLevel: number;
+    asvsLevel: number;
 
-    Users: UserRole[];
+    users: UserRole[];
 
-    WorkflowElementCategories: WorkflowElementCategory[];
+    workflowElementCategories: WorkflowElementCategory[];
 
-    TimeCreated: Date
+    sslLabsData: any[];
 
-    TimeLastEdit: Date
+    timeCreated: Date
+
+    timeLastEdit: Date
 }
 
 
@@ -49,20 +51,4 @@ export class UserRole {
     Name: string;
 
     Role: string;
-}
-
-export enum ASVSLevel {
-    LevelOne = 1,
-    LevelTwo = 2,
-    LevelThree = 3
-}
-
-export class EnumEx {
-    static getNamesAndValues<T extends number>(e: any) {
-        return EnumEx.getNames(e).map(n => ({ name: n, value: e[n] as T }));
-    }
-
-    static getNames(e: any) {
-        return Object.keys(e).filter(k => typeof e[k] === "number") as string[];
-    }
 }

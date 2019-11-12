@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SSLLabsApiWrapper.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,9 @@ namespace Frontend.Models
 
         [BsonElement()]
         public List<WorkflowElementCategory> WorkflowElementCategories { get; set; }
+
+        [BsonElement()]
+        public List<Endpoint> SSLLabsData { get; set; }
 
         // Meta Data
         [BsonElement()]

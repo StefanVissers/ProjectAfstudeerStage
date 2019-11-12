@@ -14,6 +14,7 @@
           </ng-template>
         </ngb-panel>
       </ngb-accordion>
+      <br />
     </div>
 
     <div class="col-md-9 col-sm-8">
@@ -23,21 +24,27 @@
       </div>
       <hr />
 
-      <div class="container" *ngIf="!categoryId && !elementId && !settings">
+      <div class="container" *ngIf="!categoryId && !elementId && !settings && !ssllabs">
         <p>{{ project.description }}</p>
+        <hr />
+        <a class="btn btn-block btn-success" [routerLink]="['/project-ssllabs/' + project.id]">To SSLLabs Data</a>
       </div>
 
-      <div class="container" *ngIf="!elementId && categoryId && category && !settings">
+      <div class="container" *ngIf="!elementId && categoryId && category && !settings && !ssllabs">
         <h2 style="text-align: center">{{ category.name }}</h2>
         <p>{{ category.description }}</p>
       </div>
 
-      <div class="container" *ngIf="elementId && categoryId && category && element && !settings">
+      <div class="container" *ngIf="elementId && categoryId && category && element && !settings && !ssllabs">
         <app-project-details [project]="project" [category]="category" [element]="element"></app-project-details>
       </div>
-
-      <div class="container" *ngIf="settings">
+      
+      <div class="container" *ngIf="settings && !ssllabs">
         <app-project-settings></app-project-settings>
+      </div>
+
+      <div class="container" *ngIf="ssllabs">
+        <app-project-ssllabs></app-project-ssllabs>
       </div>
 
     </div>
