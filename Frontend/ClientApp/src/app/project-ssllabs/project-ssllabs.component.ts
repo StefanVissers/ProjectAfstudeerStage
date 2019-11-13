@@ -89,7 +89,7 @@ export class ProjectSsllabsComponent implements OnInit {
         });
 
         this.result.details.sims.results.forEach(function (value) {
-            simString = simString + value.client.name + ' ' + value.client.version + ' ' + value.client.isReference + '\n';
+            simString = simString + value.client.name + ' ' + value.client.version + ' ' + value.errorCode + '\n';
         });
 
         object.suites = suitesString;
