@@ -1,5 +1,5 @@
 import { AuthenticationService } from '../services/authentication.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
     submitted = false;
     returnUrl: string;
     error = '';
+    loggedIn = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -46,8 +47,14 @@ export class LoginComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 data => {
-                    this.loading = false;
-                    this.router.navigate([this.returnUrl]);
+                    if (data.status == "Success") {
+                        this.loading = false;
+                        this.loggedIn = true;
+                        this.router.navigate(['/project']);
+                    } else {
+                        this.error = data.message;
+                        this.loading = false;
+                    }
                 },
                 error => {
                     this.error = error;

@@ -22,21 +22,20 @@ export class ProjectWrapperComponent implements OnInit {
     public ssllabs = false;
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
-        route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string,
-        private activeRoute: ActivatedRoute) {
-        route.params.subscribe(event => {
+        private route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string) {
+        this.route.params.subscribe(event => {
             this.projectId = event.id;
             this.categoryId = event.category;
             this.elementId = event.element;
         });
-        this.activeRoute.data.subscribe(data => {
+        this.route.data.subscribe(data => {
             this.settings = data.settings;
             this.ssllabs = data.ssllabs;
         })
     }
 
     ngOnInit() {
-        this.activeRoute.params.subscribe(_ => {
+        this.route.params.subscribe(_ => {
             this.loadElement();
         });
     }

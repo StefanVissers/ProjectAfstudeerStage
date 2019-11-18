@@ -78,29 +78,35 @@ namespace Frontend.Controllers
         [HttpPost("[action]")]
         public IActionResult Authenticate([FromBody] UserModel user)
         {
-            // Authenticates a user using username and password.
-            user = _userService.Authenticate(user);
-
-            if (user != null)
+            try
             {
-                Response.Cookies.Append(
-                    "Auth",
-                    user.Token,
-                    new CookieOptions()
-                    {
-                        Path = "/",
-                        Secure = true,
-                        HttpOnly = false
-                    });
+                // Authenticates a user using username and password.
+                user = _userService.Authenticate(user);
 
-                return Ok(new Response { Status = "Success", Message = user.Token });
+                if (user != null)
+                {
+                    Response.Cookies.Append(
+                        "Auth",
+                        user.Token,
+                        new CookieOptions()
+                        {
+                            Path = "/",
+                            Secure = true,
+                            HttpOnly = false
+                        });
+
+                    return Ok(new Response { Status = "Success", Message = user.Token });
+                }
+                else
+                {
+                    //return Ok("Invalid username or password");
+                    return Ok(new Response { Status = "Failure", Message = "Invalid Username or Password" });
+                }
             }
-            else
+            catch
             {
-                //return Ok("Invalid username or password");
-                return Ok(new Response { Status = "Failure", Message = "Invalid Username or Password" });
+                return Ok(new Response { Status = "Error", Message = "Something went wrong, please try again." });
             }
-
         }
     }
 }
