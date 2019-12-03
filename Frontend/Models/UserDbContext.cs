@@ -1,10 +1,8 @@
 ﻿using Frontend.Services;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Frontend.Models
 {
@@ -31,9 +29,9 @@ namespace Frontend.Models
 
             // Creates a model to log into the mongodb.
             //MongoCredential credential = MongoCredential.CreateCredential
-                //(MongoAuthDatabaseName,
-                // MongoUsername,
-                // MongoPassword);
+            //(MongoAuthDatabaseName,
+            // MongoUsername,
+            // MongoPassword);
 
             // Connects to the Db.
             var settings = new MongoClientSettings
@@ -95,11 +93,15 @@ namespace Frontend.Models
             return user;
         }
 
+        /// <summary>
+        /// Gets a list of users with only its Id, Username and Email.
+        /// </summary>
+        /// <returns></returns>
         public List<UserModel> Get()
         {
             var users = UsersCollection.Find(EmptyUserFilter).ToList();
 
-            var userss = users.Select(x => new UserModel() { Id = x.Id, Username = x.Username }).ToList();
+            var userss = users.Select(x => new UserModel() { Id = x.Id, Username = x.Username, Email = x.Email }).ToList();
 
             return userss;
         }
@@ -126,9 +128,25 @@ namespace Frontend.Models
             }
         }
 
+        /// <summary>
+        /// Updates a users username, password and email.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public UserModel Put(string id, UserModel model)
         {
-            throw new NotImplementedException();
+            model.Password = UserService.HashPassword(model.Username, model.Password);
+
+            var filterId = Builders<UserModel>.Filter.Eq(x => x.Id, id);
+
+            var updateUserName = Builders<UserModel>.Update.Set(x => x.Username, model.Username);
+            var updateUserPassword = Builders<UserModel>.Update.Set(x => x.Password, model.Password);
+            var updateUserEmail = Builders<UserModel>.Update.Set(x => x.Email, model.Email);
+
+            var updates = Builders<UserModel>.Update.Combine(updateUserEmail, updateUserName, updateUserPassword);
+
+            return UsersCollection.FindOneAndUpdate(filterId, updates);
         }
 
         /// <summary>
@@ -154,6 +172,7 @@ namespace Frontend.Models
     interface IUsersDbContext : IDbContext<UserModel>
     {
         List<UserModel> Get();
+        UserModel Get(UserModel model);
         IMongoCollection<UserModel> UsersCollection { get; }
     }
 }

@@ -6,12 +6,15 @@
           <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onFormSubmit(userForm.value)">
             <h1 style="text-align:center">Register</h1>
             <div class="input-group mb-3">
+              Username:
               <input type="text" class="form-control" placeholder="Username" formControlName="UserName">
             </div>
             <div class="input-group mb-3">
+              Password:
               <input type="password" class="form-control" placeholder="Password" formControlName="Password">
             </div>
             <div class="input-group mb-4">
+              Email:
               <input type="text" class="form-control" placeholder="Email" formControlName="Email">
             </div>
             <button type="submit" class="btn btn-block btn-success">Add User</button>

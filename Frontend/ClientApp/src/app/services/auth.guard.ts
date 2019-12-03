@@ -15,6 +15,8 @@ export class AuthGuard implements CanActivate {
         this.http = http;
     }
 
+    // Checks to see if the user is authenticated.
+    // If not, redirect to the login page.
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (this.cookieService.get("Auth")) {
             // logged in so return true

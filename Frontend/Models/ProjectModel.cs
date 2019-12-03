@@ -105,13 +105,6 @@ namespace Frontend.Models
         public string Role { get; set; }
     }
 
-    public enum ASVSLevel
-    {
-        LevelOne = 1,
-        LevelTwo = 2,
-        LevelThree = 3
-    }
-
     public class ProjectListViewModel
     {
         public string Id { get; set; }
@@ -123,5 +116,12 @@ namespace Frontend.Models
         public bool IsCompleted { get; set; }
 
         public int ASVSLevel { get; set; }
+    }
+
+    public class SSLLabsRequestModel
+    {
+        public string Host { get; set; }
+
+        public string Ip { get; set; }
     }
 }

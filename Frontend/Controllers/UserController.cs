@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Security.Claims;
 using System.Threading;
 
 namespace Frontend.Controllers
@@ -37,12 +38,29 @@ namespace Frontend.Controllers
         }
 
         // GET: api/User/5
-
         [HttpGet("{id}")]
         public UserModel Get(string id)
         {
             var user = _usersDbContext.Get(id);
+            user.Password = null;
             return user;
+        }
+
+        // GET: api/User/FromToken
+        [HttpGet("FromToken")]
+        public IActionResult FromToken()
+        {
+            var user = User.Identity as ClaimsIdentity;
+            var userId = user.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (userId != null)
+            {
+                return Ok(_usersDbContext.Get(userId));
+            }
+            else
+            {
+                return Ok(new UserModel());
+            }
         }
 
         // POST: api/User
@@ -58,20 +76,43 @@ namespace Frontend.Controllers
 
         // PUT: api/User/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] UserModel userModel)
+        public IActionResult Put(string id, [FromBody] UpdateUserModel userModel)
         {
+            UserModel result;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
+            var user = new UserModel { 
+                Password = userModel.OldPassword, 
+                Username = userModel.Username,
+                Email = userModel.Email,
+                Id = userModel.Id };
+
+            if (_usersDbContext.Get(user) != null)
+            {
+                user.Password = userModel.NewPassword;
+                result = _usersDbContext.Put(id, user);
+            } 
+            else
+            {
+                result = user;
+            }
+
+            return Ok(result);
         }
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(string id)
         {
+            _usersDbContext.Delete(id);
+
+            return Ok();
         }
 
         [HttpGet("[action]")]
         [Authorize]
         public IActionResult Authenticated()
         {
+            // If bearer token is correct return 200 OK.
             return Ok(new Response() { Status = "Success", Message = "Authenticated" });
         }
 
@@ -83,8 +124,10 @@ namespace Frontend.Controllers
                 // Authenticates a user using username and password.
                 user = _userService.Authenticate(user);
 
+                // If user exists and credentials are correct
                 if (user != null)
                 {
+                    // Return a cookie in the response.
                     Response.Cookies.Append(
                         "Auth",
                         user.Token,
@@ -99,7 +142,6 @@ namespace Frontend.Controllers
                 }
                 else
                 {
-                    //return Ok("Invalid username or password");
                     return Ok(new Response { Status = "Failure", Message = "Invalid Username or Password" });
                 }
             }

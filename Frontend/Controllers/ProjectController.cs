@@ -30,22 +30,49 @@ namespace Frontend.Controllers
         }
 
         // GET: api/Project/SSLLabs/5da829fa67db7d33e88a5d9e/http://google.nl/192.168.1.1
-        [HttpGet("SSLLabs/{id}/{host}/{ip}")]
-        public IActionResult GetSSLLabsReport(string id, string host, string ip)
+        [HttpPost("SSLLabs/{id}")]
+        public IActionResult GetSSLLabsReport(string id, [FromBody]SSLLabsRequestModel requestModel)
         {
             var ssllService = new SSLLabsApiService("https://api.ssllabs.com/api/v3");
-            var x = ssllService.Analyze(host: "http://itauditcenter.nl", publish: Publish.Off, startNew: StartNew.On,
-                fromCache: FromCache.Off, maxHours: 1, all: All.Done, ignoreMismatch: IgnoreMismatch.Off);
+            var x = ssllService.Analyze(host: requestModel.Host, publish: Publish.Off, startNew: StartNew.Ignore,
+                fromCache: FromCache.Off, maxHours: 1, all: All.On, ignoreMismatch: IgnoreMismatch.Off);
 
-            var z = ssllService.GetEndpointData("http://itauditcenter.nl", "62.177.196.171");
-            while (z.statusMessage == "In progress")
+            var z = ssllService.GetEndpointData(host: requestModel.Host, s: requestModel.Ip);
+            while (z.statusMessage == "In progress" || z.statusMessage == "Pending" || x.status == "IN_PROGRESS")
             {
-                Console.WriteLine("In Progress");
                 Thread.Sleep(5000);
-                z = ssllService.GetEndpointData("http://itauditcenter.nl", "62.177.196.171");
+                z = ssllService.GetEndpointData(requestModel.Host, requestModel.Ip);
+                
+                x = ssllService.Analyze(host: requestModel.Host, publish: Publish.Off, startNew: StartNew.Ignore,
+                fromCache: FromCache.Off, maxHours: 1, all: All.On, ignoreMismatch: IgnoreMismatch.Off);
             }
 
-            return Ok(z);
+            if (x.Errors.Any())
+            {
+                if (x.Errors.First().message.Contains("529"))
+                {
+                    return Ok(new { Status = "Service Overloaded", Body = "" });
+                } 
+                else if (x.Errors.First().message.Contains("503"))
+                {
+                    return Ok(new { Status = "Service Unavailable", Body = "" });
+                }
+                else if (x.Errors.First().message.Contains("500"))
+                {
+                    return Ok(new { Status = "Service Error", Body = "" });
+                }
+                else if (x.Errors.First().message.Contains("429"))
+                {
+                    return Ok(new { Status = "Too Many Requests", Body = "" });
+                }
+                else if (x.Errors.First().message.Contains("400"))
+                {
+                    return Ok(new { Status = "Invalid Parameters", Body = "" });
+                }
+            }
+
+            // Return the raw response because the model in the wrapper is not up to date.
+            return Ok(x.Wrapper.ApiRawResponse);
         }
 
         // GET: api/Project

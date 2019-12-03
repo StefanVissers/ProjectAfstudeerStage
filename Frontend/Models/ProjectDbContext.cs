@@ -88,6 +88,7 @@ namespace Frontend.Models
             return model;
         }
 
+
         public ProjectModel Put(string id, ProjectModel model)
         {
             var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
@@ -110,6 +111,12 @@ namespace Frontend.Models
             return project;
         }
 
+        /// <summary>
+        /// Updates the Users list of a project.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public ProjectModel Put(string id, IEnumerable<UserRole> model)
         {
             var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
@@ -122,6 +129,13 @@ namespace Frontend.Models
             return project;
         }
 
+        /// <summary>
+        /// Updates a workflowelement in a project.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="workflowElement"></param>
+        /// <returns></returns>
         public ProjectModel Put(string projectId, string categoryId, WorkflowElement workflowElement)
         {
             var project = Get(projectId);

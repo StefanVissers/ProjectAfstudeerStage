@@ -12,7 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { NewTestCompComponent } from './new-test-comp/new-test-comp.component'
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProfileComponent } from './profile/profile.component';
 import { ProjectComponent } from './project/project.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
@@ -35,7 +35,7 @@ import { AuthGuard } from './services/auth.guard';
         NewTestCompComponent,
         LoginComponent,
         RegisterComponent,
-        DashboardComponent,
+        ProfileComponent,
         ProjectComponent,
         CreateProjectComponent,
         ProjectDetailsComponent,
@@ -62,7 +62,7 @@ import { AuthGuard } from './services/auth.guard';
             { path: 'project-ssllabs/:id', component: ProjectWrapperComponent, data: { 'ssllabs': true } },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
-            { path: 'dashboard', component: DashboardComponent },
+            { path: 'profile', component: ProfileComponent },
         ], { onSameUrlNavigation: 'reload' })
     ],
     providers: [

@@ -34,6 +34,19 @@ namespace Frontend.Models
         public DateTime TimeCreated { get; set; }
     }
 
+    public class UpdateUserModel
+    {
+        public string Id { get; set; }
+
+        public string Username { get; set; }
+
+        public string OldPassword { get; set; }
+
+        public string NewPassword { get; set; }
+
+        public string Email { get; set; }
+    }
+
     public class Response
     {
         public string Status { set; get; }

@@ -16,6 +16,7 @@ export class ProjectSsllabsComponent implements OnInit {
     public resultForm: FormGroup;
     private projectId: string;
     private result: any;
+    private error: string;
     private loading: boolean
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
@@ -35,6 +36,14 @@ export class ProjectSsllabsComponent implements OnInit {
         this.resultForm = this.formbuilder.group({
             grade: [''],
             serverName: [''],
+            subject: [''],
+            altNames: [''],
+            validFrom: [''],
+            validUntil: [''],
+            key: [''],
+            issuer: [''],
+            sigAlg: [''],
+            revocationStatus: [''],
             suites: [''],
             protocols: [''],
             sims: [''],
@@ -51,50 +60,71 @@ export class ProjectSsllabsComponent implements OnInit {
     }
 
     onFormSubmit() {
+        this.error = "";
         this.loading = true;
-
-        let url = this.baseUrl + 'api/Project/SSLLabs/' + this.projectId + '/' + this.ssllabsForm.value.host + '/' + this.ssllabsForm.value.ip;
+        let url = this.baseUrl + 'api/Project/SSLLabs/' + this.projectId;
         console.log(url);
-        this.http.get<any>(url).subscribe(result => {
-            this.result = result;
-            this.updateValues();
+        this.http.post<any>(url, { host: this.ssllabsForm.value.host, ip: this.ssllabsForm.value.ip }).subscribe(result => {
             console.log(result);
+            if (result.status == "READY") {
+                this.result = result;
+                this.updateValues();
+            } else {
+                this.error = result.status;
+            }
+            
             this.loading = false;
         }, error => {
-            console.error(error);
-            this.loading = false;
+                console.error(error);
+                this.error = "";
+                this.loading = false;
         });
     }
 
     updateValues() {
+        let ipv4Endpoint = this.result.endpoints[1];
+        let altNames = '';
         let suitesString = '';
         let protocolString = '';
         let simString = '';
         let object = {
-            'grade': this.result.grade,
-            'serverName': this.result.serverName,
+            'grade': ipv4Endpoint.grade,
+            'serverName': ipv4Endpoint.serverName,
+            'subject': this.result.certs[0].subject,
+            'validFrom': this.result.certs[0].notBefore,
+            'validUntil': this.result.certs[0].notAfter,
+            'issuer': this.result.certs[0].issuerSubject,
+            'key': this.result.certs[0].keyAlg + " " + this.result.certs[0].keySize,
+            'sigAlg': this.result.certs[0].sigAlg,
+            'revocationStatus': this.result.certs[0].revocationStatus,
+            'altNames': '',
             'suites': '',
             'protocols': '',
             'sims': '',
         }
 
-        this.result.details.suites.forEach(function (value) {
+        this.result.certs[0].altNames.forEach(function (value) {
+            altNames += value + "\n";
+        })
+
+        ipv4Endpoint.details.suites.forEach(function (value) {
             value.list.forEach(function (val) {
                 suitesString = suitesString + val.name + '\n';
             });
         });
 
-        this.result.details.protocols.forEach(function (value) {
+        ipv4Endpoint.details.protocols.forEach(function (value) {
             protocolString = protocolString + value.name + ' ' + value.version + '\n';
         });
 
-        this.result.details.sims.results.forEach(function (value) {
+        ipv4Endpoint.details.sims.results.forEach(function (value) {
             simString = simString + value.client.name + ' ' + value.client.version + ' ' + value.errorCode + '\n';
         });
 
         object.suites = suitesString;
         object.protocols = protocolString;
         object.sims = simString;
+        object.altNames = altNames;
 
         this.resultForm.patchValue(object);
     }

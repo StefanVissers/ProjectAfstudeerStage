@@ -10,12 +10,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-project.component.css']
 })
 export class CreateProjectComponent implements OnInit {
-    data = false;
     projectForm: FormGroup;
-    keys = Object.keys;
-    asvsLevels: any;
 
-    constructor(private router: Router, private formbuilder: FormBuilder, private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+    constructor(private router: Router, private formbuilder: FormBuilder,
+        private http: HttpClient, @Inject('BASE_URL')
+        private baseUrl: string)
+    {
     }
 
     ngOnInit() {

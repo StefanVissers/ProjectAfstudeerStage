@@ -1,0 +1,36 @@
+<div class="container" style="padding-top:40px;">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card mx-6">
+        <div class="card-body p-6">
+          <h2>Profile</h2>
+          <hr />
+          <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onFormSubmit(userForm.value)">
+            <input type="hidden" formControlName="id" />
+            <p>Username:</p>
+            <div class="input-group mb-3">
+              <input contenteditable="false" type="text" class="form-control" placeholder="Username" formControlName="username">
+            </div>
+            <p>Email:</p>
+            <div class="input-group mb-4">
+              <input type="text" class="form-control" placeholder="Email" formControlName="email">
+            </div>
+            <hr />
+            <h3>Change password:</h3>
+            <hr />
+            <p>Old Password:</p>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" placeholder="Old Password" formControlName="oldPassword">
+            </div>
+            <p>New Password:</p>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" placeholder="New Password" formControlName="newPassword">
+            </div>
+            <hr />
+            <button type="submit" class="btn btn-block btn-success">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

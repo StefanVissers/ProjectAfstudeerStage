@@ -4,7 +4,7 @@
   <input type="text" class="form-control" placeholder="http://google.nl" formControlName="host" />
   <hr />
   IP address:
-  <input type="text" class="form-control" placeholder="192.168.1.1" formControlName="ip" />
+  <input type="text" class="form-control" placeholder="172.217.6.35" formControlName="ip" />
   <hr />
   <button type="submit" class="btn btn-block btn-success">Start Scan</button>
 </form>
@@ -12,21 +12,40 @@
 <hr />
 
 <p *ngIf="loading">Loading...</p>
+<p *ngIf="error">{{ error }}</p>
 <form *ngIf="result" name="resultForm" [formGroup]="resultForm">
   Grade:
-  <input class="form-control-plaintext" style="font-size:large;" formControlName="grade" contenteditable="false" />
+  <input class="form-control-plaintext" style="font-size:x-large;" formControlName="grade" contenteditable="false" />
   <hr />
   Server Name:
   <input class="form-control-plaintext" formControlName="serverName" contenteditable="false" />
   <hr />
+  <h5>Server Key and Certificate</h5>
+  Subject:
+  <input class="form-control-plaintext" formControlName="subject" contenteditable="false" />
+  Alternative Names:
+  <input class="form-control-plaintext" formControlName="altNames" contenteditable="false" />
+  Certificate Valid From:
+  <input class="form-control-plaintext" formControlName="validFrom" contenteditable="false" />
+  Certificate Valid Until:
+  <input class="form-control-plaintext" formControlName="validUntil" contenteditable="false" />
+  Key:
+  <input class="form-control-plaintext" formControlName="key" contenteditable="false" />
+  Certificate Issuer:
+  <input class="form-control-plaintext" formControlName="issuer" contenteditable="false" />
+  Signature Algorithm:
+  <input class="form-control-plaintext" formControlName="sigAlg" contenteditable="false" />
+  Revocation Status:
+  <input class="form-control-plaintext" formControlName="revocationStatus" contenteditable="false" />
+  <hr />
   Suites:
-  <textarea rows="3" class="form-control-plaintext" formControlName="suites" contenteditable="false" ></textarea>
+  <textarea rows="3" class="form-control-plaintext" formControlName="suites" contenteditable="false"></textarea>
   <hr />
   Protocols:
-  <textarea rows="2" class="form-control-plaintext" formControlName="protocols" contenteditable="false" ></textarea>
+  <textarea rows="2" class="form-control-plaintext" formControlName="protocols" contenteditable="false"></textarea>
   <hr />
   Simulations:
-  <textarea rows="5" class="form-control-plaintext" formControlName="sims" contenteditable="false" ></textarea>
+  <textarea rows="5" class="form-control-plaintext" formControlName="sims" contenteditable="false"></textarea>
   <hr />
 </form>
 <br />
