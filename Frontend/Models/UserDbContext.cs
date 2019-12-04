@@ -1,4 +1,5 @@
 ﻿using Frontend.Services;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,10 @@ namespace Frontend.Models
         public IMongoDatabase _database;
         private readonly MongoDBAppSettings Config;
 
-        public UsersDbContext(MongoDBAppSettings config)
+        public UsersDbContext(IOptions<MongoDBAppSettings> config)
         {
             // Uses the config.
-            Config = config;
+            Config = config.Value;
 
             // Gets values out of the config.
             var MongoDatabaseName = Config.MongoUserDatabaseName;
@@ -113,6 +114,7 @@ namespace Frontend.Models
         /// <returns></returns>
         public UserModel Post(UserModel user)
         {
+            user.TimeLastEdit = DateTime.Now;
             user.Password = UserService.HashPassword(user.Username, user.Password);
 
             if (Get(user) == null)
@@ -136,6 +138,7 @@ namespace Frontend.Models
         /// <returns></returns>
         public UserModel Put(string id, UserModel model)
         {
+            model.TimeLastEdit = DateTime.Now;
             model.Password = UserService.HashPassword(model.Username, model.Password);
 
             var filterId = Builders<UserModel>.Filter.Eq(x => x.Id, id);
@@ -143,6 +146,7 @@ namespace Frontend.Models
             var updateUserName = Builders<UserModel>.Update.Set(x => x.Username, model.Username);
             var updateUserPassword = Builders<UserModel>.Update.Set(x => x.Password, model.Password);
             var updateUserEmail = Builders<UserModel>.Update.Set(x => x.Email, model.Email);
+            var updateUserTimeLastEdit = Builders<UserModel>.Update.Set(x => x.TimeLastEdit, model.TimeLastEdit);
 
             var updates = Builders<UserModel>.Update.Combine(updateUserEmail, updateUserName, updateUserPassword);
 
@@ -169,7 +173,7 @@ namespace Frontend.Models
         }
     }
 
-    interface IUsersDbContext : IDbContext<UserModel>
+    public interface IUsersDbContext : IDbContext<UserModel>
     {
         List<UserModel> Get();
         UserModel Get(UserModel model);

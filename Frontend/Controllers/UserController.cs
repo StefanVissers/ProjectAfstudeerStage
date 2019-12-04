@@ -17,16 +17,14 @@ namespace Frontend.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUsersDbContext _usersDbContext;
-        private readonly MongoDBAppSettings _mongoDbSettings;
 
         // Userservice needed for authentication.
         private readonly IUserService _userService;
 
-        public UserController(IOptions<MongoDBAppSettings> mongoDbSettings, IOptions<SecretSettings> secretSettings)
+        public UserController(IUsersDbContext dbContext, IUserService userService)
         {
-            _mongoDbSettings = mongoDbSettings.Value;
-            _usersDbContext = new UsersDbContext(_mongoDbSettings);
-            _userService = new UserService(secretSettings.Value, mongoDbSettings.Value);
+            _usersDbContext = dbContext;
+            _userService = userService;
         }
 
         // GET: api/User/
@@ -84,7 +82,8 @@ namespace Frontend.Controllers
                 Password = userModel.OldPassword, 
                 Username = userModel.Username,
                 Email = userModel.Email,
-                Id = userModel.Id };
+                Id = userModel.Id
+            };
 
             if (_usersDbContext.Get(user) != null)
             {

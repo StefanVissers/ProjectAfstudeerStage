@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,10 @@ namespace Frontend.Models
         public IMongoDatabase _database;
         private readonly MongoDBAppSettings Config;
 
-        public ProjectDbContext(MongoDBAppSettings config)
+        public ProjectDbContext(IOptions<MongoDBAppSettings> config)
         {
             // Uses the config.
-            Config = config;
+            Config = config.Value;
 
             // Gets values out of the config.
             var MongoDatabaseName = Config.MongoUserDatabaseName;
@@ -168,7 +169,7 @@ namespace Frontend.Models
         }
     }
 
-    interface IProjectDbContext : IDbContext<ProjectModel>
+    public interface IProjectDbContext : IDbContext<ProjectModel>
     {
         IEnumerable<ProjectModel> Get();
         ProjectModel Put(string projectId, IEnumerable<UserRole> value);

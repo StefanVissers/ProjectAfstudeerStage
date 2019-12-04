@@ -1,5 +1,6 @@
 ﻿using Frontend.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,12 +18,12 @@ namespace Frontend.Services
     public class UserService : IUserService
     {
         private readonly SecretSettings _secretSettings;
-        private readonly UsersDbContext _userDbContext;
+        private readonly IUsersDbContext _userDbContext;
 
-        public UserService(SecretSettings secretSettings, MongoDBAppSettings mongoSettings)
+        public UserService(IUsersDbContext dbContext, IOptions<MongoDBAppSettings> mongoDbSettings, IOptions<SecretSettings> secretSettings)
         {
-            _secretSettings = secretSettings;
-            _userDbContext = new UsersDbContext(mongoSettings);
+            _secretSettings = secretSettings.Value;
+            _userDbContext = dbContext;
         }
         public UserModel Authenticate(UserModel user)
         {

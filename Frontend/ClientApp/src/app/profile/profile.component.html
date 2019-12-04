@@ -29,8 +29,12 @@
             <hr />
             <button type="submit" class="btn btn-block btn-success">Update</button>
           </form>
+          <br />
+          <p *ngIf="error" class="alert-danger">{{ errorText }}</p>
+          <p *ngIf="updated" class="alert-success">Updated</p>
         </div>
       </div>
     </div>
   </div>
 </div>
+<br />

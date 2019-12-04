@@ -20,12 +20,12 @@ namespace Frontend.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly IProjectDbContext _projectsDbContext;
-        private readonly MongoDBAppSettings _mongoDbSettings;
+        private readonly IUsersDbContext _usersDbContext;
 
-        public ProjectController(IOptions<MongoDBAppSettings> mongoDbSettings)
+        public ProjectController(IUsersDbContext usersDbContext, IProjectDbContext dbContext)
         {
-            _mongoDbSettings = mongoDbSettings.Value;
-            _projectsDbContext = new ProjectDbContext(_mongoDbSettings);
+            _usersDbContext = usersDbContext;
+            _projectsDbContext = dbContext;
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
         }
 
@@ -77,7 +77,7 @@ namespace Frontend.Controllers
 
         // GET: api/Project
         [HttpGet("")]
-        public IActionResult Get()
+        public ActionResult<IEnumerable<ProjectModel>> Get()
         {
             var result = _projectsDbContext.Get();
 
@@ -97,7 +97,7 @@ namespace Frontend.Controllers
 
         // GET: api/Project/5da829fa67db7d33e88a5d9e
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public ActionResult<ProjectModel> Get(string id)
         {
             var result = _projectsDbContext.Get(id);
 
@@ -105,7 +105,7 @@ namespace Frontend.Controllers
         }
 
         [HttpGet("{id}/{categoryid}")]
-        public IActionResult Get(string id, string categoryid)
+        public ActionResult<WorkflowElementCategory> Get(string id, string categoryid)
         {
             var project = _projectsDbContext.Get(id);
             var category = project.WorkflowElementCategories.Where(x => x.CategoryId == categoryid).FirstOrDefault();
@@ -114,7 +114,7 @@ namespace Frontend.Controllers
         }
 
         [HttpGet("{id}/{categoryid}/{elementid}")]
-        public IActionResult Get(string id, string categoryid, string elementid)
+        public ActionResult<WorkflowElement> Get(string id, string categoryid, string elementid)
         {
             var project = _projectsDbContext.Get(id);
             var category = project.WorkflowElementCategories.Where(x => x.CategoryId == categoryid).FirstOrDefault();
@@ -123,7 +123,7 @@ namespace Frontend.Controllers
         }
 
         [HttpGet("Users/{id}")]
-        public IActionResult Users(string id)
+        public ActionResult<UserModel> Users(string id)
         {
             var project = _projectsDbContext.Get(id);
 
@@ -131,7 +131,7 @@ namespace Frontend.Controllers
         }
 
         [HttpGet("UserRoles")]
-        public IActionResult UserRoles()
+        public ActionResult<string[]> UserRoles()
         {
             var roles = UserRole.UserRoles;
 
@@ -140,7 +140,7 @@ namespace Frontend.Controllers
 
         // POST: api/Project
         [HttpPost]
-        public IActionResult Post([FromBody] ProjectModel project)
+        public ActionResult<ProjectModel> Post([FromBody] ProjectModel project)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
             project.TimeCreated = DateTime.Now;
@@ -157,8 +157,7 @@ namespace Frontend.Controllers
 
             if (userId != null)
             {
-                var userDbContext = new UsersDbContext(_mongoDbSettings);
-                var userModel = userDbContext.Get(userId);
+                var userModel = _usersDbContext.Get(userId);
 
                 var userRole = new UserRole() { UserId = userId, Name = userModel.Username, Role = UserRole.UserRoleCreator };
 
@@ -172,7 +171,7 @@ namespace Frontend.Controllers
 
         // PUT: api/Project/5
         [HttpPut("{id}")]
-        public IActionResult Put(string id, [FromBody] ProjectModel project)
+        public ActionResult<ProjectModel> Put(string id, [FromBody] ProjectModel project)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
             project.TimeLastEdit = DateTime.Now;
@@ -184,7 +183,7 @@ namespace Frontend.Controllers
 
         // PUT: api/Project/5
         [HttpPut("Users/{id}")]
-        public IActionResult Put(string id, [FromBody] IEnumerable<UserRole> value)
+        public ActionResult<ProjectModel> Put(string id, [FromBody] IEnumerable<UserRole> value)
         {
             var result = _projectsDbContext.Put(id, value);
 
@@ -192,7 +191,7 @@ namespace Frontend.Controllers
         }
 
         [HttpPut("{projectId}/{categoryId}")]
-        public IActionResult Put(string projectId, string categoryId, [FromBody] WorkflowElement value)
+        public ActionResult<ProjectModel> Put(string projectId, string categoryId, [FromBody] WorkflowElement value)
         {
             var result = _projectsDbContext.Put(projectId, categoryId, value);
 
@@ -201,7 +200,7 @@ namespace Frontend.Controllers
 
         // DELETE: api/Project/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public ActionResult Delete(string id)
         {
             _projectsDbContext.Delete(id);
 
@@ -211,7 +210,7 @@ namespace Frontend.Controllers
 
         [HttpGet("Authenticated/{id}")]
         [Authorize]
-        public IActionResult Authenticated(string id)
+        public ActionResult<string> Authenticated(string id)
         {
             var user = User.Identity as ClaimsIdentity;
 

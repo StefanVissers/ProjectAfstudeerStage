@@ -1,4 +1,5 @@
 using Frontend.Models;
+using Frontend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,10 @@ namespace Frontend
             services.Configure<SecretSettings>(Configuration.GetSection("SecretSettings"));
             var appSettingsSection = Configuration.GetSection("SecretSettings");
             services.Configure<SecretSettings>(appSettingsSection);
+
+            services.AddScoped<IProjectDbContext, ProjectDbContext>();
+            services.AddScoped<IUsersDbContext, UsersDbContext>();
+            services.AddScoped<IUserService, UserService>();
 
             // Configure JWT Authentication
             var appSettings = appSettingsSection.Get<SecretSettings>();

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Frontend.Models
 {
-    interface IDbContext<T>
+    public interface IDbContext<T>
     {
         T Post(T model);
         T Put(string id, T model);
