@@ -86,9 +86,13 @@ namespace Frontend.Models
             var filterId = Builders<UserModel>.Filter.Eq(x => x.Id, id);
             var user = UsersCollection.FindAsync(filterId).Result.FirstOrDefault();
 
-            if (user == null)
+            if (user != null)
             {
                 user.Password = null;
+            } 
+            else
+            {
+                user = new UserModel();
             }
 
             return user;
@@ -114,6 +118,7 @@ namespace Frontend.Models
         /// <returns></returns>
         public UserModel Post(UserModel user)
         {
+            user.TimeCreated = DateTime.Now;
             user.TimeLastEdit = DateTime.Now;
             user.Password = UserService.HashPassword(user.Username, user.Password);
 

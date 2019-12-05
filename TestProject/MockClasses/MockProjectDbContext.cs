@@ -202,7 +202,6 @@ namespace TestProject.MockClasses
 
         public ProjectModel Put(string id, ProjectModel model)
         {
-            var project = projects.Where(x => x.Id == id).FirstOrDefault();
             int index = projects.FindIndex(x => x.Id == id);
             projects[index] = model;
 

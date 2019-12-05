@@ -29,24 +29,24 @@ namespace Frontend.Controllers
 
         // GET: api/User/
         [HttpGet()]
-        public List<UserModel> Get()
+        public ActionResult<List<UserModel>> Get()
         {
             var user = _usersDbContext.Get();
-            return user;
+            return Ok(user);
         }
 
         // GET: api/User/5
         [HttpGet("{id}")]
-        public UserModel Get(string id)
+        public ActionResult<UserModel> Get(string id)
         {
             var user = _usersDbContext.Get(id);
             user.Password = null;
-            return user;
+            return Ok(user);
         }
 
         // GET: api/User/FromToken
-        [HttpGet("FromToken")]
-        public IActionResult FromToken()
+        [HttpGet("[action]")]
+        public ActionResult<UserModel> FromToken()
         {
             var user = User.Identity as ClaimsIdentity;
             var userId = user.FindFirst(ClaimTypes.Name)?.Value;
@@ -63,7 +63,7 @@ namespace Frontend.Controllers
 
         // POST: api/User
         [HttpPost]
-        public IActionResult Post([FromBody] UserModel userModel)
+        public ActionResult<UserModel> Post([FromBody] UserModel userModel)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
             userModel.TimeCreated = DateTime.Now;
@@ -74,7 +74,7 @@ namespace Frontend.Controllers
 
         // PUT: api/User/5
         [HttpPut("{id}")]
-        public IActionResult Put(string id, [FromBody] UpdateUserModel userModel)
+        public ActionResult<UserModel> Put(string id, [FromBody] UpdateUserModel userModel)
         {
             UserModel result;
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
@@ -100,7 +100,7 @@ namespace Frontend.Controllers
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public ActionResult Delete(string id)
         {
             _usersDbContext.Delete(id);
 
@@ -109,14 +109,14 @@ namespace Frontend.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
-        public IActionResult Authenticated()
+        public ActionResult<Response> Authenticated()
         {
             // If bearer token is correct return 200 OK.
             return Ok(new Response() { Status = "Success", Message = "Authenticated" });
         }
-
+        
         [HttpPost("[action]")]
-        public IActionResult Authenticate([FromBody] UserModel user)
+        public ActionResult<Response> Authenticate([FromBody] UserModel user)
         {
             try
             {

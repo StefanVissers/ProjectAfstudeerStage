@@ -49,21 +49,53 @@ namespace TestProject
         [DataRow("bbb829fa67db7d33e88a5d9f")]
         [DataRow("aaa829fa67db7d33e88a5d9a")]
         [DataRow("aaaaaaaaaaaaaaaaaaaaaaaa")]
-        public void GetSpecificTest(string id)
+        public void GetProjectTest(string id)
         {
             var response = _projectController.Get(id);
             Assert.IsNotNull(response);
             var okObjectResult = response.Result as OkObjectResult;
-            Assert.AreEqual(okObjectResult.StatusCode, 200);
+            Assert.AreEqual(200, okObjectResult.StatusCode);
             var project = okObjectResult.Value as ProjectModel;
-            if (id != "")
+            if (id != "" && id != "aaaaaaaaaaaaaaaaaaaaaaaa")
             {
                 Assert.IsNotNull(project);
                 Assert.IsNotNull(project.WorkflowElementCategories);
                 Assert.IsNotNull(project.Users);
                 Assert.IsNotNull(project.Name);
-                Assert.AreEqual(project.Id, id);
+                Assert.AreEqual(id, project.Id);
             }
+        }
+
+        [DataTestMethod]
+        [DataRow("5da829fa67db7d33e88a5d9e", "0")]
+        [DataRow("5da829fa67db7d33e88a5d9e", "1")]
+        [DataRow("bbb829fa67db7d33e88a5d9f", "1")]
+        [DataRow("aaa829fa67db7d33e88a5d9a", "0")]
+        public void GetCategoryTest(string projectId, string categoryId)
+        {
+            var response = _projectController.Get(projectId, categoryId);
+            Assert.IsNotNull(response);
+            var okObjectResult = response.Result as OkObjectResult;
+            Assert.AreEqual(200, okObjectResult.StatusCode);
+            var category = okObjectResult.Value as WorkflowElementCategory;
+            Assert.AreEqual(categoryId, category.CategoryId);
+        }
+
+        [DataTestMethod]
+        [DataRow("5da829fa67db7d33e88a5d9e", "0", "0")]
+        [DataRow("5da829fa67db7d33e88a5d9e", "0", "1")]
+        [DataRow("5da829fa67db7d33e88a5d9e", "1", "1")]
+        [DataRow("5da829fa67db7d33e88a5d9e", "1", "0")]
+        [DataRow("bbb829fa67db7d33e88a5d9f", "1", "0")]
+        [DataRow("aaa829fa67db7d33e88a5d9a", "0", "0")]
+        public void GetCategoryTest(string projectId, string categoryId, string elementId)
+        {
+            var response = _projectController.Get(projectId, categoryId, elementId);
+            Assert.IsNotNull(response);
+            var okObjectResult = response.Result as OkObjectResult;
+            Assert.AreEqual(200, okObjectResult.StatusCode);
+            var element = okObjectResult.Value as WorkflowElement;
+            Assert.AreEqual(elementId, element.ElementId);
         }
 
         [DataTestMethod]
@@ -97,6 +129,52 @@ namespace TestProject
                 projects = okObjectResult.Value as IOrderedEnumerable<ProjectModel>;
                 Assert.AreEqual(projects.Count(), 3);
             }
+        }
+
+        [DataTestMethod]
+        [DataRow("5da829fa67db7d33e88a5d9e")]
+        [DataRow("bbb829fa67db7d33e88a5d9f")]
+        [DataRow("aaa829fa67db7d33e88a5d9a")]
+        public void PutTestProject(string id)
+        {
+            var response = _projectController.Get(id);
+            var okObjectResult = response.Result as OkObjectResult;
+            var project = okObjectResult.Value as ProjectModel;
+            project.Name = "Changed Name";
+            project.Description = "Changed Description";
+            project.IsCompleted = true;
+
+            response = _projectController.Put(id, project);
+            Assert.IsNotNull(response);
+            okObjectResult = response.Result as OkObjectResult;
+            Assert.AreEqual(okObjectResult.StatusCode, 200);
+            project = okObjectResult.Value as ProjectModel;
+            Assert.IsNotNull(project);
+        }
+
+        [DataTestMethod]
+        [DataRow("5da829fa67db7d33e88a5d9e")]
+        [DataRow("bbb829fa67db7d33e88a5d9f")]
+        [DataRow("aaa829fa67db7d33e88a5d9a")]
+        public void PutTestElement(string id)
+        {
+            var response = _projectController.Get(id);
+            var okObjectResult = response.Result as OkObjectResult;
+            var project = okObjectResult.Value as ProjectModel;
+
+            var users = project.Users;
+            users.Add(new UserRole
+            {
+                UserId = "eeeed9fa67dddd35e88a5d9f",
+                Name = "Little Mocking Mock",
+                Role = "1"
+            });
+
+            response = _projectController.Put(id, users);
+            okObjectResult = response.Result as OkObjectResult;
+            Assert.AreEqual(okObjectResult.StatusCode, 200);
+            project = okObjectResult.Value as ProjectModel;
+            Assert.IsNotNull(project);
         }
     }
 }
