@@ -67,8 +67,10 @@ namespace Frontend.Controllers
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
             userModel.TimeCreated = DateTime.Now;
+            userModel.TimeLastEdit = DateTime.Now;
+            userModel.Password = UserService.HashPassword(userModel.Username, userModel.Password);
             userModel = _usersDbContext.Post(userModel);
-
+            
             return Ok(userModel);
         }
 
@@ -82,12 +84,13 @@ namespace Frontend.Controllers
                 Password = userModel.OldPassword, 
                 Username = userModel.Username,
                 Email = userModel.Email,
-                Id = userModel.Id
+                Id = userModel.Id,
+                TimeLastEdit = DateTime.Now
             };
 
             if (_usersDbContext.Get(user) != null)
             {
-                user.Password = userModel.NewPassword;
+                user.Password = UserService.HashPassword(userModel.Username, userModel.NewPassword);
                 result = _usersDbContext.Put(id, user);
             } 
             else

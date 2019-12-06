@@ -118,10 +118,6 @@ namespace Frontend.Models
         /// <returns></returns>
         public UserModel Post(UserModel user)
         {
-            user.TimeCreated = DateTime.Now;
-            user.TimeLastEdit = DateTime.Now;
-            user.Password = UserService.HashPassword(user.Username, user.Password);
-
             if (Get(user) == null)
             {
                 UsersCollection.InsertOne(user);
@@ -143,9 +139,6 @@ namespace Frontend.Models
         /// <returns></returns>
         public UserModel Put(string id, UserModel model)
         {
-            model.TimeLastEdit = DateTime.Now;
-            model.Password = UserService.HashPassword(model.Username, model.Password);
-
             var filterId = Builders<UserModel>.Filter.Eq(x => x.Id, id);
 
             var updateUserName = Builders<UserModel>.Update.Set(x => x.Username, model.Username);

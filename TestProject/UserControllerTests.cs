@@ -1,5 +1,6 @@
 ﻿using Frontend.Controllers;
 using Frontend.Models;
+using Frontend.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,6 +18,7 @@ namespace TestProject
     public class UserControllerTests
     {
         private UserController _userController;
+        private IUserService _userService;
 
         public UserControllerTests()
         {
@@ -24,8 +26,8 @@ namespace TestProject
             var identity = new GenericIdentity("5cccc9fa67db7d35e88a5d9f");
             var claimsIdentity = new ClaimsIdentity(identity);
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-            _userController = new UserController(new MockUserDbContext(), new MockUserService(new MockUserDbContext()));
+            _userService = new MockUserService(new MockUserDbContext());
+            _userController = new UserController(new MockUserDbContext(), _userService);
             _userController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = claimsPrincipal }
@@ -118,11 +120,41 @@ namespace TestProject
             Assert.AreEqual(3, projects.Count());
 
             var response2 = _userController.Delete(id);
+            var okResult = response2 as OkResult;
+            Assert.AreEqual(200, okResult.StatusCode);
 
             response = _userController.Get();
             okObjectResult = response.Result as OkObjectResult;
             projects = okObjectResult.Value as List<UserModel>;
             Assert.AreEqual(2, projects.Count());
+        }
+
+        [TestMethod]
+        public void UserServiceAuthenticateTest()
+        {
+            var user = new UserModel()
+            {
+                Username = "Mock sir Mocking",
+                Password = "Test1"
+            };
+
+            Assert.IsNull(user.Token);
+            Assert.IsNotNull(user.Password);
+            var response = _userService.Authenticate(user);
+            Assert.IsNotNull(response.Token);
+            Assert.IsNull(response.Password);
+        }
+
+        [DataTestMethod]
+        [DataRow("Mock", "Mock?")]
+        [DataRow("Hallo", "Hallo")]
+        [DataRow("MoreMockData", "SecurePassword")]
+        public void UserServiceHashPasswordTest(string username, string pass)
+        {
+            var hash = UserService.HashPassword(username, pass);
+            Assert.IsNotNull(hash);
+            Assert.AreNotEqual(username, hash);
+            Assert.AreNotEqual(pass, hash);
         }
     }
 }

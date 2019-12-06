@@ -20,11 +20,12 @@ namespace Frontend.Services
         private readonly SecretSettings _secretSettings;
         private readonly IUsersDbContext _userDbContext;
 
-        public UserService(IUsersDbContext dbContext, IOptions<MongoDBAppSettings> mongoDbSettings, IOptions<SecretSettings> secretSettings)
+        public UserService(IUsersDbContext dbContext, IOptions<SecretSettings> secretSettings)
         {
             _secretSettings = secretSettings.Value;
             _userDbContext = dbContext;
         }
+
         public UserModel Authenticate(UserModel user)
         {
             // Gets a user from the database using the username and password.
