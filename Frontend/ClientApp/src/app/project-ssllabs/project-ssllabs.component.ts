@@ -24,6 +24,14 @@ export class ProjectSsllabsComponent implements OnInit {
         route.params.subscribe(event => {
             this.projectId = event.id;
         });
+        console.log(this.projectId);
+        this.http.get<any>(this.baseUrl + 'api/Project/GetSSLLabsReport/' + this.projectId).subscribe(res => {
+            this.result = res;
+            console.log(this.result);
+            if (this.result) {
+                this.updateValues();
+            }
+        })
     }
 
     ngOnInit() {
@@ -47,6 +55,8 @@ export class ProjectSsllabsComponent implements OnInit {
             suites: [''],
             protocols: [''],
             sims: [''],
+            trusted: [''],
+            forwardSecrecy: [''],
         })
     }
 
@@ -81,50 +91,82 @@ export class ProjectSsllabsComponent implements OnInit {
         });
     }
 
+    // Long function for filling the resultform.
     updateValues() {
-        let ipv4Endpoint = this.result.endpoints[1];
+        let ipv4Endpoint = this.result.endpoints.length == 1 ? this.result.endpoints[0] : this.result.endpoints[1];
         let altNames = '';
         let suitesString = '';
         let protocolString = '';
         let simString = '';
+        let trusted = '';
         let object = {
             'grade': ipv4Endpoint.grade,
             'serverName': ipv4Endpoint.serverName,
-            'subject': this.result.certs[0].subject,
-            'validFrom': this.result.certs[0].notBefore,
-            'validUntil': this.result.certs[0].notAfter,
-            'issuer': this.result.certs[0].issuerSubject,
-            'key': this.result.certs[0].keyAlg + " " + this.result.certs[0].keySize,
-            'sigAlg': this.result.certs[0].sigAlg,
-            'revocationStatus': this.result.certs[0].revocationStatus,
+            'subject': '',
+            'validFrom': '',
+            'validUntil': '',
+            'issuer': '',
+            'key': '',
+            'sigAlg': '',
+            'revocationStatus': '',
             'altNames': '',
             'suites': '',
             'protocols': '',
             'sims': '',
+            'trusted': '',
+            'forwardSecrecy': '',
         }
 
+        let subject = this.result.certs[0].subject;
+        let validFrom = new Date(this.result.certs[0].notBefore).toString();
+        let validUntil = new Date(this.result.certs[0].notAfter).toString();
+        let issuer = this.result.certs[0].issuerSubject;
+        let key = this.result.certs[0].keyAlg + " " + this.result.certs[0].keySize;
+        let sigAlg = this.result.certs[0].sigAlg;
+        let revocationStatus = (this.result.certs[0].revocationStatus == 1 ? 'Certificate Revoked' :
+            this.result.certs[0].revocationStatus == 2 ? 'Certificate Not Revoked' : 'No information');
+        let forwardSecrecy = (ipv4Endpoint.details.forwardSecrecy == 1 ? 'At least one browser negotiated Forward Secrecy' :
+            ipv4Endpoint.details.forwardSecrecy == 2 ? 'Modern browsers used Forward Secrecy' :
+                ipv4Endpoint.details.forwardSecrecy == 4 ? 'All simulated browsers achieved Forward Secrecy' : 'No browsers used Forward Secrecy')
+
         this.result.certs[0].altNames.forEach(function (value) {
-            altNames += value + "\n";
-        })
+            altNames += value + ', ';
+        });
 
         ipv4Endpoint.details.suites.forEach(function (value) {
             value.list.forEach(function (val) {
-                suitesString = suitesString + val.name + '\n';
-            });
+                suitesString = suitesString + val.name + ' \n';
+            })
         });
 
         ipv4Endpoint.details.protocols.forEach(function (value) {
-            protocolString = protocolString + value.name + ' ' + value.version + '\n';
+            protocolString = protocolString + value.name + ' ' + value.version + ' \n';
         });
 
         ipv4Endpoint.details.sims.results.forEach(function (value) {
-            simString = simString + value.client.name + ' ' + value.client.version + ' ' + value.errorCode + '\n';
+            simString = simString + value.client.name + ' ' + value.client.version + ' ' +
+                (value.errorCode == 1 ? 'not supported' : 'supported') + ' ' + value.suiteName + ' \n';
         });
 
+        ipv4Endpoint.details.certChains.forEach(function (value) {
+            value.trustPaths.forEach(function (val) {
+                trusted += val.trust[0].rootStore + ': ' + (val.trust[0].isTrusted ? 'Trusted' : 'Not Trusted') + ' \n'
+            })
+        });
+
+        object.subject = subject;
+        object.validFrom = validFrom;
+        object.validUntil = validUntil;
+        object.issuer = issuer;
+        object.key = key;
+        object.sigAlg = sigAlg;
         object.suites = suitesString;
         object.protocols = protocolString;
         object.sims = simString;
         object.altNames = altNames;
+        object.revocationStatus = revocationStatus;
+        object.forwardSecrecy = forwardSecrecy;
+        object.trusted = trusted;
 
         this.resultForm.patchValue(object);
     }

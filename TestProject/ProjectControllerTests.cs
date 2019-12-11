@@ -24,7 +24,9 @@ namespace TestProject
             var claimsIdentity = new ClaimsIdentity(identity);
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            _projectController = new ProjectController(new MockUserDbContext(), new MockProjectDbContext());
+            _projectController = new ProjectController(
+                    new MockUserDbContext(),
+                    new MockProjectDbContext());
             _projectController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = claimsPrincipal }
@@ -63,6 +65,10 @@ namespace TestProject
                 Assert.IsNotNull(project.Users);
                 Assert.IsNotNull(project.Name);
                 Assert.AreEqual(id, project.Id);
+            }
+            else
+            {
+                Assert.IsNull(project);
             }
         }
 

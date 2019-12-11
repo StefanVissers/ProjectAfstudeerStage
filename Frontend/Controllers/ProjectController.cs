@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using Frontend.Models;
+using Frontend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -21,58 +21,100 @@ namespace Frontend.Controllers
     {
         private readonly IProjectDbContext _projectsDbContext;
         private readonly IUsersDbContext _usersDbContext;
+        private readonly IToolingService _toolingService;
 
         public ProjectController(IUsersDbContext usersDbContext, IProjectDbContext dbContext)
         {
             _usersDbContext = usersDbContext;
             _projectsDbContext = dbContext;
+            _toolingService = new ToolingService();
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
         }
 
-        // GET: api/Project/SSLLabs/5da829fa67db7d33e88a5d9e/http://google.nl/192.168.1.1
+        // GET: api/Project/SSLLabs/5da829fa67db7d33e88a5d9e/
+        [HttpGet("[action]/{id}")]
+        public ActionResult<string> GetSSLLabsReport(string id)
+        {
+            var project = _projectsDbContext.Get(id);
+
+            return Ok(project.SSLLabsData);
+        }
+
+        // POST: api/Project/SSLLabs/5da829fa67db7d33e88a5d9e/
         [HttpPost("SSLLabs/{id}")]
         public IActionResult GetSSLLabsReport(string id, [FromBody]SSLLabsRequestModel requestModel)
         {
+            var project = _projectsDbContext.Get(id);
+
+            // check for null values
+            if (requestModel == null || requestModel.Host == null)
+            {
+                return Ok(new { Status = "Please enter a hostname and ip address", Body = "" });
+            }
+            
+            // Start the scan or get a already started scan.
             var ssllService = new SSLLabsApiService("https://api.ssllabs.com/api/v3");
-            var x = ssllService.Analyze(host: requestModel.Host, publish: Publish.Off, startNew: StartNew.Ignore,
+            var analyze = ssllService.Analyze(host: requestModel.Host, publish: Publish.Off, startNew: StartNew.Ignore,
                 fromCache: FromCache.Off, maxHours: 1, all: All.On, ignoreMismatch: IgnoreMismatch.Off);
 
-            var z = ssllService.GetEndpointData(host: requestModel.Host, s: requestModel.Ip);
-            while (z.statusMessage == "In progress" || z.statusMessage == "Pending" || x.status == "IN_PROGRESS")
+            // Check every 8 seconds to see if the scan has completed.
+            while (analyze.status == "IN_PROGRESS" || analyze.status != "READY")
             {
-                Thread.Sleep(5000);
-                z = ssllService.GetEndpointData(requestModel.Host, requestModel.Ip);
-                
-                x = ssllService.Analyze(host: requestModel.Host, publish: Publish.Off, startNew: StartNew.Ignore,
+                Thread.Sleep(8000);
+
+                analyze = ssllService.Analyze(host: requestModel.Host, publish: Publish.Off, startNew: StartNew.Ignore,
                 fromCache: FromCache.Off, maxHours: 1, all: All.On, ignoreMismatch: IgnoreMismatch.Off);
             }
 
-            if (x.Errors.Any())
+            // If there are errors, return error status to notify the user.
+            if (analyze.Errors.Any())
             {
-                if (x.Errors.First().message.Contains("529"))
+                if (analyze.Errors.First().message.Contains("529"))
                 {
                     return Ok(new { Status = "Service Overloaded", Body = "" });
-                } 
-                else if (x.Errors.First().message.Contains("503"))
+                }
+                else if (analyze.Errors.First().message.Contains("503"))
                 {
                     return Ok(new { Status = "Service Unavailable", Body = "" });
                 }
-                else if (x.Errors.First().message.Contains("500"))
+                else if (analyze.Errors.First().message.Contains("500"))
                 {
                     return Ok(new { Status = "Service Error", Body = "" });
                 }
-                else if (x.Errors.First().message.Contains("429"))
+                else if (analyze.Errors.First().message.Contains("429"))
                 {
                     return Ok(new { Status = "Too Many Requests", Body = "" });
                 }
-                else if (x.Errors.First().message.Contains("400"))
+                else if (analyze.Errors.First().message.Contains("400"))
                 {
                     return Ok(new { Status = "Invalid Parameters", Body = "" });
                 }
             }
 
+            // Save the api responsedata.
+            project.SSLLabsDataTimeLastScan = DateTime.Now;
+            project.SSLLabsData = analyze.Wrapper.ApiRawResponse;
+            var x = _projectsDbContext.Put(id, project);
+
             // Return the raw response because the model in the wrapper is not up to date.
-            return Ok(x.Wrapper.ApiRawResponse);
+            return Ok(analyze.Wrapper.ApiRawResponse);
+        }
+
+        [HttpPost("[action]/{id}")]
+        public ActionResult KaliLinuxTool(string id, [FromBody] Command command)
+        {
+            string result;
+            try
+            {
+                result = _toolingService.Execute(command);
+            }
+            catch (Exception objException)
+            {
+                // Log the exception
+                return Ok(objException);
+            }
+
+            return Ok(new Response() { Message = result, Status = "Ok" });
         }
 
         // GET: api/Project
@@ -99,9 +141,16 @@ namespace Frontend.Controllers
         [HttpGet("{id}")]
         public ActionResult<ProjectModel> Get(string id)
         {
-            var result = _projectsDbContext.Get(id);
+            try
+            {
+                var result = _projectsDbContext.Get(id);
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch
+            {
+                return Ok(null);
+            }
         }
 
         [HttpGet("{id}/{categoryid}")]
@@ -122,7 +171,7 @@ namespace Frontend.Controllers
             return Ok(element);
         }
 
-        [HttpGet("Users/{id}")]
+        [HttpGet("[action]/{id}")]
         public ActionResult<UserModel> Users(string id)
         {
             var project = _projectsDbContext.Get(id);
@@ -130,7 +179,7 @@ namespace Frontend.Controllers
             return Ok(project.Users);
         }
 
-        [HttpGet("UserRoles")]
+        [HttpGet("[action]")]
         public ActionResult<string[]> UserRoles()
         {
             var roles = UserRole.UserRoles;
@@ -172,17 +221,14 @@ namespace Frontend.Controllers
         // PUT: api/Project/5
         [HttpPut("{id}")]
         public ActionResult<ProjectModel> Put(string id, [FromBody] ProjectModel project)
-        {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
-            project.TimeLastEdit = DateTime.Now;
-            
+        {   
             var result = _projectsDbContext.Put(id, project);
 
             return Ok(result);
         }
 
         // PUT: api/Project/5
-        [HttpPut("Users/{id}")]
+        [HttpPut("[action]/{id}")]
         public ActionResult<ProjectModel> Put(string id, [FromBody] IEnumerable<UserRole> value)
         {
             var result = _projectsDbContext.Put(id, value);
@@ -208,7 +254,7 @@ namespace Frontend.Controllers
         }
 
 
-        [HttpGet("Authenticated/{id}")]
+        [HttpGet("[action]/{id}")]
         [Authorize]
         public ActionResult<string> Authenticated(string id)
         {

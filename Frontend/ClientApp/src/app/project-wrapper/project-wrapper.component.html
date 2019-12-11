@@ -24,29 +24,33 @@
       </div>
       <hr />
 
-      <div class="container" *ngIf="!categoryId && !elementId && !settings && !ssllabs">
+      <div class="container" *ngIf="!categoryId && !elementId && !settings && !ssllabs && !tooling">
         <p>{{ project.description }}</p>
         <hr />
         <a class="btn btn-block btn-success" [routerLink]="['/project-ssllabs/' + project.id]">To SSLLabs Data</a>
+        <a class="btn btn-block btn-success" [routerLink]="['/project-tooling/' + project.id]">To Tooling</a>
       </div>
 
-      <div class="container" *ngIf="!elementId && categoryId && category && !settings && !ssllabs">
+      <div class="container" *ngIf="!elementId && categoryId && category && !settings && !ssllabs && !tooling">
         <h2 style="text-align: center">{{ category.name }}</h2>
         <p>{{ category.description }}</p>
       </div>
 
-      <div class="container" *ngIf="elementId && categoryId && category && element && !settings && !ssllabs">
+      <div class="container" *ngIf="elementId && categoryId && category && element && !settings && !ssllabs && !tooling">
         <app-project-details [project]="project" [category]="category" [element]="element"></app-project-details>
       </div>
       
-      <div class="container" *ngIf="settings && !ssllabs">
+      <div class="container" *ngIf="settings && !ssllabs && !tooling">
         <app-project-settings></app-project-settings>
       </div>
 
-      <div class="container" *ngIf="ssllabs">
+      <div class="container" *ngIf="ssllabs && !tooling && !settings">
         <app-project-ssllabs></app-project-ssllabs>
       </div>
 
+      <div class="container" *ngIf="tooling && !ssllabs && !settings">
+        <app-project-kali-linux></app-project-kali-linux>
+      </div>
     </div>
   </div>
 </div>

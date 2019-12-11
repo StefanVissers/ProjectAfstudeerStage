@@ -38,8 +38,13 @@ namespace Frontend.Models
         [BsonElement()]
         public List<WorkflowElementCategory> WorkflowElementCategories { get; set; }
 
+        // We save the raw response
         [BsonElement()]
-        public List<Endpoint> SSLLabsData { get; set; }
+        public string SSLLabsData { get; set; }
+
+        [BsonElement()]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime SSLLabsDataTimeLastScan { get; set; }
 
         // Meta Data
         [BsonElement()]
@@ -86,6 +91,32 @@ namespace Frontend.Models
 
         [BsonElement()]
         public bool IsRelevant { get; set; }
+    }
+
+    public class Command
+    {
+        public string Action { get; set; }
+
+        public bool NmapStandard { get; set; }
+
+        public bool NiktoStandard { get; set; }
+
+        public bool XsserStandard { get; set; }
+
+        public string Id { get; set; }
+    }
+
+    public class CommandResult
+    {
+        public string Action { get; set; }
+
+        public string NmapResult { get; set; }
+
+        public string NiktoResult { get; set; }
+
+        public string XsserResult { get; set; }
+
+        public string Error { get; set; }
     }
 
     public class UserRole

@@ -15,37 +15,41 @@
 <p *ngIf="error">{{ error }}</p>
 <form *ngIf="result" name="resultForm" [formGroup]="resultForm">
   Grade:
-  <input class="form-control-plaintext" style="font-size:x-large;" formControlName="grade" contenteditable="false" />
+  <input class="form-control" style="font-size:x-large;" formControlName="grade" contenteditable="false" />
   <hr />
   Server Name:
-  <input class="form-control-plaintext" formControlName="serverName" contenteditable="false" />
+  <input class="form-control" formControlName="serverName" contenteditable="false" />
   <hr />
   <h5>Server Key and Certificate</h5>
   Subject:
-  <input class="form-control-plaintext" formControlName="subject" contenteditable="false" />
+  <input class="form-control" formControlName="subject" contenteditable="false" />
   Alternative Names:
-  <input class="form-control-plaintext" formControlName="altNames" contenteditable="false" />
+  <textarea rows="2" class="form-control" formControlName="altNames" contenteditable="false" ></textarea>
   Certificate Valid From:
-  <input class="form-control-plaintext" formControlName="validFrom" contenteditable="false" />
+  <input class="form-control" formControlName="validFrom" contenteditable="false" />
   Certificate Valid Until:
-  <input class="form-control-plaintext" formControlName="validUntil" contenteditable="false" />
+  <input class="form-control" formControlName="validUntil" contenteditable="false" />
   Key:
-  <input class="form-control-plaintext" formControlName="key" contenteditable="false" />
+  <input class="form-control" formControlName="key" contenteditable="false" />
   Certificate Issuer:
-  <input class="form-control-plaintext" formControlName="issuer" contenteditable="false" />
+  <input class="form-control" formControlName="issuer" contenteditable="false" />
   Signature Algorithm:
-  <input class="form-control-plaintext" formControlName="sigAlg" contenteditable="false" />
+  <input class="form-control" formControlName="sigAlg" contenteditable="false" />
   Revocation Status:
-  <input class="form-control-plaintext" formControlName="revocationStatus" contenteditable="false" />
+  <input class="form-control" formControlName="revocationStatus" contenteditable="false" />
+  Trusted:
+  <textarea rows="3" class="form-control" formControlName="trusted" contenteditable="false" ></textarea>
+  Forward Secrecy:
+  <input class="form-control" formControlName="forwardSecrecy" contenteditable="false" />
   <hr />
   Suites:
-  <textarea rows="3" class="form-control-plaintext" formControlName="suites" contenteditable="false"></textarea>
+  <textarea rows="3" class="form-control" formControlName="suites" contenteditable="false"></textarea>
   <hr />
   Protocols:
-  <textarea rows="2" class="form-control-plaintext" formControlName="protocols" contenteditable="false"></textarea>
+  <textarea rows="2" class="form-control" formControlName="protocols" contenteditable="false"></textarea>
   <hr />
   Simulations:
-  <textarea rows="5" class="form-control-plaintext" formControlName="sims" contenteditable="false"></textarea>
+  <textarea rows="5" class="form-control" formControlName="sims" contenteditable="false"></textarea>
   <hr />
 </form>
 <br />

@@ -72,10 +72,17 @@ namespace Frontend.Models
         /// <returns></returns>
         public ProjectModel Get(string id)
         {
-            var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
-            var project = ProjectsCollection.FindAsync(filterId).Result.FirstOrDefault();
+            try
+            {
+                var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
+                var project = ProjectsCollection.FindAsync(filterId).Result.First();
 
-            return project;
+                return project;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public ProjectModel Post(ProjectModel model)
@@ -92,6 +99,8 @@ namespace Frontend.Models
 
         public ProjectModel Put(string id, ProjectModel model)
         {
+            model.TimeLastEdit = DateTime.Now;
+
             var filterId = Builders<ProjectModel>.Filter.Eq(x => x.Id, id);
 
             var updateProjectName = Builders<ProjectModel>.Update.Set(x => x.Name, model.Name);
@@ -101,11 +110,13 @@ namespace Frontend.Models
             var updateProjectUsers = Builders<ProjectModel>.Update.Set(x => x.Users, model.Users);
             var updateProjectElements = Builders<ProjectModel>.Update.Set(x => x.WorkflowElementCategories, model.WorkflowElementCategories);
             var updateProjectTimeLastEdit = Builders<ProjectModel>.Update.Set(x => x.TimeLastEdit, model.TimeLastEdit);
+            var updateSSLLabsData = Builders<ProjectModel>.Update.Set(x => x.SSLLabsData, model.SSLLabsData);
+            var updateSSLLabsDataTimeScan = Builders<ProjectModel>.Update.Set(x => x.SSLLabsDataTimeLastScan, model.SSLLabsDataTimeLastScan);
 
             var updates = Builders<ProjectModel>.Update.Combine(
                 updateProjectName, updateProjectDescription, updateProjectASVSLevel,
                 updateProjectIsCompleted, updateProjectUsers, updateProjectElements,
-                updateProjectTimeLastEdit);
+                updateProjectTimeLastEdit, updateSSLLabsData, updateSSLLabsDataTimeScan);
 
             var project = ProjectsCollection.FindOneAndUpdate(filterId, updates);
 

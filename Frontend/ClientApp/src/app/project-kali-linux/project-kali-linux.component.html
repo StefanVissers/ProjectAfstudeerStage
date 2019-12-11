@@ -1,0 +1,50 @@
+<form name="toolingForm" [formGroup]="toolingForm" (ngSubmit)="onFormSubmit(toolingForm.value)">
+  <input hidden="hidden" formControlName="projectId" />
+  Host name:
+  <input type="text" class="form-control" placeholder="http://google.nl" formControlName="host" />
+  <hr />
+  IP address:
+  <input type="text" class="form-control" placeholder="172.217.6.35" formControlName="ip" />
+  <hr />
+  <div class="row">
+    <div class="col-sm-4">
+      Nmap standard scan:
+      <input class="form-control" title="Nmap" type="checkbox" name="nmapStandard" formControlName="nmapStandard" />
+    </div>
+    <div class="col-sm-4">
+      Nikto standard scan:
+      <input class="form-control" title="Nikto" type="checkbox" name="niktoStandard" formControlName="niktoStandard" />
+    </div>
+    <div class="col-sm-4">
+      Xsser standard scan:
+      <input class="form-control" title="Xsser" type="checkbox" name="xsserStandard" formControlName="xsserStandard" />
+    </div>
+  </div>
+  <br />
+  <button type="submit" class="btn btn-block btn-success">Start Scans</button>
+</form>
+
+<hr />
+
+<form name="resultForm" [formGroup]="resultForm">
+  <div class="row">
+    <div class="col-sm-12">
+      Nmap result:
+      <textarea rows="3" class="form-control" formControlName="nmapResult" contenteditable="false"></textarea>
+    </div>
+    <hr />
+    <div class="col-sm-12">
+      Nikto result:
+      <textarea rows="3" class="form-control" formControlName="niktoResult" contenteditable="false"></textarea>
+    </div>
+    <hr />
+    <div class="col-sm-12">
+      Xsser result:
+      <textarea rows="3" class="form-control" formControlName="xsserResult" contenteditable="false"></textarea>
+    </div>
+  </div>
+</form>
+
+<hr />
+
+<p>{{ result }}</p>

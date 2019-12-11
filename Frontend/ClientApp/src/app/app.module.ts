@@ -19,6 +19,7 @@ import { ProjectDetailsComponent } from './project-details/project-details.compo
 import { ProjectSettingsComponent } from './project-settings/project-settings.component';
 import { ProjectWrapperComponent } from './project-wrapper/project-wrapper.component';
 import { ProjectSsllabsComponent } from './project-ssllabs/project-ssllabs.component';
+import { ProjectKaliLinuxComponent } from './project-kali-linux/project-kali-linux.component';
 
 import { AuthInterceptor } from './services/auth.interceptor';
 import { ErrorInterceptor } from './services/error.interceptor';
@@ -42,6 +43,7 @@ import { AuthGuard } from './services/auth.guard';
         ProjectSettingsComponent,
         ProjectWrapperComponent,
         ProjectSsllabsComponent,
+        ProjectKaliLinuxComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -60,6 +62,7 @@ import { AuthGuard } from './services/auth.guard';
             { path: 'project', component: ProjectComponent },
             { path: 'project-settings/:id', component: ProjectWrapperComponent, data: { 'settings': true } },
             { path: 'project-ssllabs/:id', component: ProjectWrapperComponent, data: { 'ssllabs': true } },
+            { path: 'project-tooling/:id', component: ProjectWrapperComponent, data: { 'tooling': true } },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
             { path: 'profile', component: ProfileComponent },
