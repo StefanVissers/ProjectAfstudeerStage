@@ -112,11 +112,13 @@ namespace Frontend.Models
             var updateProjectTimeLastEdit = Builders<ProjectModel>.Update.Set(x => x.TimeLastEdit, model.TimeLastEdit);
             var updateSSLLabsData = Builders<ProjectModel>.Update.Set(x => x.SSLLabsData, model.SSLLabsData);
             var updateSSLLabsDataTimeScan = Builders<ProjectModel>.Update.Set(x => x.SSLLabsDataTimeLastScan, model.SSLLabsDataTimeLastScan);
+            var updateCommandResult = Builders<ProjectModel>.Update.Set(x => x.CommandResult, model.CommandResult);
 
             var updates = Builders<ProjectModel>.Update.Combine(
                 updateProjectName, updateProjectDescription, updateProjectASVSLevel,
                 updateProjectIsCompleted, updateProjectUsers, updateProjectElements,
-                updateProjectTimeLastEdit, updateSSLLabsData, updateSSLLabsDataTimeScan);
+                updateProjectTimeLastEdit, updateSSLLabsData, updateSSLLabsDataTimeScan,
+                updateCommandResult);
 
             var project = ProjectsCollection.FindOneAndUpdate(filterId, updates);
 

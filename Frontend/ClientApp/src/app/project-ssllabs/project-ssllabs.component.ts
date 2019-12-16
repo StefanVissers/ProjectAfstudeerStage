@@ -68,7 +68,7 @@ export class ProjectSsllabsComponent implements OnInit {
             this.ssllabsForm.patchValue(this.project);
         }, error => console.error(error));
     }
-
+    
     onFormSubmit() {
         this.error = "";
         this.loading = true;

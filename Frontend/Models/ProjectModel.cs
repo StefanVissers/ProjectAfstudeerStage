@@ -1,13 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using SSLLabsApiWrapper.Models.Response;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace Frontend.Models
 {
@@ -41,6 +35,9 @@ namespace Frontend.Models
         // We save the raw response
         [BsonElement()]
         public string SSLLabsData { get; set; }
+
+        [BsonElement()]
+        public CommandResult CommandResult { get; set; }
 
         [BsonElement()]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
@@ -96,6 +93,10 @@ namespace Frontend.Models
     public class Command
     {
         public string Action { get; set; }
+
+        public string Hostname { get; set; }
+
+        public string Ip { get; set; }
 
         public bool NmapStandard { get; set; }
 

@@ -23,11 +23,11 @@ namespace Frontend.Controllers
         private readonly IUsersDbContext _usersDbContext;
         private readonly IToolingService _toolingService;
 
-        public ProjectController(IUsersDbContext usersDbContext, IProjectDbContext dbContext)
+        public ProjectController(IUsersDbContext usersDbContext, IProjectDbContext dbContext, IToolingService toolingService)
         {
             _usersDbContext = usersDbContext;
             _projectsDbContext = dbContext;
-            _toolingService = new ToolingService();
+            _toolingService = toolingService;
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
         }
 
@@ -94,7 +94,7 @@ namespace Frontend.Controllers
             // Save the api responsedata.
             project.SSLLabsDataTimeLastScan = DateTime.Now;
             project.SSLLabsData = analyze.Wrapper.ApiRawResponse;
-            var x = _projectsDbContext.Put(id, project);
+            _projectsDbContext.Put(id, project);
 
             // Return the raw response because the model in the wrapper is not up to date.
             return Ok(analyze.Wrapper.ApiRawResponse);
@@ -103,18 +103,20 @@ namespace Frontend.Controllers
         [HttpPost("[action]/{id}")]
         public ActionResult KaliLinuxTool(string id, [FromBody] Command command)
         {
-            string result;
+            CommandResult result;
+            var project = _projectsDbContext.Get(id);
             try
             {
                 result = _toolingService.Execute(command);
             }
             catch (Exception objException)
             {
-                // Log the exception
                 return Ok(objException);
             }
+            project.CommandResult = result;
+            _projectsDbContext.Put(id, project);
 
-            return Ok(new Response() { Message = result, Status = "Ok" });
+            return Ok(result);
         }
 
         // GET: api/Project

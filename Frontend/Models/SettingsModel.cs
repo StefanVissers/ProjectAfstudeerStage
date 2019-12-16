@@ -21,18 +21,14 @@ namespace Frontend.Models
         public string MongoHost { get; set; }
     }
 
-    public class CouchDbSettings
+    public class DockerSettings
     {
-        public string Username { get; set; }
+        public string DockerClientConfigURI { get; set; }
 
-        public string Password { get; set; }
+        public string ShellFile { get; set; }
 
-        public string BaseURL { get; set; }
+        public string ShellArgs { get; set; }
 
-        public string Port { get; set; }
-
-        public string UserDatabaseName { get; set; }
-
-        public string DocumentDatabaseName { get; set; }
+        public string DockerContainerId { get; set; }
     }
 }

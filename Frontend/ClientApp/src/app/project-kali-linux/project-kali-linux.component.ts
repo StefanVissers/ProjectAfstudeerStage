@@ -13,6 +13,8 @@ export class ProjectKaliLinuxComponent implements OnInit {
     public toolingForm: FormGroup;
     public resultForm: FormGroup;
     private projectId: string;
+    public loading = false;
+    public error = false;
 
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
@@ -20,22 +22,16 @@ export class ProjectKaliLinuxComponent implements OnInit {
         route.params.subscribe(event => {
             this.projectId = event.id;
         });
-
-        this.http.post<any>(this.baseUrl + 'api/Project/KaliLinuxTool/' + this.projectId, { command: "nmap -V" }).subscribe(result => {
-            console.log(result);
-            this.result = result.message;
-            console.log(this.result);
-        })
     }
 
     ngOnInit() {
         this.toolingForm = this.formbuilder.group({
-            projectId: [''],
+            projectId: [this.projectId],
             host: [''],
             ip: [''],
-            nmapStandard: [''],
-            niktoStandard: [''],
-            xsserStandard: [''],
+            nmapStandard: [false],
+            niktoStandard: [false],
+            xsserStandard: [false],
         });
 
         this.resultForm = this.formbuilder.group({
@@ -46,10 +42,19 @@ export class ProjectKaliLinuxComponent implements OnInit {
     }
 
     onFormSubmit() {
-        this.http.post<any>(this.baseUrl + 'api/Project/KaliLinuxTool/' + this.projectId, { command: "nmap -V" }).subscribe(result => {
+        this.error = false;
+        this.loading = true;
+        console.log(this.toolingForm.value);
+        this.http.post<any>(this.baseUrl + 'api/Project/KaliLinuxTool/' + this.projectId, this.toolingForm.value).subscribe(result => {
             console.log(result);
-            this.result = result.message;
+            this.result = result;
             console.log(this.result);
+            this.resultForm.patchValue(this.result);
+            this.loading = false;
+        }, error => {
+            console.error(error);
+            this.error = true;
+            this.loading = false;
         })
     }
 

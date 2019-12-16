@@ -33,12 +33,14 @@ namespace Frontend
             // Add our Config object so it can be injected
             services.Configure<MongoDBAppSettings>(Configuration.GetSection("MongoDbAppSettings"));
             services.Configure<SecretSettings>(Configuration.GetSection("SecretSettings"));
+            services.Configure<DockerSettings>(Configuration.GetSection("DockerSettings"));
             var appSettingsSection = Configuration.GetSection("SecretSettings");
             services.Configure<SecretSettings>(appSettingsSection);
 
             services.AddScoped<IProjectDbContext, ProjectDbContext>();
             services.AddScoped<IUsersDbContext, UsersDbContext>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IToolingService, ToolingService>();
 
             // Configure JWT Authentication
             var appSettings = appSettingsSection.Get<SecretSettings>();
