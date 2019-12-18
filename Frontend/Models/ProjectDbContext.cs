@@ -88,6 +88,13 @@ namespace Frontend.Models
         public ProjectModel Post(ProjectModel model)
         {
             var template = ProjectsCollection.Find(TemplateProjectFilter).FirstOrDefault();
+            
+            foreach(WorkflowElementCategory category in template.WorkflowElementCategories.ToList())
+            {
+                category.WorkflowElements.RemoveAll(x => x.ASVSLevel > model.ASVSLevel);
+                if (category.WorkflowElements.Count <= 0)
+                    template.WorkflowElementCategories.Remove(category);
+            }
 
             model.WorkflowElementCategories = template.WorkflowElementCategories;
 

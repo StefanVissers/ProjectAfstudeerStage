@@ -75,6 +75,9 @@ namespace Frontend.Models
         public string ElementId { get; set; }
 
         [BsonElement()]
+        public int ASVSLevel { get; set; }
+
+        [BsonElement()]
         public string Name { get; set; }
 
         [BsonElement()]

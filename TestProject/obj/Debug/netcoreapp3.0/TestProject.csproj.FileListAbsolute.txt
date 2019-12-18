@@ -207,3 +207,4 @@ D:\Projects\Frontend\TestProject\bin\Debug\netcoreapp3.0\TestProject.runtimeconf
 D:\Projects\Frontend\TestProject\bin\Debug\netcoreapp3.0\TestProject.runtimeconfig.dev.json
 D:\Projects\Frontend\TestProject\bin\Debug\netcoreapp3.0\TestProject.pdb
 D:\Projects\Frontend\TestProject\obj\Debug\netcoreapp3.0\TestProject.csproj.CopyComplete
+D:\Projects\Frontend\TestProject\bin\Debug\netcoreapp3.0\Docker.DotNet.dll

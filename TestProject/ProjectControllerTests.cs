@@ -3,7 +3,6 @@ using Frontend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -26,7 +25,8 @@ namespace TestProject
 
             _projectController = new ProjectController(
                     new MockUserDbContext(),
-                    new MockProjectDbContext());
+                    new MockProjectDbContext(),
+                    new MockToolingService());
             _projectController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = claimsPrincipal }
