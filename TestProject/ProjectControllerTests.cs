@@ -42,14 +42,14 @@ namespace TestProject
             Assert.AreEqual(okObjectResult.StatusCode, 200);
             var projects = okObjectResult.Value as IOrderedEnumerable<ProjectModel>;
             Assert.IsNotNull(projects);
-            Assert.AreEqual(projects.Count(), 3);
+            // There are 3 projects but only 2 for the current user.
+            Assert.AreEqual(projects.Count(), 2);
         }
 
         [DataTestMethod]
         [DataRow("")]
         [DataRow("5da829fa67db7d33e88a5d9e")]
         [DataRow("bbb829fa67db7d33e88a5d9f")]
-        [DataRow("aaa829fa67db7d33e88a5d9a")]
         [DataRow("aaaaaaaaaaaaaaaaaaaaaaaa")]
         public void GetProjectTest(string id)
         {
@@ -108,14 +108,13 @@ namespace TestProject
         [DataRow("")]
         [DataRow("5da829fa67db7d33e88a5d9e")]
         [DataRow("bbb829fa67db7d33e88a5d9f")]
-        [DataRow("aaa829fa67db7d33e88a5d9a")]
         [DataRow("aaaaaaaaaaaaaaaaaaaaaaaa")]
         public void DeleteTest(string id)
         {
             var response = _projectController.Get();
             var okObjectResult = response.Result as OkObjectResult;
             var projects = okObjectResult.Value as IOrderedEnumerable<ProjectModel>;
-            Assert.AreEqual(projects.Count(), 3);
+            Assert.AreEqual(projects.Count(), 2);
 
             response = _projectController.Delete(id);
             var okResult = response.Result as OkResult;
@@ -126,14 +125,14 @@ namespace TestProject
                 response = _projectController.Get();
                 okObjectResult = response.Result as OkObjectResult;
                 projects = okObjectResult.Value as IOrderedEnumerable<ProjectModel>;
-                Assert.AreEqual(projects.Count(), 2);
+                Assert.AreEqual(projects.Count(), 1);
             }
             else
             {
                 response = _projectController.Get();
                 okObjectResult = response.Result as OkObjectResult;
                 projects = okObjectResult.Value as IOrderedEnumerable<ProjectModel>;
-                Assert.AreEqual(projects.Count(), 3);
+                Assert.AreEqual(projects.Count(), 2);
             }
         }
 

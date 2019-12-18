@@ -103,8 +103,13 @@ namespace Frontend.Controllers
         [HttpPost("[action]/{id}")]
         public ActionResult KaliLinuxTool(string id, [FromBody] Command command)
         {
+            if (command.Ip == null && command.Hostname == null)
+            {
+                return BadRequest(new { Status = "Invalid Parameters", Body = "" });
+            }
             CommandResult result;
             var project = _projectsDbContext.Get(id);
+
             try
             {
                 result = _toolingService.Execute(command);

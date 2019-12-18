@@ -147,7 +147,7 @@ namespace TestProject.MockClasses
                 TimeCreated = DateTime.Now,
                 TimeLastEdit = DateTime.Now,
                 WorkflowElementCategories = elementCategories,
-                Users = users
+                Users = new List<UserRole>(){ users[1] }
             }
         };
 

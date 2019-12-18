@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Frontend.Models
 {
@@ -24,6 +25,7 @@ namespace Frontend.Models
 
         // Data
         [BsonElement()]
+        [RegularExpression("[123]")]
         public int ASVSLevel { get; set; }
 
         [BsonElement()]
@@ -51,7 +53,6 @@ namespace Frontend.Models
         [BsonElement()]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime TimeLastEdit { get; set; }
-
     }
 
     public class WorkflowElementCategory
@@ -75,6 +76,7 @@ namespace Frontend.Models
         public string ElementId { get; set; }
 
         [BsonElement()]
+        [RegularExpression("[123]")]
         public int ASVSLevel { get; set; }
 
         [BsonElement()]
@@ -97,8 +99,12 @@ namespace Frontend.Models
     {
         public string Action { get; set; }
 
+        [RegularExpression("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+            ErrorMessage = "Hostname is not a correct format.")]
         public string Hostname { get; set; }
 
+        [RegularExpression("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b",
+            ErrorMessage = "Ip address is not a correct format.")]
         public string Ip { get; set; }
 
         public bool NmapStandard { get; set; }
@@ -155,8 +161,12 @@ namespace Frontend.Models
 
     public class SSLLabsRequestModel
     {
+        [RegularExpression("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+            ErrorMessage = "Hostname is not a correct format.")]
         public string Host { get; set; }
 
+        [RegularExpression("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b",
+            ErrorMessage = "Ip address is not a correct format.")]
         public string Ip { get; set; }
     }
 }
