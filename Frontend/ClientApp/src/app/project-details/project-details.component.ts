@@ -15,9 +15,9 @@ export class ProjectDetailsComponent implements OnInit {
     public categoryId: string;
     public elementId: string;
     public projectForm: FormGroup;
-    @Input() project: Project;
-    @Input() category: WorkflowElementCategory;
-    @Input() element: WorkflowElement;
+    @Input() project: any;
+    @Input() category: any;
+    @Input() element: any;
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
         route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string,
@@ -54,6 +54,7 @@ export class ProjectDetailsComponent implements OnInit {
 
     onFormSubmit() {
         this.element = this.projectForm.value;
+        console.log(this.element);
         this.http.put<Project>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId, this.element).subscribe(result => {
             this.project = result;
             this.loadElement();

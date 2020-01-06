@@ -12,10 +12,10 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class ProjectSettingsComponent implements OnInit {
     private projectId: string;
-    public project: Project;
-    public users: UserRole[];
+    public project: any;
+    public users: any[];
     public projectForm: FormGroup;
-    public usersToBeAdded: User[];
+    public usersToBeAdded: any[];
     public rolesToBeAdded: string[];
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
@@ -38,18 +38,18 @@ export class ProjectSettingsComponent implements OnInit {
     // Load Everything from Database.
     loadSettings() {
         // Load project
-        this.http.get<Project>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
+        this.http.get<any>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
             this.project = result;
             this.projectForm.patchValue(this.project);
         }, error => console.error(error));
 
         // Load users in a project
-        this.http.get<UserRole[]>(this.baseUrl + 'api/Project/Users/' + this.projectId).subscribe(result => {
+        this.http.get<any[]>(this.baseUrl + 'api/Project/Users/' + this.projectId).subscribe(result => {
             this.users = result;
         }, error => console.error(error));
 
         // Load all users
-        this.http.get<User[]>(this.baseUrl + 'api/User').subscribe(result => {
+        this.http.get<any[]>(this.baseUrl + 'api/User').subscribe(result => {
             this.usersToBeAdded = result;
         })
 
@@ -64,10 +64,12 @@ export class ProjectSettingsComponent implements OnInit {
         this.project.description = this.projectForm.value.description;
         this.project.isCompleted = this.projectForm.value.isCompleted;
 
-        this.http.put<Project>(this.baseUrl + 'api/Project/' + this.projectId, this.project).subscribe(result => {
+        this.http.put<any>(this.baseUrl + 'api/Project/' + this.projectId, this.project).subscribe(result => {
+            console.log(result);
             this.project = result;
             // Update Users
-            this.http.put<Project>(this.baseUrl + 'api/Project/Users/' + this.projectId, this.users).subscribe(result => {
+            console.log(this.users);
+            this.http.put<any>(this.baseUrl + 'api/Project/Users/' + this.projectId, this.users).subscribe(result => {
                 this.project = result;
             }, error => console.error(error));
         }, error => console.error(error));
@@ -82,7 +84,7 @@ export class ProjectSettingsComponent implements OnInit {
     add() {
         console.log('add');
         if (this.usersToBeAdded[0]) {
-            this.users.push({ Name: this.usersToBeAdded[0].username, Role: this.rolesToBeAdded[0], UserId: this.usersToBeAdded[0].id });
+            this.users.push({ name: this.usersToBeAdded[0].username, role: this.rolesToBeAdded[0], userId: this.usersToBeAdded[0].id });
         }
     }
 
@@ -92,10 +94,10 @@ export class ProjectSettingsComponent implements OnInit {
         let y = this.usersToBeAdded.filter(z => z.id === event.target.value as string).pop();
 
         if (property === "name") {
-            x.Name = y.username;
-            x.UserId = event.target.value;
+            x.name = y.username;
+            x.userId = event.target.value;
         } else {
-            x.Role = event.target.value;
+            x.role = event.target.value;
         }
     }
 }

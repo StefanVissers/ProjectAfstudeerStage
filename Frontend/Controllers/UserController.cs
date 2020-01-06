@@ -68,7 +68,6 @@ namespace Frontend.Controllers
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
             userModel.TimeCreated = DateTime.Now;
             userModel.TimeLastEdit = DateTime.Now;
-            userModel.Password = UserService.HashPassword(userModel.Username, userModel.Password);
             userModel = _usersDbContext.Post(userModel);
             
             return Ok(userModel);
@@ -137,7 +136,8 @@ namespace Frontend.Controllers
                         {
                             Path = "/",
                             Secure = true,
-                            HttpOnly = false
+                            HttpOnly = false,
+                            SameSite = SameSiteMode.Strict
                         });
 
                     return Ok(new Response { Status = "Success", Message = user.Token });

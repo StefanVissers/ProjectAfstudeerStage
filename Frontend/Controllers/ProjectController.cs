@@ -58,7 +58,7 @@ namespace Frontend.Controllers
                 fromCache: FromCache.Off, maxHours: 1, all: All.On, ignoreMismatch: IgnoreMismatch.Off);
 
             // Check every 8 seconds to see if the scan has completed.
-            while (analyze.status == "IN_PROGRESS" || analyze.status != "READY")
+            while (analyze.status != "READY")
             {
                 Thread.Sleep(8000);
 
@@ -105,10 +105,7 @@ namespace Frontend.Controllers
         public ActionResult KaliLinuxTool(string id, [FromBody] Command command)
         {
             // If the Ip or hostname is invalid it will be null.
-            if (command.Ip == null)
-            {
-                return BadRequest(new { Status = "Missing Ip address.", Body = "" });
-            }
+            
             CommandResult result;
             var project = _projectsDbContext.Get(id);
 
@@ -241,7 +238,7 @@ namespace Frontend.Controllers
         }
 
         // PUT: api/Project/5
-        [HttpPut("[action]/{id}")]
+        [HttpPut("Users/{id}")]
         public ActionResult<ProjectModel> Put(string id, [FromBody] IEnumerable<UserRole> value)
         {
             var result = _projectsDbContext.Put(id, value);

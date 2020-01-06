@@ -95,6 +95,8 @@ export class ProjectSsllabsComponent implements OnInit {
     // Long function for filling the resultform.
     updateValues() {
         let ipv4Endpoint = this.result.endpoints.length == 1 ? this.result.endpoints[0] : this.result.endpoints[1];
+        let serverName = '';
+        let ipAddresses = '';
         let altNames = '';
         let suitesString = '';
         let protocolString = '';
@@ -102,8 +104,8 @@ export class ProjectSsllabsComponent implements OnInit {
         let trusted = '';
         let object = {
             'grade': ipv4Endpoint.grade,
-            'serverName': ipv4Endpoint.serverName,
-            'ipAddresses': ipv4Endpoint.ipAddress,
+            'serverName': '',
+            'ipAddresses': '',
             'subject': '',
             'validFrom': '',
             'validUntil': '',
@@ -134,6 +136,13 @@ export class ProjectSsllabsComponent implements OnInit {
         this.result.certs[0].altNames.forEach(function (value) {
             altNames += value + ', ';
         });
+
+        this.result.endpoints.forEach(function (value) {
+            ipAddresses += value.ipAddress + ', \n';
+            if (value.serverName) {
+                serverName += value.serverName + ', \n';
+            }
+        })
 
         ipv4Endpoint.details.suites.forEach(function (value) {
             value.list.forEach(function (val) {
@@ -169,6 +178,8 @@ export class ProjectSsllabsComponent implements OnInit {
         object.revocationStatus = revocationStatus;
         object.forwardSecrecy = forwardSecrecy;
         object.trusted = trusted;
+        object.ipAddresses = ipAddresses;
+        object.serverName = serverName;
 
         this.resultForm.patchValue(object);
     }

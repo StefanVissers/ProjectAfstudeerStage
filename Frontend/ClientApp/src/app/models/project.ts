@@ -46,9 +46,9 @@ export class WorkflowElement {
 }
 
 export class UserRole {
-    UserId: string;
+    userId: string;
 
-    Name: string;
+    name: string;
 
-    Role: string;
+    role: string;
 }

@@ -35,15 +35,15 @@ namespace Frontend.Services
 
             if (command.NmapStandard)
             {
-                result.NmapResult = ExecuteCommandSync("nmap " + command.NmapAction + " " + command.Ip);
+                result.NmapResult = ExecuteCommandSync("nmap " + command.NmapAdditionalArgs + " " + command.Hostname);
             }
             if (command.NiktoStandard)
             {
-                result.NiktoResult = ExecuteCommandSync("nikto " + command.NiktoAction + " " + command.Ip);
+                result.NiktoResult = ExecuteCommandSync("nikto " + command.NiktoAdditionalArgs + " " + command.Hostname);
             }
             if (command.XsserStandard)
             {
-                result.XsserResult = ExecuteCommandSync("xsser " + command.XsserAction + " " + command.Ip);
+                result.XsserResult = ExecuteCommandSync("xsser " + command.XsserAdditionalArgs + " " + command.Hostname);
             }
 
             StopContainer();

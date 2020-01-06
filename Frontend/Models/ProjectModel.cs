@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -76,7 +77,6 @@ namespace Frontend.Models
         public string ElementId { get; set; }
 
         [BsonElement()]
-        [RegularExpression("[123]")]
         public int ASVSLevel { get; set; }
 
         [BsonElement()]
