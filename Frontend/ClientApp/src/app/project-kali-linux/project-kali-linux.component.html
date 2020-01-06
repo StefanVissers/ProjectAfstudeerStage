@@ -2,7 +2,7 @@
   <input hidden="hidden" formControlName="projectId" />
   Host name:
   <input type="text" pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-         title="Use a correct format for a hostname." class="form-control" placeholder="http://google.nl" formControlName="host" />
+         title="Use a correct format for a hostname." class="form-control" placeholder="http://google.nl" formControlName="hostname" />
   <hr />
   IP address:
   <input type="text" pattern="\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\b"
@@ -22,7 +22,14 @@
       <input class="form-control" title="Xsser" type="checkbox" name="xsserStandard" formControlName="xsserStandard" />
     </div>
   </div>
-  <br />
+  <hr />
+  Nmap additional arguments:
+  <input class="form-control" title="Nmap" type="text" name="nmapStandard" formControlName="nmapAdditionalArgs" />
+  Nikto additional arguments:
+  <input class="form-control" title="Nmap" type="text" name="nmapStandard" formControlName="niktoAdditionalArgs" />
+  Xsser additional arguments:
+  <input class="form-control" title="Nmap" type="text" name="nmapStandard" formControlName="xsserAdditionalArgs" />
+  <hr />
   <button type="submit" class="btn btn-block btn-success">Start Scans</button>
 </form>
 

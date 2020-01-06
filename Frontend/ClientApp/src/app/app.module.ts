@@ -8,8 +8,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { NewTestCompComponent } from './new-test-comp/new-test-comp.component'
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -32,8 +30,6 @@ import { AuthGuard } from './services/auth.guard';
         AppComponent,
         NavMenuComponent,
         HomeComponent,
-        FetchDataComponent,
-        NewTestCompComponent,
         LoginComponent,
         RegisterComponent,
         ProfileComponent,
@@ -53,8 +49,6 @@ import { AuthGuard } from './services/auth.guard';
         ReactiveFormsModule,
         RouterModule.forRoot([
             { path: '', component: HomeComponent, pathMatch: 'full' },
-            { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthGuard] },
-            { path: 'new-test-comp', component: NewTestCompComponent, canActivate: [AuthGuard] },
             { path: 'create-project', component: CreateProjectComponent },
             { path: 'project/:id', component: ProjectWrapperComponent },
             { path: 'project/:id/:category', component: ProjectWrapperComponent },
@@ -65,7 +59,7 @@ import { AuthGuard } from './services/auth.guard';
             { path: 'project-tooling/:id', component: ProjectWrapperComponent, data: { 'tooling': true } },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
-            { path: 'profile', component: ProfileComponent },
+            { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
         ], { onSameUrlNavigation: 'reload' })
     ],
     providers: [

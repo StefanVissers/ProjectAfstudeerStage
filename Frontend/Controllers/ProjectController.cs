@@ -22,7 +22,7 @@ namespace Frontend.Controllers
         private readonly IProjectDbContext _projectsDbContext;
         private readonly IUsersDbContext _usersDbContext;
         private readonly IToolingService _toolingService;
-
+        
         public ProjectController(IUsersDbContext usersDbContext, IProjectDbContext dbContext, IToolingService toolingService)
         {
             _usersDbContext = usersDbContext;
@@ -49,7 +49,7 @@ namespace Frontend.Controllers
             // check for null values
             if (requestModel == null || requestModel.Host == null)
             {
-                return Ok(new { Status = "Please enter a hostname and ip address", Body = "" });
+                return Ok(new { Status = "Please enter a hostname or an ip address", Body = "" });
             }
             
             // Start the scan or get a already started scan.
@@ -99,13 +99,15 @@ namespace Frontend.Controllers
             // Return the raw response because the model in the wrapper is not up to date.
             return Ok(analyze.Wrapper.ApiRawResponse);
         }
-
+        
+        // POST: api/Project/KaliLinuxTool/5da829fa67db7d33e88a5d9e
         [HttpPost("[action]/{id}")]
         public ActionResult KaliLinuxTool(string id, [FromBody] Command command)
         {
-            if (command.Ip == null && command.Hostname == null)
+            // If the Ip or hostname is invalid it will be null.
+            if (command.Ip == null)
             {
-                return BadRequest(new { Status = "Invalid Parameters", Body = "" });
+                return BadRequest(new { Status = "Missing Ip address.", Body = "" });
             }
             CommandResult result;
             var project = _projectsDbContext.Get(id);
@@ -160,6 +162,7 @@ namespace Frontend.Controllers
             }
         }
 
+        //GET: api/Project/5da829fa67db7d33e88a5d9e/4
         [HttpGet("{id}/{categoryid}")]
         public ActionResult<WorkflowElementCategory> Get(string id, string categoryid)
         {
@@ -169,6 +172,7 @@ namespace Frontend.Controllers
             return Ok(category);
         }
 
+        //GET: api/Project/5da829fa67db7d33e88a5d9e/4/2
         [HttpGet("{id}/{categoryid}/{elementid}")]
         public ActionResult<WorkflowElement> Get(string id, string categoryid, string elementid)
         {
@@ -178,6 +182,7 @@ namespace Frontend.Controllers
             return Ok(element);
         }
 
+        //GET: api/Project/Users/5da829fa67db7d33e88a5d9e
         [HttpGet("[action]/{id}")]
         public ActionResult<UserModel> Users(string id)
         {
@@ -186,6 +191,7 @@ namespace Frontend.Controllers
             return Ok(project.Users);
         }
 
+        //GET: api/Project/UserRoles
         [HttpGet("[action]")]
         public ActionResult<string[]> UserRoles()
         {
@@ -243,6 +249,7 @@ namespace Frontend.Controllers
             return Ok(result);
         }
 
+        // PUT: api/Project/5da829fa67db7d33e88a5d9e/4
         [HttpPut("{projectId}/{categoryId}")]
         public ActionResult<ProjectModel> Put(string projectId, string categoryId, [FromBody] WorkflowElement value)
         {

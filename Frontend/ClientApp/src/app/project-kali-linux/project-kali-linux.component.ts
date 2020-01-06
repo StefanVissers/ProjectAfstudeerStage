@@ -27,11 +27,14 @@ export class ProjectKaliLinuxComponent implements OnInit {
     ngOnInit() {
         this.toolingForm = this.formbuilder.group({
             projectId: [this.projectId],
-            host: [''],
+            hostname: [''],
             ip: [''],
             nmapStandard: [false],
             niktoStandard: [false],
             xsserStandard: [false],
+            nmapAdditionalArgs: [''],
+            niktoAdditionalArgs: ['-host'],
+            xsserAdditionalArgs: ['-u'],
         });
 
         this.resultForm = this.formbuilder.group({

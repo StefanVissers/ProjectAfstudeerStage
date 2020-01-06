@@ -18,7 +18,7 @@ namespace Frontend.Services
     public class ToolingService : IToolingService
     {
         public DockerClient _client;
-        private DockerSettings _settings;
+        private readonly DockerSettings _settings;
 
         public ToolingService(IOptions<DockerSettings> settings)
         {
@@ -35,21 +35,15 @@ namespace Frontend.Services
 
             if (command.NmapStandard)
             {
-                command.Action = "nmap " + command.Ip;
-
-                result.NmapResult = ExecuteCommandSync(command);
+                result.NmapResult = ExecuteCommandSync("nmap " + command.NmapAction + " " + command.Ip);
             }
             if (command.NiktoStandard)
             {
-                command.Action = "nikto -host " + command.Ip;
-
-                result.NiktoResult = ExecuteCommandSync(command);
+                result.NiktoResult = ExecuteCommandSync("nikto " + command.NiktoAction + " " + command.Ip);
             }
             if (command.XsserStandard)
             {
-                command.Action = "xsser -u " + command.Hostname;
-
-                result.XsserResult = ExecuteCommandSync(command);
+                result.XsserResult = ExecuteCommandSync("xsser " + command.XsserAction + " " + command.Ip);
             }
 
             StopContainer();
@@ -57,7 +51,7 @@ namespace Frontend.Services
             return result;
         }
 
-        private string ExecuteCommandSync(Command command)
+        private string ExecuteCommandSync(string command)
         {
             string result; 
 
@@ -68,7 +62,7 @@ namespace Frontend.Services
                 // Incidentally, /c tells cmd that we want it to execute the command that follows,
                 // and then exit.
                 System.Diagnostics.ProcessStartInfo procStartInfo =
-                    new System.Diagnostics.ProcessStartInfo(_settings.ShellFile, _settings.ShellArgs + "docker exec -t " + _settings.DockerContainerId + " " + command.Action);
+                    new System.Diagnostics.ProcessStartInfo(_settings.ShellFile, _settings.ShellArgs + "docker exec -t " + _settings.DockerContainerId + " " + command);
 
                 // The following commands are needed to redirect the standard output.
                 // This means that it will be redirected to the Process.StandardOutput StreamReader.

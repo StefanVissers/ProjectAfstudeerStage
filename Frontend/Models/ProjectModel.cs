@@ -97,23 +97,35 @@ namespace Frontend.Models
 
     public class Command
     {
-        public string Action { get; set; }
+        public string NmapAction { get; set; }
+        
+        public string NiktoAction { get; set; }
 
-        [RegularExpression("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
-            ErrorMessage = "Hostname is not a correct format.")]
+        public string XsserAction { get; set; }
+
+        [RegularExpression("[^|&$;`]+", ErrorMessage = "Blacklisted characters used.")]
+        public string NmapAdditionalArgs { get; set; }
+
+        [RegularExpression("[^|&$;`]+", ErrorMessage = "Blacklisted characters used.")]
+        public string NiktoAdditionalArgs { get; set; }
+
+        [RegularExpression("[^|&$;`]+", ErrorMessage = "Blacklisted characters used.")]
+        public string XsserAdditionalArgs { get; set; }
+
+        [RegularExpression("[^|&$;`]+", ErrorMessage = "Blacklisted characters used.")]
         public string Hostname { get; set; }
 
         [RegularExpression("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b",
             ErrorMessage = "Ip address is not a correct format.")]
         public string Ip { get; set; }
-
+        
         public bool NmapStandard { get; set; }
 
         public bool NiktoStandard { get; set; }
 
         public bool XsserStandard { get; set; }
 
-        public string Id { get; set; }
+        public string ProjectId { get; set; }
     }
 
     public class CommandResult
@@ -161,8 +173,6 @@ namespace Frontend.Models
 
     public class SSLLabsRequestModel
     {
-        [RegularExpression("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
-            ErrorMessage = "Hostname is not a correct format.")]
         public string Host { get; set; }
 
         [RegularExpression("\\b(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b",

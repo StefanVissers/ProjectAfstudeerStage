@@ -44,6 +44,7 @@ export class ProjectSsllabsComponent implements OnInit {
         this.resultForm = this.formbuilder.group({
             grade: [''],
             serverName: [''],
+            ipAddresses: [''],
             subject: [''],
             altNames: [''],
             validFrom: [''],
@@ -102,6 +103,7 @@ export class ProjectSsllabsComponent implements OnInit {
         let object = {
             'grade': ipv4Endpoint.grade,
             'serverName': ipv4Endpoint.serverName,
+            'ipAddresses': ipv4Endpoint.ipAddress,
             'subject': '',
             'validFrom': '',
             'validUntil': '',
