@@ -53,8 +53,7 @@ namespace Frontend.Services
 
         private string ExecuteCommandSync(string command)
         {
-            string result; 
-
+            string result;
             try
             {
                 // create the ProcessStartInfo using "cmd" as the program to be run,
@@ -62,7 +61,8 @@ namespace Frontend.Services
                 // Incidentally, /c tells cmd that we want it to execute the command that follows,
                 // and then exit.
                 System.Diagnostics.ProcessStartInfo procStartInfo =
-                    new System.Diagnostics.ProcessStartInfo(_settings.ShellFile, _settings.ShellArgs + "docker exec -t " + _settings.DockerContainerId + " " + command);
+                    new System.Diagnostics.ProcessStartInfo(_settings.ShellFile, _settings.ShellArgs + 
+                            "docker exec -t " + _settings.DockerContainerId + " " + command);
 
                 // The following commands are needed to redirect the standard output.
                 // This means that it will be redirected to the Process.StandardOutput StreamReader.

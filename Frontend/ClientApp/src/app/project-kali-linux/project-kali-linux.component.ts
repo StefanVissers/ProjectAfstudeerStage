@@ -16,12 +16,18 @@ export class ProjectKaliLinuxComponent implements OnInit {
     public loading = false;
     public error = false;
 
-
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
         route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string) {
         route.params.subscribe(event => {
             this.projectId = event.id;
         });
+
+        this.http.get<any>(this.baseUrl + 'api/Project/GetToolingReport/' + this.projectId).subscribe(res => {
+            this.result = res;
+            if (this.result) {
+                this.updateValues();
+            }
+        })
     }
 
     ngOnInit() {
@@ -47,12 +53,9 @@ export class ProjectKaliLinuxComponent implements OnInit {
     onFormSubmit() {
         this.error = false;
         this.loading = true;
-        console.log(this.toolingForm.value);
         this.http.post<any>(this.baseUrl + 'api/Project/KaliLinuxTool/' + this.projectId, this.toolingForm.value).subscribe(result => {
-            console.log(result);
             this.result = result;
-            console.log(this.result);
-            this.resultForm.patchValue(this.result);
+            this.updateValues();
             this.loading = false;
         }, error => {
             console.error(error);
@@ -61,6 +64,8 @@ export class ProjectKaliLinuxComponent implements OnInit {
         })
     }
 
-
+    updateValues() {
+        this.resultForm.patchValue(this.result);
+    }
 
 }

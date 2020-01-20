@@ -24,10 +24,8 @@ export class ProjectSsllabsComponent implements OnInit {
         route.params.subscribe(event => {
             this.projectId = event.id;
         });
-        console.log(this.projectId);
         this.http.get<any>(this.baseUrl + 'api/Project/GetSSLLabsReport/' + this.projectId).subscribe(res => {
             this.result = res;
-            console.log(this.result);
             if (this.result) {
                 this.updateValues();
             }
@@ -74,9 +72,7 @@ export class ProjectSsllabsComponent implements OnInit {
         this.error = "";
         this.loading = true;
         let url = this.baseUrl + 'api/Project/SSLLabs/' + this.projectId;
-        console.log(url);
         this.http.post<any>(url, { host: this.ssllabsForm.value.host, ip: this.ssllabsForm.value.ip }).subscribe(result => {
-            console.log(result);
             if (result.status == "READY") {
                 this.result = result;
                 this.updateValues();
@@ -143,7 +139,7 @@ export class ProjectSsllabsComponent implements OnInit {
                 serverName += value.serverName + ', \n';
             }
         })
-
+        
         ipv4Endpoint.details.suites.forEach(function (value) {
             value.list.forEach(function (val) {
                 suitesString = suitesString + val.name + ' \n';

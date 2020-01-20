@@ -13,7 +13,6 @@ export class ProjectComponent implements OnInit {
     constructor(http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
         http.get<Project[]>(baseUrl + 'api/Project/').subscribe(result => {
             this.projects = result;
-            console.log(result);
         }, error => console.error(error));
     }
 

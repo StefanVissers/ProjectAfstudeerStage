@@ -65,10 +65,8 @@ export class ProjectSettingsComponent implements OnInit {
         this.project.isCompleted = this.projectForm.value.isCompleted;
 
         this.http.put<any>(this.baseUrl + 'api/Project/' + this.projectId, this.project).subscribe(result => {
-            console.log(result);
             this.project = result;
             // Update Users
-            console.log(this.users);
             this.http.put<any>(this.baseUrl + 'api/Project/Users/' + this.projectId, this.users).subscribe(result => {
                 this.project = result;
             }, error => console.error(error));
@@ -77,12 +75,10 @@ export class ProjectSettingsComponent implements OnInit {
 
     // Section Users Table
     remove(id: any) {
-        console.log('remove')
         this.users.splice(id, 1);
     }
 
     add() {
-        console.log('add');
         if (this.usersToBeAdded[0]) {
             this.users.push({ name: this.usersToBeAdded[0].username, role: this.rolesToBeAdded[0], userId: this.usersToBeAdded[0].id });
         }

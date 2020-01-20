@@ -31,7 +31,7 @@ namespace Frontend.Controllers
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
         }
 
-        // GET: api/Project/SSLLabs/5da829fa67db7d33e88a5d9e/
+        // GET: api/Project/GetSSLLabsReport/5da829fa67db7d33e88a5d9e/
         [HttpGet("[action]/{id}")]
         public ActionResult<string> GetSSLLabsReport(string id)
         {
@@ -44,13 +44,13 @@ namespace Frontend.Controllers
         [HttpPost("SSLLabs/{id}")]
         public IActionResult GetSSLLabsReport(string id, [FromBody]SSLLabsRequestModel requestModel)
         {
-            var project = _projectsDbContext.Get(id);
-
             // check for null values
-            if (requestModel == null || requestModel.Host == null)
+            if (requestModel == null && requestModel.Host == null)
             {
                 return Ok(new { Status = "Please enter a hostname or an ip address", Body = "" });
             }
+
+            var project = _projectsDbContext.Get(id);
             
             // Start the scan or get a already started scan.
             var ssllService = new SSLLabsApiService("https://api.ssllabs.com/api/v3");
@@ -58,7 +58,7 @@ namespace Frontend.Controllers
                 fromCache: FromCache.Off, maxHours: 1, all: All.On, ignoreMismatch: IgnoreMismatch.Off);
 
             // Check every 8 seconds to see if the scan has completed.
-            while (analyze.status != "READY")
+            while (analyze.status != "READY" && analyze.status != null)
             {
                 Thread.Sleep(8000);
 
@@ -99,13 +99,20 @@ namespace Frontend.Controllers
             // Return the raw response because the model in the wrapper is not up to date.
             return Ok(analyze.Wrapper.ApiRawResponse);
         }
-        
+
+        // GET: api/Project/GetToolingReport/5da829fa67db7d33e88a5d9e/
+        [HttpGet("[action]/{id}")]
+        public ActionResult<string> GetToolingReport(string id)
+        {
+            var project = _projectsDbContext.Get(id);
+
+            return Ok(project.CommandResult);
+        }
+
         // POST: api/Project/KaliLinuxTool/5da829fa67db7d33e88a5d9e
         [HttpPost("[action]/{id}")]
         public ActionResult KaliLinuxTool(string id, [FromBody] Command command)
         {
-            // If the Ip or hostname is invalid it will be null.
-            
             CommandResult result;
             var project = _projectsDbContext.Get(id);
 

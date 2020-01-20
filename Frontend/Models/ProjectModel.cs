@@ -142,7 +142,7 @@ namespace Frontend.Models
     }
 
     public class UserRole
-    {
+    { 
         public const string UserRoleCreator = "Creator";
         public const string UserRoleExtra = "Extra";
         public const string UserRoleViewer = "Viewer";

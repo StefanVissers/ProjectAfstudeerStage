@@ -33,7 +33,6 @@ export class ProfileComponent implements OnInit {
     onFormSubmit() {
         const user = this.userForm.value;
         user.username = this.user.username
-        console.log(user);
         this.http.put<any>(this.baseUrl + 'api/User/' + user.id, user).subscribe(result => {
             this.error = false;
             this.updated = true;

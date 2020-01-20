@@ -1,10 +1,10 @@
 <form name="ssllabsForm" [formGroup]="ssllabsForm" (ngSubmit)="onFormSubmit(ssllabsForm.value)">
   <input hidden="hidden" formControlName="projectId" />
   Host name:
-  <input type="text" class="form-control" placeholder="http://google.nl" formControlName="host" />
+  <input type="text" class="form-control" placeholder="www.google.nl" formControlName="host" />
   <hr />
   IP address:
-  <input type="text" class="form-control" placeholder="172.217.6.35" formControlName="ip" />
+  <input type="text" class="form-control" placeholder="8.8.8.8" formControlName="ip" />
   <hr />
   <button type="submit" class="btn btn-block btn-success">Start Scan</button>
 </form>
