@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project, WorkflowElementCategory, WorkflowElement } from '../models/project';
+import { Project, WorkflowElement } from '../models/project';
 import { HttpClient } from '@angular/common/http';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
     selector: 'app-project-details',
@@ -54,7 +54,6 @@ export class ProjectDetailsComponent implements OnInit {
 
     onFormSubmit() {
         this.element = this.projectForm.value;
-        console.log(this.element);
         this.http.put<Project>(this.baseUrl + 'api/Project/' + this.projectId + '/' + this.categoryId, this.element).subscribe(result => {
             this.project = result;
             this.loadElement();

@@ -8,7 +8,6 @@ using Frontend.Models;
 using Frontend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SSLLabsApiWrapper;
 using static SSLLabsApiWrapper.SSLLabsApiService;
@@ -100,7 +99,7 @@ namespace Frontend.Controllers
             return Ok(analyze.Wrapper.ApiRawResponse);
         }
 
-        // GET: api/Project/GetToolingReport/5da829fa67db7d33e88a5d9e/
+        // GET: api/Project/GetToolingReport/5da829fa67db7d33e88a5d9e
         [HttpGet("[action]/{id}")]
         public ActionResult<string> GetToolingReport(string id)
         {
@@ -244,7 +243,7 @@ namespace Frontend.Controllers
             return Ok(result);
         }
 
-        // PUT: api/Project/5
+        // PUT: api/Project/5da829fa67db7d33e88a5d9e
         [HttpPut("Users/{id}")]
         public ActionResult<ProjectModel> Put(string id, [FromBody] IEnumerable<UserRole> value)
         {
@@ -262,7 +261,7 @@ namespace Frontend.Controllers
             return Ok(result);
         }
 
-        // DELETE: api/Project/5
+        // DELETE: api/Project/5da829fa67db7d33e88a5d9e
         [HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {

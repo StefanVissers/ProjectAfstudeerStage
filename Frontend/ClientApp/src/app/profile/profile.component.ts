@@ -46,7 +46,6 @@ export class ProfileComponent implements OnInit {
 
     loadForm() {
         this.http.get<any>(this.baseUrl + 'api/User/FromToken').subscribe(result => {
-            console.log(result);
             this.error = false;
             this.user = result;
             this.userForm.patchValue(this.user);
