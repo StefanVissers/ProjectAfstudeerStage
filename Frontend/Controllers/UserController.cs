@@ -14,6 +14,7 @@ namespace Frontend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUsersDbContext _usersDbContext;
@@ -63,6 +64,7 @@ namespace Frontend.Controllers
 
         // POST: api/User
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult<UserModel> Post([FromBody] UserModel userModel)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
@@ -118,6 +120,7 @@ namespace Frontend.Controllers
         }
         
         [HttpPost("[action]")]
+        [AllowAnonymous]
         public ActionResult<Response> Authenticate([FromBody] UserModel user)
         {
             try
@@ -136,7 +139,7 @@ namespace Frontend.Controllers
                         {
                             Path = "/",
                             Secure = true,
-                            HttpOnly = false,
+                            HttpOnly = true,
                             SameSite = SameSiteMode.Strict
                         });
 

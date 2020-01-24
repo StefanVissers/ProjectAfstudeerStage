@@ -16,6 +16,7 @@ namespace Frontend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectDbContext _projectsDbContext;
@@ -272,7 +273,6 @@ namespace Frontend.Controllers
 
 
         [HttpGet("[action]/{id}")]
-        [Authorize]
         public ActionResult<string> Authenticated(string id)
         {
             var user = User.Identity as ClaimsIdentity;
