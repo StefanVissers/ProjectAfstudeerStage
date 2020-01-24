@@ -13,7 +13,10 @@ export class NavMenuComponent implements OnInit, AfterViewChecked{
     show = false;
     @Input() loggedIn;
 
-    constructor(private cdRef: ChangeDetectorRef, private authenticationService: AuthenticationService, private cookieService: CookieService, private route: ActivatedRoute) {
+    constructor(private cdRef: ChangeDetectorRef,
+        private authenticationService: AuthenticationService,
+        private cookieService: CookieService,
+        private route: ActivatedRoute) {
         this.isLoggedIn();
     }
 

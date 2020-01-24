@@ -1,8 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Project, UserRole } from '../models/project';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../models/user';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -17,6 +15,7 @@ export class ProjectSettingsComponent implements OnInit {
     public projectForm: FormGroup;
     public usersToBeAdded: any[];
     public rolesToBeAdded: string[];
+    public updated = false;
 
     constructor(private formbuilder: FormBuilder, private http: HttpClient,
         route: ActivatedRoute, @Inject('BASE_URL') private baseUrl: string) {
@@ -24,7 +23,7 @@ export class ProjectSettingsComponent implements OnInit {
             this.projectId = event.id;
         });
     }
-
+    
     ngOnInit() {
         this.projectForm = this.formbuilder.group({
             id: [''],
@@ -69,6 +68,7 @@ export class ProjectSettingsComponent implements OnInit {
             // Update Users
             this.http.put<any>(this.baseUrl + 'api/Project/Users/' + this.projectId, this.users).subscribe(result => {
                 this.project = result;
+                this.updated = true;
             }, error => console.error(error));
         }, error => console.error(error));
     }
@@ -76,12 +76,18 @@ export class ProjectSettingsComponent implements OnInit {
     // Section Users Table
     remove(id: any) {
         this.users.splice(id, 1);
+        this.updated = false;
     }
 
     add() {
         if (this.usersToBeAdded[0]) {
-            this.users.push({ name: this.usersToBeAdded[0].username, role: this.rolesToBeAdded[0], userId: this.usersToBeAdded[0].id });
+            this.users.push({
+                name: this.usersToBeAdded[0].username,
+                role: this.rolesToBeAdded[0],
+                userId: this.usersToBeAdded[0].id
+            });
         }
+        this.updated = false;
     }
 
     // Updates the users list when another value is selected.
@@ -95,5 +101,6 @@ export class ProjectSettingsComponent implements OnInit {
         } else {
             x.role = event.target.value;
         }
+        this.updated = false;
     }
 }
