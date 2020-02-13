@@ -68,6 +68,12 @@ namespace Frontend.Models
 
         [BsonElement()]
         public List<WorkflowElement> WorkflowElements { get; set; }
+
+        [BsonIgnore]
+        public bool IsCompleted { get
+            {
+                return WorkflowElements.TrueForAll(x => x.IsCompleted);
+            } }
     }
 
     public class WorkflowElement
@@ -92,6 +98,12 @@ namespace Frontend.Models
 
         [BsonElement()]
         public bool IsRelevant { get; set; }
+
+        [BsonIgnore]
+        public bool IsCompleted { get
+            {
+                return (IsDone || !IsRelevant);
+            } }
     }
 
     public class Command

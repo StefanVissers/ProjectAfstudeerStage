@@ -4,10 +4,11 @@
   <div class="row" *ngIf="project">
     <div class="col-md-3 col-sm-4" style="overflow-y: auto">
       <ngb-accordion #acc="ngbAccordion" [closeOthers]="true" activeIds="panel-{{ categoryId }}">
-        <ngb-panel *ngFor="let category of project.workflowElementCategories" id="panel-{{ category.categoryId }}" title="{{ category.name }}">
+        <ngb-panel *ngFor="let category of project.workflowElementCategories" id="panel-{{ category.categoryId }}"
+                   title="{{ category.name }}" >
           <ng-template ngbPanelContent>
-            <ul>
-              <li *ngFor="let element of category.workflowElements">
+            <ul class="list-group-flush" [className]="category.isCompleted ? 'list-group-item-dark' : 'visible'">
+              <li *ngFor="let element of category.workflowElements" [className]="element.isCompleted ? 'list-group-item-dark' : 'visible'" >
                 <a [routerLink]="['/project/'+project.id+'/'+category.categoryId+'/'+element.elementId]">{{ element.name }}</a>
               </li>
             </ul>
@@ -16,14 +17,13 @@
       </ngb-accordion>
       <br />
     </div>
-
     <div class="col-md-9 col-sm-8">
       <div class="row">
         <div class="col-md-9"><h2 style="text-align: center"><a *ngIf="project" [routerLink]="['/project/'+project.id]">{{ project.name }}</a></h2></div>
         <div class="col-md-3"><h3 style="text-align: right"><a [routerLink]="['/project-settings/' + project.id]">Settings</a></h3></div>
       </div>
       <hr />
-
+       
       <div class="container" *ngIf="!categoryId && !elementId && !settings && !ssllabs && !tooling">
         <p>{{ project.description }}</p>
         <hr />

@@ -69,21 +69,22 @@ export class ProjectSsllabsComponent implements OnInit {
     }
     
     onFormSubmit() {
-        this.error = "";
         this.loading = true;
         let url = this.baseUrl + 'api/Project/SSLLabs/' + this.projectId;
         this.http.post<any>(url, { host: this.ssllabsForm.value.host, ip: this.ssllabsForm.value.ip }).subscribe(result => {
+            console.log(result);
             if (result.status == "READY") {
                 this.result = result;
                 this.updateValues();
             } else {
+                console.log(result.status);
                 this.error = result.status;
             }
             
             this.loading = false;
         }, error => {
                 console.error(error);
-                this.error = "";
+                this.error = error.status;
                 this.loading = false;
         });
     }

@@ -108,7 +108,7 @@ namespace TestProject.MockClasses
         };
 
         // Even more mock data.
-        private List<ProjectModel> projects = new List<ProjectModel>()
+        public static List<ProjectModel> projects = new List<ProjectModel>()
         {
             new ProjectModel()
             {

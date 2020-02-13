@@ -1,11 +1,11 @@
 <form name="ssllabsForm" [formGroup]="ssllabsForm" (ngSubmit)="onFormSubmit(ssllabsForm.value)">
   <input hidden="hidden" formControlName="projectId" />
   Host name:
-  <input type="text" class="form-control" placeholder="www.google.nl" formControlName="host" />
+  <input type="text" class="form-control" placeholder="http://www.example.com" formControlName="host" />
   <hr />
-  IP address:
+  <!--IP address:
   <input type="text" class="form-control" placeholder="8.8.8.8" formControlName="ip" />
-  <hr />
+  <hr />-->
   <button type="submit" class="btn btn-block btn-success">Start Scan</button>
 </form>
 
@@ -14,20 +14,20 @@
 <p *ngIf="loading">Loading...</p>
 <p *ngIf="error">{{ error }}</p>
 <form *ngIf="result" name="resultForm" [formGroup]="resultForm">
-  Grade:
+  Grade:+
   <input class="form-control" style="font-size:x-large;" formControlName="grade" contenteditable="false" />
   <hr />
   Server Name:
-  <textarea rows="2" class="form-control" formControlName="serverName" contenteditable="false" ></textarea>
+  <textarea rows="2" class="form-control" formControlName="serverName" contenteditable="false"></textarea>
   <hr />
   Ip addresses:
-  <textarea rows="2" class="form-control" formControlName="ipAddresses" contenteditable="false" ></textarea>
+  <textarea rows="2" class="form-control" formControlName="ipAddresses" contenteditable="false"></textarea>
   <hr />
   <h5>Server Key and Certificate</h5>
   Subject:
   <input class="form-control" formControlName="subject" contenteditable="false" />
   Alternative Names:
-  <textarea rows="2" class="form-control" formControlName="altNames" contenteditable="false" ></textarea>
+  <textarea rows="2" class="form-control" formControlName="altNames" contenteditable="false"></textarea>
   Certificate Valid From:
   <input class="form-control" formControlName="validFrom" contenteditable="false" />
   Certificate Valid Until:
@@ -41,7 +41,7 @@
   Revocation Status:
   <input class="form-control" formControlName="revocationStatus" contenteditable="false" />
   Trusted:
-  <textarea rows="3" class="form-control" formControlName="trusted" contenteditable="false" ></textarea>
+  <textarea rows="3" class="form-control" formControlName="trusted" contenteditable="false"></textarea>
   Forward Secrecy:
   <input class="form-control" formControlName="forwardSecrecy" contenteditable="false" />
   <hr />

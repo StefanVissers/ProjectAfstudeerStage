@@ -30,6 +30,11 @@ namespace Frontend.Services
         {
             var result = new CommandResult();
 
+            if (!(command.NiktoStandard || command.NmapStandard || command.XsserStandard))
+            {
+                return result;
+            }
+
             StartContainer();
 
             if (command.NmapStandard)
@@ -44,8 +49,10 @@ namespace Frontend.Services
             {
                 result.XsserResult = ExecuteCommandSync("xsser " + command.XsserAdditionalArgs + " " + command.Hostname);
             }
-
+            
             StopContainer();
+
+            _client.Dispose();
 
             return result;
         }
@@ -107,7 +114,7 @@ namespace Frontend.Services
             }
             catch (Exception e)
             {
-
+                throw e;
             }
         }
 
@@ -125,7 +132,7 @@ namespace Frontend.Services
             }
             catch (Exception e)
             {
-
+                throw e;
             }
         }
     }

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Project, WorkflowElementCategory, WorkflowElement } from '../models/project';
 import { HttpClient } from '@angular/common/http';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
     selector: 'app-project-wrapper',

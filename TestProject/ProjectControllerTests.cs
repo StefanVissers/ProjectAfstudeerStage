@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Threading;
 using TestProject.MockClasses;
 
 namespace TestProject

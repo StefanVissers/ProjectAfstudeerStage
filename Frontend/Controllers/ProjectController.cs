@@ -16,13 +16,12 @@ namespace Frontend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectDbContext _projectsDbContext;
         private readonly IUsersDbContext _usersDbContext;
         private readonly IToolingService _toolingService;
-        
+
         public ProjectController(IUsersDbContext usersDbContext, IProjectDbContext dbContext, IToolingService toolingService)
         {
             _usersDbContext = usersDbContext;
@@ -47,11 +46,11 @@ namespace Frontend.Controllers
             // check for null values
             if (requestModel == null && requestModel.Host == null)
             {
-                return Ok(new { Status = "Please enter a hostname or an ip address", Body = "" });
+                return BadRequest(new { Status = "Please enter a hostname or an ip address", Body = "" });
             }
 
             var project = _projectsDbContext.Get(id);
-            
+
             // Start the scan or get a already started scan.
             var ssllService = new SSLLabsApiService("https://api.ssllabs.com/api/v3");
             var analyze = ssllService.Analyze(host: requestModel.Host, publish: Publish.Off, startNew: StartNew.Ignore,
@@ -71,23 +70,35 @@ namespace Frontend.Controllers
             {
                 if (analyze.Errors.First().message.Contains("529"))
                 {
-                    return Ok(new { Status = "Service Overloaded", Body = "" });
+                    return StatusCode(529, new { Status = "Service Overloaded. Try again in a few minutes.", Body = "" });
                 }
                 else if (analyze.Errors.First().message.Contains("503"))
                 {
-                    return Ok(new { Status = "Service Unavailable", Body = "" });
+                    return StatusCode(503, new { Status = "Service Unavailable. Try again in a few minutes.", Body = "" });
                 }
                 else if (analyze.Errors.First().message.Contains("500"))
                 {
-                    return Ok(new { Status = "Service Error", Body = "" });
+                    return StatusCode(500, new { Status = "Service Error", Body = "" });
                 }
                 else if (analyze.Errors.First().message.Contains("429"))
                 {
-                    return Ok(new { Status = "Too Many Requests", Body = "" });
+                    return StatusCode(429, new { Status = "Too Many Requests. Try again in a few seconds.", Body = "" });
                 }
                 else if (analyze.Errors.First().message.Contains("400"))
                 {
-                    return Ok(new { Status = "Invalid Parameters", Body = "" });
+                    return StatusCode(400, new { Status = "Invalid Parameters", Body = "" });
+                }
+                else if (analyze.Errors.First().message.Contains("preflight validation"))
+                {
+                    return StatusCode(400, new { Status = "Incorrect format used. Use the format: 'http://www.example.com'", Body = "" });
+                }
+                else if (analyze.Errors.First().message.Contains("System.Net.WebException"))
+                {
+                    return StatusCode(500, new { Status = "No connection could be made. Try again in a few minutes.", Body = "" });
+                }
+                else
+                {
+                    return StatusCode(500, new { Status = "Something went wrong. Please try again", Body = "" });
                 }
             }
 
@@ -122,7 +133,7 @@ namespace Frontend.Controllers
             }
             catch (Exception objException)
             {
-                return Ok(objException);
+                return StatusCode(500, objException);
             }
             project.CommandResult = result;
             _projectsDbContext.Put(id, project);
@@ -160,9 +171,9 @@ namespace Frontend.Controllers
 
                 return Ok(result);
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(null);
+                return StatusCode(500, ex);
             }
         }
 
@@ -231,14 +242,14 @@ namespace Frontend.Controllers
             }
 
             var result = _projectsDbContext.Post(project);
-            
+
             return Ok(result);
         }
 
         // PUT: api/Project/5
         [HttpPut("{id}")]
         public ActionResult<ProjectModel> Put(string id, [FromBody] ProjectModel project)
-        {   
+        {
             var result = _projectsDbContext.Put(id, project);
 
             return Ok(result);
@@ -281,12 +292,12 @@ namespace Frontend.Controllers
 
             var project = _projectsDbContext.Get(id);
 
-            if(project.Users.Any(x => x.UserId == userId))
-             {
+            if (project.Users.Any(x => x.UserId == userId))
+            {
                 return Ok("Succes");
             }
 
-            return Ok("Failure");
+            return StatusCode(403, "Failure");
         }
     }
 }

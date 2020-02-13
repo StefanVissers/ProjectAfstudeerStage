@@ -46,7 +46,7 @@ namespace Frontend.Models
             _client = new MongoClient(settings);
 
             // Gets the corrext db.
-            _database = _client.GetDatabase("Projects");
+            _database = _client.GetDatabase(config.Value.MongoDatabaseName);
         }
 
         /// <summary>

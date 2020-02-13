@@ -14,7 +14,6 @@ namespace Frontend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUsersDbContext _usersDbContext;
@@ -139,8 +138,7 @@ namespace Frontend.Controllers
                         {
                             Path = "/",
                             Secure = true,
-                            HttpOnly = true,
-                            SameSite = SameSiteMode.Strict
+                            HttpOnly = false
                         });
 
                     return Ok(new Response { Status = "Success", Message = user.Token });
