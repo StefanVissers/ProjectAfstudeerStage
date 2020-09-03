@@ -47,6 +47,19 @@ namespace Frontend.Models
 
             // Gets the corrext db.
             _database = _client.GetDatabase(config.Value.MongoDatabaseName);
+
+            //if (IsEmpty())
+            //{
+            //    // TODO: insert template project instead of empty project.
+            //    ProjectsCollection.InsertOne(new ProjectModel() { Name = "Can Be Deleted After Inserting Template" });
+            //}
+        }
+
+        private bool IsEmpty()
+        {
+            var list = ProjectsCollection.Find(EmptyProjectFilter).ToList();
+
+            return list.Any();
         }
 
         /// <summary>
@@ -58,7 +71,8 @@ namespace Frontend.Models
             var list = ProjectsCollection.Find(EmptyProjectFilter).ToList();
 
             // Parallel so requests will be faster.
-            Parallel.ForEach(list, project => {
+            Parallel.ForEach(list, project =>
+            {
                 project.WorkflowElementCategories = null;
             });
 
@@ -88,8 +102,8 @@ namespace Frontend.Models
         public ProjectModel Post(ProjectModel model)
         {
             var template = ProjectsCollection.Find(TemplateProjectFilter).FirstOrDefault();
-            
-            foreach(WorkflowElementCategory category in template.WorkflowElementCategories.ToList())
+
+            foreach (WorkflowElementCategory category in template.WorkflowElementCategories.ToList())
             {
                 category.WorkflowElements.RemoveAll(x => x.ASVSLevel > model.ASVSLevel);
                 if (category.WorkflowElements.Count <= 0)

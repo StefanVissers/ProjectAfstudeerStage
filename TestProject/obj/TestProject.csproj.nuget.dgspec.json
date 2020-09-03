@@ -81,6 +81,10 @@
             "SSLLabsApiWrapper": {
               "target": "Package",
               "version": "[1.0.8, )"
+            },
+            "System.Xml.XmlSerializer": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [

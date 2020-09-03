@@ -42,6 +42,12 @@ export class ProjectWrapperComponent implements OnInit {
         });
     }
 
+    xml() {
+        this.http.get<Project>(this.baseUrl + 'api/Project/xml/' + this.projectId).subscribe(result => {
+            var result = result;
+        }, error => console.error(error));
+    }
+
     loadElement() {
         this.http.get<Project>(this.baseUrl + 'api/Project/' + this.projectId).subscribe(result => {
             this.project = result;

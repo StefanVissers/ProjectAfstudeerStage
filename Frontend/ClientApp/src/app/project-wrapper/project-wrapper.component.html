@@ -29,6 +29,7 @@
         <hr />
         <a class="btn btn-block btn-success" [routerLink]="['/project-ssllabs/' + project.id]">To SSLLabs Data</a>
         <a class="btn btn-block btn-success" [routerLink]="['/project-tooling/' + project.id]">To Tooling</a>
+        <a class="btn btn-block btn-success" (click)="xml()">Export as XML</a>
       </div>
 
       <div class="container" *ngIf="!elementId && categoryId && category && !settings && !ssllabs && !tooling">

@@ -19,6 +19,7 @@ namespace Frontend
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureKestrel(c => c.AddServerHeader = false)
                 .UseStartup<Startup>();
     }
 }

@@ -106,8 +106,6 @@ namespace TestProject
         [DataTestMethod]
         [DataRow("")]
         [DataRow("5da829fa67db7d33e88a5d9e")]
-        [DataRow("bbb829fa67db7d33e88a5d9f")]
-        [DataRow("aaaaaaaaaaaaaaaaaaaaaaaa")]
         public void DeleteTest(string id)
         {
             var response = _projectController.Get();

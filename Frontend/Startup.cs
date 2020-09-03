@@ -3,7 +3,6 @@ using Frontend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
@@ -98,7 +97,6 @@ namespace Frontend
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
-
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
@@ -110,6 +108,22 @@ namespace Frontend
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
+            });
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Xss-Protection", "1");
+                context.Response.Headers.Add("X-Frame-Options", "DENY");
+                context.Response.Headers.Add("Referrer-Policy", "no-referrer");
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                context.Response.Headers.Add(
+                    "Content-Security-Policy",
+                    "default-src 'self'; " +
+                    "img-src 'self'; " +
+                    "font-src 'self'; " +
+                    "style-src 'self'; " +
+                    "frame-src 'self';" +
+                    "connect-src 'self';");
+                await next();
             });
         }
     }

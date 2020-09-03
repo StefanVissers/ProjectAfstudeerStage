@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
+using System.Xml;
+using System.Xml.Serialization;
 using Frontend.Models;
 using Frontend.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using SSLLabsApiWrapper;
@@ -197,6 +199,27 @@ namespace Frontend.Controllers
             return Ok(element);
         }
 
+        [HttpGet("XML/{id}")]
+        public ActionResult<string> GetXML(string id)
+        {
+            var project = _projectsDbContext.Get(id);
+
+            XmlSerializer xsSubmit = new XmlSerializer(typeof(ProjectModel));
+            var xml = "";
+
+            using (var sww = new StringWriter())
+            {
+                using (XmlWriter writer = XmlWriter.Create(sww))
+                {
+                    xsSubmit.Serialize(writer, project);
+                    xml = sww.ToString(); // Your XML
+                }
+            }
+
+            return Ok(xml);
+
+        }
+
         //GET: api/Project/Users/5da829fa67db7d33e88a5d9e
         [HttpGet("[action]/{id}")]
         public ActionResult<UserModel> Users(string id)
@@ -245,7 +268,7 @@ namespace Frontend.Controllers
 
             return Ok(result);
         }
-
+        
         // PUT: api/Project/5
         [HttpPut("{id}")]
         public ActionResult<ProjectModel> Put(string id, [FromBody] ProjectModel project)
